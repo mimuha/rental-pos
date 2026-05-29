@@ -1,0 +1,173 @@
+body.login {
+    min-height: 100%;
+    background:
+        radial-gradient(circle at top left, rgba(109, 75, 232, .14), transparent 30rem),
+        #f4f6f8;
+    overflow-x: hidden;
+}
+
+body.login #container,
+body.login .main,
+body.login .content {
+    min-height: 0;
+}
+
+body.login .admin-content-container {
+    width: 100%;
+    max-width: none;
+    min-height: 0;
+    margin: 0;
+    padding: 0 1rem 2rem;
+    display: block;
+}
+
+body.login .admin-content-container > .row {
+    width: 100%;
+    justify-content: center;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+body.login .admin-sidebar-col {
+    display: none;
+}
+
+body.login .admin-main-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+}
+
+body.login #content {
+    width: 100%;
+    max-width: 28rem !important;
+    margin: 20vh auto 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.login-page {
+    width: 100%;
+}
+
+.login-card {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e6eaee;
+    border-radius: 1.25rem;
+    box-shadow: var(--rental-box-shadow);
+}
+
+.login-card-header {
+    padding: 2rem 2rem 1.25rem;
+    text-align: center;
+    border-bottom: 1px solid #edf0f2;
+}
+
+.login-brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    margin: 0 auto 1rem;
+    color: #6d4be8;
+    background: #f7f3ff;
+    border-radius: 1rem;
+}
+
+.login-brand-icon svg {
+    width: 7rem;
+    height: 7rem;
+}
+
+.login-card-header h1 {
+    margin: 0 0 .5rem;
+    color: #111827;
+    font-size: 1.45rem;
+    font-weight: 800;
+}
+
+.login-card-header p {
+    margin: 0;
+    color: #6c757d;
+    font-size: .9rem;
+}
+
+body.login #login-form {
+    padding: 1.5rem 2rem 2rem;
+}
+
+body.login .form-row {
+    padding: 0;
+    margin: 0 0 1rem;
+    border: 0;
+}
+
+body.login .form-row label {
+    display: block;
+    margin-bottom: .45rem;
+    color: #374151;
+    font-weight: 700;
+}
+
+body.login input[type="text"],
+body.login input[type="password"] {
+    width: 100%;
+    max-width: none;
+    min-height: 2.75rem;
+    padding: .65rem .85rem;
+    border: 1px solid #ced4da;
+    border-radius: .65rem;
+    background: #ffffff;
+}
+
+body.login .submit-row {
+    display: block;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+body.login .submit-row input {
+    width: 100%;
+    min-height: 2.85rem;
+    background: #6d4be8;
+    border-color: #6d4be8;
+    border-radius: .75rem;
+    font-weight: 800;
+}
+
+body.login .submit-row input:hover {
+    background: #5638c9;
+    border-color: #5638c9;
+}
+
+body.login .errornote {
+    margin: 1rem 2rem 0;
+}
+
+.password-reset-link {
+    margin-top: .5rem;
+    text-align: right;
+    font-size: .875rem;
+}
+
+@media (max-width: 575.98px) {
+    body.login .admin-content-container {
+        padding: 0 1rem 1.5rem;
+    }
+
+    body.login #content {
+        margin-top: 10vh !important;
+    }
+
+    .login-card-header,
+    body.login #login-form {
+        padding-right: 1.25rem;
+        padding-left: 1.25rem;
+    }
+}

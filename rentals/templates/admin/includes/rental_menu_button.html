@@ -1,0 +1,15 @@
+{% if model.admin_url %}
+    <a href="{{ model.admin_url }}" class="rental-menu-button">
+        <span class="rental-menu-icon">
+            {% include "admin/includes/rental_icon.html" with model_name=model.object_name %}
+        </span>
+        <span class="rental-menu-label">{{ model.name }}</span>
+    </a>
+{% else %}
+    <div class="rental-menu-button disabled">
+        <span class="rental-menu-icon">
+            {% include "admin/includes/rental_icon.html" with model_name=model.object_name %}
+        </span>
+        <span class="rental-menu-label">{{ model.name }}</span>
+    </div>
+{% endif %}

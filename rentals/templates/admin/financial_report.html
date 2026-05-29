@@ -1,0 +1,118 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}Laporan Keuangan{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Beranda' %}</a>
+    <span> &rsaquo; </span>
+    <a href="{% url 'admin:index' %}">POS Rental</a>
+    <span> &rsaquo; </span>
+    {{ title }}
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="admin-content-container">
+  <div class="row">
+    <div class="col-12">
+      <form method="get" class="d-flex gap-2 mb-5 align-items-center">
+        <label for="start_date" class="form-label mb-0">Dari</label>
+        <input type="date" id="start_date" name="start_date" value="{{ start_date }}" class="form-control">
+        <label for="end_date" class="form-label mb-0">Sampai</label>
+        <input type="date" id="end_date" name="end_date" value="{{ end_date }}" class="form-control">
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="{% url 'admin:rental_financial_report_export' %}?start_date={{ start_date }}&end_date={{ end_date }}" class="btn btn-success">Export CSV</a>
+      </form>
+
+      <div class="row g-4 mb-4">
+        <div class="col-6 col-md-3">
+          <div class="card border-sm h-100 admin-card p-3">
+            <div class="small text-secondary">Pemasukan</div>
+            <div class="fw-bold">{{ income_total_fmt }}</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card border-sm h-100 admin-card p-3">
+            <div class="small text-secondary">Pengeluaran (Lain)</div>
+            <div class="fw-bold">{{ other_total_fmt }}</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card border-sm h-100 admin-card p-3">
+            <div class="small text-secondary">Pengeluaran (Maintenance)</div>
+            <div class="fw-bold">{{ maintenance_total_fmt }}</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card border-sm h-100 admin-card p-3">
+            <div class="small text-secondary">Laba / Rugi</div>
+            <div class="fw-bold">{{ profit_fmt }}</div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="h6 mb-2">Detail Transaksi</h2>
+      <div class="card admin-card mb-4">
+        <div class="card-body p-0">
+          <table class="table table-sm mb-0">
+            <thead>
+              <tr>
+                <th>Tipe</th>
+                <th>Tanggal</th>
+                <th>Referensi</th>
+                <th>Deskripsi</th>
+                <th>Kredit</th>
+                <th class="text-end">Debit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in payments %}
+                <tr>
+                  <td>Pembayaran</td>
+                  <td>{{ p.payment_date|date:"Y-m-d" }}</td>
+                  <td>{{ p.rental.invoice_number }}</td>
+                  <td>{{ p.method }}</td>
+                  <td class="text-end text-success">{{ p.amount }}</td>
+                  <td class="text-end">-</td>
+                </tr>
+              {% endfor %}
+              {% for o in other_expenses %}
+                <tr>
+                  <td>Biaya Lain</td>
+                  <td>{{ o.expense_date|date:"Y-m-d" }}</td>
+                  <td>{{ o.reference_number }}</td>
+                  <td>{{ o.description }}</td>
+                  <td class="text-end">-</td>
+                  <td class="text-end text-danger">{{ o.total_cost }}</td>
+                </tr>
+              {% endfor %}
+              {% for m in maintenances %}
+                <tr>
+                  <td>Maintenance</td>
+                  <td>{{ m.maintenance_date|date:"Y-m-d" }}</td>
+                  <td>{{ m.vendor.name }}</td>
+                  <td>{{ m.issue_description }}</td>
+                  <td class="text-end">-</td>
+                  <td class="text-end text-danger">{{ m.total_cost }}</td>
+                </tr>
+              {% endfor %}
+              {% for r in rentals %}
+                <tr>
+                  <td>Order Rental</td>
+                  <td>{{ r.start_at|date:"Y-m-d" }}</td>
+                  <td>{{ r.invoice_number }}</td>
+                  <td>Customer: {{ r.customer.full_name }}</td>
+                  <td class="text-end">-</td>
+                  <td class="text-end">-</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}{% if form.errors %}{% translate "Error:" %} {% endif %}Masuk | {{ site_title|default:_('POS Rental Mobil') }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/login.css' %}?v=3">
+{{ form.media }}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+{% block header %}{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% block content_subtitle %}{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-card">
+        <div class="login-card-header">
+            <div class="login-brand-icon" aria-hidden="true">
+                {% include "admin/includes/sidebar_icons/pos_rental.svg" %}
+            </div>
+            <h1>Admin POS Rental Mobil</h1>
+            <p>Masuk untuk mengelola transaksi rental mobil.</p>
+        </div>
+
+        {% if form.errors and not form.non_field_errors %}
+            <p class="errornote">Periksa kembali nama pengguna dan sandi Anda.</p>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <p class="errornote">{{ error }}</p>
+            {% endfor %}
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <p class="errornote">
+                Anda sudah masuk sebagai {{ username }}, tetapi akun ini tidak memiliki izin untuk membuka halaman ini.
+            </p>
+        {% endif %}
+
+        <form action="{{ app_path }}" method="post" id="login-form" novalidate>
+            {% csrf_token %}
+            <div class="form-row">
+                {{ form.username.errors }}
+                <label for="{{ form.username.id_for_label }}">Nama pengguna</label>
+                {{ form.username }}
+            </div>
+            <div class="form-row">
+                {{ form.password.errors }}
+                <label for="{{ form.password.id_for_label }}">Sandi</label>
+                {{ form.password }}
+                <input type="hidden" name="next" value="{{ next }}">
+            </div>
+            {% url 'admin_password_reset' as password_reset_url %}
+            {% if password_reset_url %}
+                <div class="password-reset-link">
+                    <a href="{{ password_reset_url }}">Lupa kredensial masuk?</a>
+                </div>
+            {% endif %}
+            <div class="submit-row">
+                <input type="submit" value="Masuk">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}{% endblock %}

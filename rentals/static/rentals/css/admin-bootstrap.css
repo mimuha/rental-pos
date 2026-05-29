@@ -1,0 +1,1066 @@
+:root {
+    --primary: #6d4be8;
+    --secondary: #8b78d8;
+    --link-fg: #6d4be8;
+    --link-selected-fg: #5638c9;
+    --header-bg: #ffffff;
+    --header-color: #212529;
+    --breadcrumbs-bg: #f8f9fa;
+    --body-bg: #f4f6f8;
+    --body-fg: #212529;
+    --border-color: #dee2e6;
+    --rental-primary: #6d4be8;
+    --rental-primary-dark: #5638c9;
+    --rental-primary-soft: #f7f3ff;
+    --rental-primary-border: #ded4ff;
+    --rental-primary-shadow: rgba(109, 75, 232, .22);
+    --rental-danger: #e84a4a;
+    --rental-box-shadow: 0px 10px 16px -12px #4679a850;
+    --bs-primary: #6d4be8;
+    --bs-primary-rgb: 109, 75, 232;
+    --bs-link-color: #6d4be8;
+    --bs-link-hover-color: #5638c9;
+    --bs-success: #6d4be8;
+    --bs-success-rgb: 109, 75, 232;
+    --bs-info: #8b78d8;
+    --bs-info-rgb: 139, 120, 216;
+}
+
+body {
+    background: var(--body-bg) !important;
+    font-family: 'Inter', sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: 'Inter', sans-serif;
+}
+
+#container {
+    background: transparent !important;
+}
+
+#header {
+    background: #ffffff !important;
+    color: #212529 !important;
+    min-height: 64px !important;
+    padding: 0 !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .04) !important;
+}
+
+#header > .container,
+#header > .container-full {
+    min-height: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#branding h1,
+#branding h1 a:link,
+#branding h1 a:visited,
+#site-name,
+#site-name a:link,
+#site-name a:visited {
+    color: #212529 !important;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+}
+
+.rental-admin-brand {
+    display: inline-flex !important;
+    align-items: center;
+    gap: .65rem;
+}
+
+.rental-admin-brand-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    color: var(--rental-primary);
+    background: var(--rental-primary-soft);
+    border-radius: .7rem;
+}
+
+.rental-admin-brand-icon svg {
+    width: 1.45rem;
+    height: 1.45rem;
+}
+.rental-admin-brand-icon svg path {
+    fill: #6d4be8;
+}
+
+#user-tools
+{
+    color: #495057 !important;
+    font-size: .875rem !important;
+}
+#user-tools a,
+#logout-form button {
+    font-size: .875rem !important;
+    transition: .5s ease;
+}
+
+#user-tools a{
+    color: var(--rental-primary) !important;
+}
+
+#logout-form button {
+    color: var(--rental-danger) !important;
+}
+
+#user-tools a:hover,
+#logout-form button:hover {
+    color: var(--rental-primary) !important;
+}
+
+div.breadcrumbs {
+    background: #f8f9fa !important;
+    color: #6c757d !important;
+    padding: .85rem 1.5rem !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    border-radius: 1rem;
+    margin: 1rem 0 0;
+}
+
+div.breadcrumbs a {
+    color: var(--rental-primary);
+}
+
+.main {
+    background: transparent !important;
+}
+
+#content {
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 auto 2.5rem !important;
+    padding: 1.5rem !important;
+    background: #ffffff !important;
+    border: 1px solid #fff;
+    border-radius: 1rem !important;
+    box-shadow: var(--rental-box-shadow);
+}
+
+.admin-content-container .admin-card{
+    border: .1px solid #f1f1f1 !important;
+    padding: .7rem;
+}
+
+.admin-content-container form{
+    height: auto;
+}
+
+.admin-content-container form input[type="date"]{
+    width: 11rem;
+}
+
+.container-full {
+    max-width: none;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+}
+
+.admin-sidebar-col {
+    min-width: 0;
+}
+
+.admin-main-col {
+    min-width: 0;
+}
+
+.dashboard .admin-sidebar-col {
+    display: none;
+}
+
+.dashboard .admin-main-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+}
+
+#content h1 {
+    color: #212529;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 1.25rem;
+}
+
+.module,
+.inline-group {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: .5rem;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .03);
+}
+
+.module h2,
+.module caption,
+.inline-group h2 {
+    background: #f8f9fa;
+    color: #212529;
+    font-size: .95rem;
+    font-weight: 700;
+    padding: .85rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.module table {
+    margin-bottom: 0;
+}
+
+table {
+    border-color: var(--border-color);
+}
+
+thead th
+a,
+thead th a:link,
+thead th a:visited {
+    color: #111;
+}
+
+thead th,
+tfoot td {
+    background: #f8f9fa;
+    color: #212529;
+}
+tbody tr{
+    transition: .5s ease;
+}
+tbody tr:hover {
+    background: #f8fbff;
+}
+
+tbody tr th a{
+    font-weight: 400;
+}
+
+tbody tr th a:hover{
+    color: #c54444 !important;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+textarea,
+select,
+.vTextField {
+    border: 1px solid #ced4da;
+    border-radius: .375rem;
+    padding: .45rem .65rem;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.vTextField:focus {
+    border-color: var(--rental-primary);
+    box-shadow: none;
+    outline: 0;
+}
+
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button {
+    background: var(--rental-primary);
+    color: #ffffff !important;
+    border: 1px solid var(--rental-primary);
+    border-radius: .375rem;
+    padding: .45rem .8rem;
+    font-weight: 600;
+}
+
+.button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.submit-row input:hover,
+a.button:hover {
+    background: var(--rental-primary-dark);
+    border-color: var(--rental-primary-dark);
+    color: #ffffff;
+}
+
+.submit-row {
+    background: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-radius: .5rem;
+    padding: 1rem;
+}
+
+.submit-row .rental-status-submit {
+    color: var(--rental-primary) !important;
+    background: #ffffff !important;
+    border: 1px solid var(--rental-primary) !important;
+}
+
+.submit-row .rental-status-submit:hover,
+.submit-row .rental-status-submit:focus {
+    color: #ffffff !important;
+    background: var(--rental-primary-dark) !important;
+    border-color: var(--rental-primary-dark) !important;
+}
+
+.object-tools a:link,
+.object-tools a:visited {
+    background: var(--rental-primary);
+    border-radius: .375rem;
+    font-weight: 600;
+}
+
+.object-tools a:hover {
+    background: var(--rental-primary-dark);
+}
+
+#changelist {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: .5rem;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .03);
+    padding: 1rem 0;
+}
+
+#changelist-filter {
+    border-left: 1px solid var(--border-color);
+}
+
+.rental-filter-open {
+    display: none;
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 3000;
+    align-items: center;
+    gap: .45rem;
+    width: fit-content;
+    min-height: 2.75rem;
+    margin: 0;
+    padding: .65rem .9rem;
+    color: #ffffff;
+    background: var(--rental-primary);
+    border: 1px solid var(--rental-primary);
+    border-radius: .5rem;
+    font-size: .875rem;
+    font-weight: 700;
+    box-shadow: 0 14px 32px var(--rental-primary-shadow);
+    cursor: pointer;
+}
+
+.rental-filter-open.is-visible {
+    display: inline-flex;
+}
+
+#changelist.rental-filter-collapsed #changelist-filter {
+    display: none !important;
+}
+
+#changelist.rental-filter-collapsed .changelist-form-container:has(#changelist-filter) > div {
+    max-width: 100% !important;
+}
+
+#changelist .changelist-form-container {
+    gap: 1rem !important;
+}
+
+#changelist .changelist-form-container:has(#changelist-filter) > div {
+    max-width: calc(100% - 290px) !important;
+}
+
+#changelist-filter {
+    position: sticky !important;
+    top: 1rem !important;
+    flex: 0 0 260px !important;
+    width: 260px !important;
+    margin: 0 !important;
+    padding: 0 1rem 1rem !important;
+    order: 1 !important;
+    background: #ffffff !important;
+    border: 1px solid #dfe4ea !important;
+    border-radius: .5rem !important;
+    box-shadow: var(--rental-box-shadow);
+}
+
+#changelist-filter-header {
+    display: flex !important;
+    align-items: center !important;
+    gap: .5rem !important;
+    min-height: 3rem !important;
+    margin: 0 -1rem 1rem !important;
+    padding: .75rem 1rem !important;
+    color: #111827 !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid #e7ebf0 !important;
+    border-radius: .5rem .5rem 0 0 !important;
+    font-size: .95rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+}
+
+.rental-filter-title-icon {
+    display: inline-block;
+    width: .9rem;
+    height: .9rem;
+    background: currentColor;
+    clip-path: polygon(8% 12%, 92% 12%, 61% 48%, 61% 86%, 39% 86%, 39% 48%);
+    opacity: .7;
+}
+
+.rental-filter-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    min-height: 1.9rem;
+    margin-left: auto;
+    padding: 0;
+    color: #111827;
+    background: transparent;
+    border: 0;
+    border-radius: .375rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.rental-filter-close:hover,
+.rental-filter-open:hover {
+    background: var(--rental-primary-dark);
+}
+
+#changelist-filter-extra-actions {
+    display: none !important;
+}
+
+#changelist-filter .rental-filter-group {
+    margin: 0 0 1rem !important;
+    padding: 0 !important;
+}
+
+#changelist-filter .rental-filter-group summary {
+    display: block !important;
+    margin: 0 0 .6rem !important;
+    padding: 0 !important;
+    color: #111827 !important;
+    font-size: .82rem !important;
+    font-weight: 800 !important;
+    line-height: 1.25 !important;
+    list-style: none !important;
+    cursor: pointer !important;
+}
+
+#changelist-filter .rental-filter-group summary::before,
+#changelist-filter .rental-filter-group[open] > summary::before {
+    content: none !important;
+}
+
+#changelist-filter .rental-filter-group summary::-webkit-details-marker {
+    display: none !important;
+}
+
+#changelist-filter .rental-filter-options {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: .5rem !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    list-style: none !important;
+}
+
+#changelist-filter .rental-filter-options li {
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    list-style: none !important;
+}
+
+#changelist-filter .rental-filter-options a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 2rem !important;
+    padding: .4rem .55rem !important;
+    color: #1f2937 !important;
+    background: #ffffff !important;
+    border: 1px solid #dce2e8 !important;
+    border-radius: .42rem !important;
+    box-shadow: 0 1px 2px rgba(17, 24, 39, .04) !important;
+    font-size: .72rem !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    text-decoration: none !important;
+    word-break: normal !important;
+    overflow-wrap: anywhere !important;
+}
+
+#changelist-filter .rental-filter-options li.selected a {
+    color: #ffffff !important;
+    background: var(--rental-primary) !important;
+    border-color: var(--rental-primary) !important;
+    box-shadow: 0 8px 16px var(--rental-primary-shadow) !important;
+}
+
+#changelist-filter .rental-filter-options a:hover {
+    color: #111827 !important;
+    background: #f7f9fb !important;
+    border-color: #bdc7d2 !important;
+}
+
+#changelist-filter .rental-filter-options li.selected a:hover {
+    color: #ffffff !important;
+    background: var(--rental-primary-dark) !important;
+}
+
+.rental-active-filters {
+    margin: 1rem 0 0;
+    padding: .9rem 0 0;
+    border-top: 1px solid #e7ebf0;
+}
+
+.rental-active-filters h3 {
+    margin: 0 0 .5rem !important;
+    padding: 0 !important;
+    color: #374151 !important;
+    background: transparent !important;
+    border: 0 !important;
+    font-size: .78rem !important;
+    font-weight: 700 !important;
+}
+
+.rental-active-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+}
+
+.rental-filter-chip,
+.rental-filter-empty {
+    display: inline-flex !important;
+    align-items: center;
+    gap: .35rem;
+    max-width: 100%;
+    min-height: 1.8rem;
+    padding: .35rem .5rem;
+    color: var(--rental-primary-dark) !important;
+    background: var(--rental-primary-soft) !important;
+    border: 1px solid var(--rental-primary-border);
+    border-radius: .42rem;
+    font-size: .72rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none !important;
+}
+
+.rental-filter-chip span {
+    color: #6b7280;
+    font-size: .95rem;
+    line-height: 1;
+}
+
+.rental-filter-empty {
+    color: #6b7280 !important;
+    font-weight: 600;
+}
+
+.rental-filter-actions {
+    display: grid;
+    gap: .65rem;
+    margin-top: 1rem;
+}
+
+.rental-filter-reset,
+.rental-filter-apply {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.35rem;
+    padding: .55rem .75rem;
+    border-radius: .45rem;
+    font-size: .78rem;
+    font-weight: 800;
+    text-align: center;
+    text-decoration: none !important;
+}
+
+.rental-filter-reset {
+    color: #ef4444 !important;
+    background: #ffffff !important;
+    border: 1px solid #ef4444;
+}
+
+.rental-filter-reset:hover {
+    color: #ffffff !important;
+    background: #ef4444 !important;
+}
+
+.rental-filter-apply {
+    color: #ffffff !important;
+    background: var(--rental-primary) !important;
+    border: 1px solid var(--rental-primary);
+    box-shadow: 0 8px 18px var(--rental-primary-shadow);
+}
+
+.rental-filter-apply:hover {
+    color: #ffffff !important;
+    background: var(--rental-primary-dark) !important;
+}
+
+#toolbar {
+    background: #f8f9fa;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.actions {
+    align-items: center;
+}
+
+.actions label {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.actions select {
+    width: auto;
+    min-width: 16rem;
+    max-width: 100%;
+    margin: 0;
+}
+
+.actions .button,
+.actions button,
+.actions input[type="submit"] {
+    margin: 0;
+    align-self: center;
+}
+
+.actions .action-counter {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.4rem;
+    margin-left: .25rem;
+}
+
+.messagelist li {
+    border-radius: .375rem;
+}
+
+.bootstrap-admin-dashboard #content {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.bootstrap-admin-dashboard #content h1 {
+    margin: 2rem 0 ;
+    text-align: center;
+    font-size: 2.5rem;
+}
+
+.bootstrap-admin-dashboard .admin-dashboard {
+    width: 100%;
+    margin: 0;
+}
+
+.rental-dashboard-summary {
+    margin-bottom: 2rem;
+}
+
+.rental-dashboard-summary__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.rental-dashboard-summary__filter {
+    min-width: 12rem;
+}
+
+.rental-dashboard-summary__filter .form-label {
+    font-size: .875rem;
+    font-weight: 600;
+    color: #6c757d;
+}
+
+.rental-dashboard-summary__filter .form-control {
+    min-height: 2.5rem;
+    border-color: var(--rental-primary-border);
+    border-radius: .5rem;
+    font-weight: 600;
+}
+
+.rental-dashboard-summary__filter .form-control:focus {
+    border-color: var(--rental-primary);
+    box-shadow: 0 0 0 .25rem rgba(109, 75, 232, .18);
+}
+
+.rental-stat-card {
+    max-height: none;
+}
+
+.rental-stat-card .card-body {
+    padding: 1.25rem;
+}
+
+.rental-stat-card__value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #111827;
+}
+
+.rental-stat-card__value--success,
+.rental-stat-card__value--primary {
+    color: var(--rental-primary);
+}
+
+.rental-stat-card__value--income,
+.rental-stat-card__value--expense {
+    font-size: 1.5rem;
+}
+
+.rental-stat-card__value--expense {
+    color: #dc2626;
+}
+
+.rental-stat-card__hint {
+    margin-top: .5rem;
+}
+
+.rental-menu-groups {
+    padding-top: .25rem;
+}
+
+.rental-menu-group--spaced {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #edf0f2;
+}
+
+.rental-menu-group__title {
+    margin: 0 0 1rem;
+    font-size: .8rem !important;
+    letter-spacing: .06em;
+    color: #6c757d;
+    padding-top: .5rem;
+}
+
+.admin-card {
+    border-radius: 1rem !important;
+    overflow: hidden;
+    box-shadow: var(--rental-box-shadow);
+    padding-bottom: 1rem;
+}
+
+.admin-card .card-header {
+    padding: 1rem 1.25rem;
+}
+
+.admin-card .card-body {
+    overflow-y: auto;
+}
+
+.admin-card .list-group-item {
+    border-color: #edf0f2;
+    padding: .9rem 1.25rem;
+}
+
+.admin-card .btn {
+    min-width: 76px;
+    font-weight: 600;
+    border-radius: .5rem;
+}
+
+.recent-actions .list-group-item:first-child {
+    padding-top: 0;
+}
+
+@media (max-width: 767px) {
+    #header {
+        padding: .75rem 0 !important;
+    }
+
+    #content {
+        width: 100%;
+        margin-top: 1rem;
+        padding: 1rem;
+    }
+
+    .container-full {
+        padding-right: .75rem;
+        padding-left: .75rem;
+    }
+
+    #changelist .changelist-form-container {
+        flex-direction: column !important;
+    }
+
+    #changelist .changelist-form-container:has(#changelist-filter) > div {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    #changelist-filter {
+        position: static !important;
+        order: -1 !important;
+        width: 100% !important;
+        flex-basis: auto !important;
+    }
+}
+
+
+/* Rental POS purple theme overrides for Django admin and Bootstrap 5. */
+a,
+a:link,
+a:visited {
+    color: var(--rental-primary);
+    text-wrap: auto;
+}
+
+a:hover,
+a:focus {
+    color: var(--rental-primary-dark);
+}
+
+.text-primary,
+.text-success,
+.link-primary,
+.link-success {
+    color: var(--rental-primary) !important;
+}
+
+.bg-primary,
+.bg-success {
+    background-color: var(--rental-primary) !important;
+}
+
+.border-primary,
+.border-success {
+    border-color: var(--rental-primary) !important;
+}
+
+.btn-primary,
+.btn-info,
+.btn-outline-primary:hover,
+.btn-outline-success:hover,
+.btn-outline-info:hover {
+    color: #ffffff !important;
+    background-color: var(--rental-primary) !important;
+    border-color: var(--rental-primary) !important;
+}
+
+.btn-success {
+    background-color: #28a745 !important;
+    color: #ffffff !important;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active,
+.btn-info:hover,
+.btn-info:focus,
+.btn-info:active,
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active,
+.btn-outline-success:hover,
+.btn-outline-success:focus,
+.btn-outline-success:active,
+.btn-outline-info:hover,
+.btn-outline-info:focus,
+.btn-outline-info:active {
+    color: #ffffff !important;
+    background-color: var(--rental-primary-dark) !important;
+    border-color: var(--rental-primary-dark) !important;
+}
+
+.btn-outline-primary,
+.btn-outline-success,
+.btn-outline-info {
+    color: var(--rental-primary) !important;
+    background-color: transparent !important;
+    border-color: var(--rental-primary) !important;
+}
+
+.btn-check:checked + .btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check) + .btn:active {
+    color: #ffffff !important;
+    background-color: var(--rental-primary-dark) !important;
+    border-color: var(--rental-primary-dark) !important;
+}
+
+.btn:focus,
+.btn:focus-visible,
+.form-control:focus,
+.form-select:focus,
+.page-link:focus {
+    border-color: var(--rental-primary) !important;
+    box-shadow: 0 0 0 .25rem rgba(109, 75, 232, .18) !important;
+}
+
+.page-link {
+    color: var(--rental-primary) !important;
+}
+
+.active > .page-link,
+.page-link.active {
+    color: #ffffff !important;
+    background-color: var(--rental-primary) !important;
+    border-color: var(--rental-primary) !important;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    color: #ffffff !important;
+    background-color: var(--rental-primary) !important;
+}
+
+.progress-bar,
+.list-group-item.active {
+    background-color: var(--rental-primary) !important;
+    border-color: var(--rental-primary) !important;
+}
+
+/* css untuk button dari changelist */
+#toolbar form input[type="submit"],#changelist .actions .button{
+    color:var(--primary) !important;
+}
+
+#changelist .actions .button{
+    border:0px solid var(--primary) !important;
+    box-shadow:none !important;
+    padding: 0 10px  !important;
+    border-radius: 5px;
+    color:#fff !important;
+}
+
+#changelist .actions .button svg {
+    height: 1rem;
+}
+
+#toolbar #searchbar:focus {
+    border-color: var(--rental-primary) !important;
+}
+/* end untuk button dari changelist */
+/* css untuk widgets pyhon */
+.datetimeshortcuts .date-icon {
+    background: url("custom_icons/calendar.svg") 0 0 no-repeat !important;
+}
+.datetimeshortcuts .clock-icon {
+    background: url(custom_icons/clock.svg) 0 0 no-repeat !important;
+}
+.selector-chosen-title {
+    background: #6d4be82e !important;
+}
+.selector-add, .selector-remove {
+    min-height: 1rem;
+    transition: 0s ease !important;
+}
+.selector-remove {
+    background: url("custom_icons/selector-icons2.svg") 0 -96px no-repeat !important;
+    background-size: 24px !important;
+}
+.selector-add {
+    background: url("custom_icons/selector-icons2.svg") 0 -144px no-repeat !important;
+    background-size: 24px !important;
+}
+:enabled.selector-add:focus, :enabled.selector-add:hover {
+    background-position: 0 -168px !important;
+}
+:enabled.selector-remove:focus, :enabled.selector-remove:hover {
+    background-position: 0 -120px !important;
+}
+/* end untuk widgets python */
+/* css untuk forms python */
+.inline-group .tabular td.original p {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    line-height: 1.4 !important;
+    width: 160px !important;
+    position: relative !important;
+    overflow: unset !important;
+}
+.inline-related.tabular fieldset.module table {
+    width: 81rem !important;
+}
+.inline-group .tabular tr.has_original td {
+    padding-top: .75rem !important;
+}
+.field-payment_date {
+    width: 253px !important;
+}
+.field-method, .field-amount {
+    width: 187px !important;
+}
+.field-reference_number{
+    width: auto !important;
+ }
+.form-row img {
+    width: 17px;
+    margin-top: 5px;
+}
+.colM .aligned .vXMLLargeTextField {
+    width: 100% !important;
+}
+.vLargeTextField, .vXMLLargeTextField {
+    width:13rem !important;
+    height: 1rem !important;
+}
+.submit-row a.deletelink {
+    background: tomato !important;
+    border-radius: 4px !important;
+    padding: 1rem !important;
+    height: auto !important;
+    line-height: 0 !important;
+    color: #fff !important;
+}
+p.datetime {
+    width: 100%;
+}
+p.datetime label {
+    display: inline-block !important;
+    min-width: 127px;
+    width: 151px;
+}
+p.datetime input {
+    width: 30%;
+    max-width: 200px;
+}
+p.datetime  span {
+    width: 30%;
+}
+/* end forms python */
+/* css button python */
+input[value="Simpan dan terus mengedit"], input[value="Simpan dan tambahkan lagi"] {
+    background: #6d4be882 !important;
+}
+/* end css button python */

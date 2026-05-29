@@ -1,0 +1,189 @@
+{% extends "admin/base_site.html" %}
+{% load i18n log %}
+
+{% block coltype %}colMS{% endblock %}
+{% block bodyclass %}{{ block.super }} dashboard bootstrap-admin-dashboard{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+            <section class="rental-dashboard-summary">
+                <div class="rental-dashboard-summary__header">
+                    <div>
+                        <h2 class="h4 fw-bold mb-1">Dashboard</h2>
+                        <p class="text-secondary mb-0">
+                            Ringkasan operasional rental mobil bulan {{ selected_period_label }}.
+                        </p>
+                    </div>
+                    <form method="get" class="rental-dashboard-summary__filter">
+                        <label class="form-label mb-1" for="dashboard-period">Pilih bulan</label>
+                        <input
+                            type="month"
+                            id="dashboard-period"
+                            name="period"
+                            class="form-control"
+                            value="{{ selected_period }}"
+                            onchange="this.form.submit()"
+                        >
+                    </form>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-12 col-md-6 col-xl">
+                        <div class="card admin-card border-0 rental-stat-card h-100">
+                            <div class="card-body">
+                                <p class="text-secondary mb-2">Total kendaraan</p>
+                                <p class="rental-stat-card__value mb-0">{{ total_vehicles }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xl">
+                        <div class="card admin-card border-0 rental-stat-card h-100">
+                            <div class="card-body">
+                                <p class="text-secondary mb-2">Kendaraan tersedia</p>
+                                <p class="rental-stat-card__value rental-stat-card__value--success mb-0">{{ available_vehicles }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xl">
+                        <div class="card admin-card border-0 rental-stat-card h-100">
+                            <div class="card-body">
+                                <p class="text-secondary mb-2">Kendaraan disewa</p>
+                                <p class="rental-stat-card__value rental-stat-card__value--primary mb-0">{{ rented_vehicles }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xl">
+                        <div class="card admin-card border-0 rental-stat-card h-100">
+                            <div class="card-body">
+                                <p class="text-secondary mb-2">Pendapatan</p>
+                                <p class="rental-stat-card__value rental-stat-card__value--income mb-0">{{ monthly_income }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-xl">
+                        <div class="card admin-card border-0 rental-stat-card h-100">
+                            <div class="card-body">
+                                <p class="text-secondary mb-2">Pengeluaran</p>
+                                <p class="rental-stat-card__value rental-stat-card__value--expense mb-0">{{ monthly_expenses }}</p>
+                                <p class="rental-stat-card__hint text-secondary small mb-0">Maintenance kendaraan &amp; biaya lain</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-12 col-xl-7">
+            <div class="row g-4">
+                {% if app_list %}
+                    {% for app in app_list %}
+                        <div class="col-12">
+                            <div class="card admin-card border-0">
+                                <div class="card-header bg-white border-bottom">
+                                    <h2 class="h6 fw-bold text-uppercase mb-0">{{ app.name }}</h2>
+                                </div>
+                                {% if app.app_label == 'rentals' %}
+                                    <div class="card-body px-4 rental-menu-groups">
+                                        {% for group in app.menu_groups %}
+                                            <section class="rental-menu-group{% if not forloop.last %} rental-menu-group--spaced{% endif %}">
+                                                <h3 class="rental-menu-group__title">{{ group.title }}</h3>
+                                                <div class="row g-4">
+                                                    {% for model in group.models %}
+                                                        <div class="col-6 col-md-4 col-xl">
+                                                            {% include "admin/includes/rental_menu_button.html" with model=model %}
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </section>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="card-body p-0">
+                                        <div class="list-group list-group-flush">
+                                            {% for model in app.models %}
+                                                <div class="list-group-item d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                                                    <div>
+                                                        {% if model.admin_url %}
+                                                            <a href="{{ model.admin_url }}" class="fw-semibold text-decoration-none">{{ model.name }}</a>
+                                                        {% else %}
+                                                            <span class="fw-semibold">{{ model.name }}</span>
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        {% if model.add_url %}
+                                                            <a href="{{ model.add_url }}" class="btn btn-sm btn-primary">{% translate 'Tambah' %}</a>
+                                                        {% endif %}
+                                                        {% if model.admin_url %}
+                                                            <a href="{{ model.admin_url }}" class="btn btn-sm btn-outline-primary">
+                                                                {% if model.view_only %}{% translate 'Lihat' %}{% else %}{% translate 'Ubah' %}{% endif %}
+                                                            </a>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="card admin-card border-0">
+                            <div class="card-body">
+                                <p class="mb-0">{% translate 'Anda tidak memiliki izin untuk melihat atau mengubah data.' %}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-3">
+            <div class="card admin-card border-0">
+                <div class="card-header bg-white border-bottom">
+                    <h2 class="h6 fw-bold mb-0">{% translate 'Tindakan terbaru' %}</h2>
+                </div>
+                <div class="card-body">
+                    <h3 class="h6 text-secondary mb-3">{% translate 'Tindakan saya' %}</h3>
+                    {% get_admin_log 10 as admin_log for_user user %}
+                    {% if not admin_log %}
+                        <p class="text-secondary mb-0">{% translate 'Belum ada tindakan.' %}</p>
+                    {% else %}
+                        <div class="list-group list-group-flush recent-actions">
+                            {% for entry in admin_log %}
+                                <div class="list-group-item px-0">
+                                    {% if entry.is_deletion or not entry.get_admin_url %}
+                                        <span class="fw-semibold">{{ entry.object_repr }}</span>
+                                    {% else %}
+                                        <a href="{{ entry.get_admin_url }}" class="fw-semibold text-decoration-none">{{ entry.object_repr }}</a>
+                                    {% endif %}
+                                    <div class="small text-secondary">
+                                        {% if entry.content_type %}
+                                            {% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}
+                                        {% else %}
+                                            {% translate 'Konten tidak diketahui' %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}{% endblock %}

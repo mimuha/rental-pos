@@ -1,0 +1,11 @@
+{% load i18n %}
+<details class="rental-filter-group" data-filter-title="{{ title }}" open>
+  <summary>{{ title }}</summary>
+  <ul class="rental-filter-options">
+  {% for choice in choices %}
+    <li{% if choice.selected %} class="selected"{% endif %}>
+      <a href="{{ choice.query_string|iriencode }}">{{ choice.display }}</a>
+    </li>
+  {% endfor %}
+  </ul>
+</details>
