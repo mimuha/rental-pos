@@ -68,47 +68,50 @@
               </tr>
             </thead>
             <tbody>
-              {% for p in payments %}
-                <tr>
+              {% for p in payments_display %}
+              <tr>
                   <td>Pembayaran</td>
-                  <td>{{ p.payment_date|date:"Y-m-d" }}</td>
-                  <td>{{ p.rental.invoice_number }}</td>
-                  <td>{{ p.method }}</td>
-                  <td class="text-end text-success">{{ p.amount }}</td>
+                  <td>{{ p.obj.payment_date|date:"Y-m-d" }}</td>
+                  <td>{{ p.obj.rental.invoice_number }}</td>
+                  <td>{{ p.obj.method }}</td>
+                  <td class="text-end text-success">{{ p.amount_fmt }}</td>
                   <td class="text-end">-</td>
-                </tr>
+              </tr>
               {% endfor %}
-              {% for o in other_expenses %}
-                <tr>
+
+              {% for o in other_expenses_display %}
+              <tr>
                   <td>Biaya Lain</td>
-                  <td>{{ o.expense_date|date:"Y-m-d" }}</td>
-                  <td>{{ o.reference_number }}</td>
-                  <td>{{ o.description }}</td>
+                  <td>{{ o.obj.expense_date|date:"Y-m-d" }}</td>
+                  <td>{{ o.obj.reference_number }}</td>
+                  <td>{{ o.obj.description }}</td>
                   <td class="text-end">-</td>
-                  <td class="text-end text-danger">{{ o.total_cost }}</td>
-                </tr>
+                  <td class="text-end text-danger">{{ o.total_cost_fmt }}</td>
+              </tr>
               {% endfor %}
-              {% for m in maintenances %}
-                <tr>
+
+              {% for m in maintenances_display %}
+              <tr>
                   <td>Maintenance</td>
-                  <td>{{ m.maintenance_date|date:"Y-m-d" }}</td>
-                  <td>{{ m.vendor.name }}</td>
-                  <td>{{ m.issue_description }}</td>
+                  <td>{{ m.obj.maintenance_date|date:"Y-m-d" }}</td>
+                  <td>{{ m.obj.vendor.name }}</td>
+                  <td>{{ m.obj.issue_description }}</td>
                   <td class="text-end">-</td>
-                  <td class="text-end text-danger">{{ m.total_cost }}</td>
-                </tr>
+                  <td class="text-end text-danger">{{ m.total_cost_fmt }}</td>
+              </tr>
               {% endfor %}
+
               {% for r in rentals %}
-                <tr>
+              <tr>
                   <td>Order Rental</td>
                   <td>{{ r.start_at|date:"Y-m-d" }}</td>
                   <td>{{ r.invoice_number }}</td>
                   <td>Customer: {{ r.customer.full_name }}</td>
                   <td class="text-end">-</td>
                   <td class="text-end">-</td>
-                </tr>
+              </tr>
               {% endfor %}
-            </tbody>
+          </tbody>
           </table>
         </div>
       </div>

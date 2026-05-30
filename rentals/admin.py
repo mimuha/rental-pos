@@ -565,41 +565,56 @@ def financial_report_csv(request):
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     writer = csv.writer(response)
 
-    writer.writerow(['Tipe', 'Tanggal', 'Referensi', 'Deskripsi', 'Jumlah'])
+    writer.writerow([
+        'Tipe',
+        'Tanggal',
+        'Referensi',
+        'Deskripsi',
+        'Kredit',
+        'Debit'
+    ])
 
+    # Pembayaran (Kredit)
     for p in payments_qs:
         writer.writerow([
-            'Pemasukan - Pembayaran',
+            'Pembayaran',
             p.payment_date.strftime('%Y-%m-%d'),
             getattr(p.rental, 'invoice_number', ''),
             p.method,
-            smart_str(p.amount),
+            p.amount,
+            '',
         ])
 
+    # Biaya Lain (Debit)
     for o in other_qs:
         writer.writerow([
-            'Pengeluaran - Biaya Lain',
+            'Biaya Lain',
             o.expense_date.strftime('%Y-%m-%d'),
             o.reference_number,
             o.description,
-            smart_str(o.total_cost),
+            '',
+            o.total_cost,
         ])
 
+    # Maintenance (Debit)
     for m in maintenance_qs:
         writer.writerow([
-            'Pengeluaran - Maintenance',
+            'Maintenance',
             m.maintenance_date.strftime('%Y-%m-%d'),
             m.vendor.name if m.vendor else '',
             m.issue_description,
-            smart_str(m.total_cost),
+            '',
+            m.total_cost,
         ])
 
+    # Order Rental (Informasi saja)
     for r in rentals_qs:
         writer.writerow([
             'Order Rental',
             r.start_at.strftime('%Y-%m-%d'),
             r.invoice_number,
             r.customer.full_name if r.customer else '',
+            '',
             '',
         ])
 
