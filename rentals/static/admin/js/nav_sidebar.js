@@ -80,9 +80,42 @@
         let currentAnchor = null;
         let docMousedownHandler = null;
         let docKeydownHandler = null;
+        let popupCloseTimer = null;
+        const desktopCollapsedMedia = window.matchMedia('(min-width: 1200px)');
+
+        function isDesktopCollapsedMode() {
+            return Boolean(
+                sidebarColumn
+                && sidebarColumn.classList.contains('rental-nav-collapsed')
+                && desktopCollapsedMedia.matches
+            );
+        }
+
+        function isCollapsedMode() {
+            return Boolean(sidebarColumn && sidebarColumn.classList.contains('rental-nav-collapsed'));
+        }
+
+        function clearPopupCloseTimer() {
+            if (popupCloseTimer) {
+                window.clearTimeout(popupCloseTimer);
+                popupCloseTimer = null;
+            }
+        }
+
+        function scheduleHoverPopupClose() {
+            clearPopupCloseTimer();
+            popupCloseTimer = window.setTimeout(function () {
+                const isStillHoveringPopup = currentPopup && currentPopup.matches(':hover');
+                const isStillHoveringAnchor = currentAnchor && currentAnchor.matches(':hover');
+                if (!isStillHoveringPopup && !isStillHoveringAnchor) {
+                    closePopup();
+                }
+            }, 120);
+        }
 
         function closePopup() {
             if (!currentPopup) return;
+            clearPopupCloseTimer();
             try { currentPopup.remove(); } catch (e) {}
             currentPopup = null;
             currentAnchor = null;
@@ -119,6 +152,12 @@
             inner.appendChild(submenuClone);
             popup.appendChild(inner);
             document.body.appendChild(popup);
+            popup.addEventListener('mouseenter', clearPopupCloseTimer);
+            popup.addEventListener('mouseleave', function () {
+                if (isDesktopCollapsedMode()) {
+                    scheduleHoverPopupClose();
+                }
+            });
 
             // position popup next to collapsed sidebar
             const anchorRect = summary.getBoundingClientRect();
@@ -142,6 +181,9 @@
             popup.style.position = 'absolute';
             popup.style.left = left + 'px';
             popup.style.top = top + 'px';
+            window.requestAnimationFrame(function () {
+                popup.classList.add('is-visible');
+            });
 
             docMousedownHandler = function (e) {
                 if (popup.contains(e.target) || summary.contains(e.target)) return;
@@ -171,14 +213,34 @@
         items.forEach(function (item) {
             const summary = item.querySelector('summary');
             if (!summary) return;
+
+            item.addEventListener('mouseenter', function () {
+                if (!isDesktopCollapsedMode()) {
+                    return;
+                }
+                clearPopupCloseTimer();
+                if (currentAnchor !== item) {
+                    showPopupForItem(item, summary);
+                }
+            });
+
+            item.addEventListener('mouseleave', function () {
+                if (isDesktopCollapsedMode()) {
+                    scheduleHoverPopupClose();
+                }
+            });
+
             summary.addEventListener('click', function (event) {
-                const isCollapsed = sidebarColumn && sidebarColumn.classList.contains('rental-nav-collapsed');
-                if (!isCollapsed) {
+                if (!isCollapsedMode()) {
                     // allow normal expand/collapse when nav is expanded
                     return;
                 }
                 event.preventDefault();
                 event.stopPropagation();
+                if (isDesktopCollapsedMode()) {
+                    showPopupForItem(item, summary);
+                    return;
+                }
                 if (currentAnchor === item) {
                     closePopup();
                     return;

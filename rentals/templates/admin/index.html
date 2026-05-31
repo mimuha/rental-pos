@@ -9,7 +9,7 @@
 {% block content %}
 <div class="admin-dashboard">
     <div class="row justify-content-center">
-        <div class="col-12 col-xl-10">
+        <div class="col-12 col-xl-11">
             <section class="rental-dashboard-summary">
                 <div class="rental-dashboard-summary__header">
                     <div>
@@ -87,12 +87,12 @@
             <div class="row g-4">
                 {% if app_list %}
                     {% for app in app_list %}
-                        <div class="col-12">
-                            <div class="card admin-card border-0">
-                                <div class="card-header bg-white border-bottom">
-                                    <h2 class="h6 fw-bold text-uppercase mb-0">{{ app.name }}</h2>
-                                </div>
-                                {% if app.app_label == 'rentals' %}
+                        {% if app.app_label == 'rentals' %}
+                            <div class="col-12">
+                                <div class="card admin-card border-0">
+                                    <div class="card-header bg-white border-bottom">
+                                        <h2 class="h6 fw-bold text-uppercase mb-0">{{ app.name }}</h2>
+                                    </div>
                                     <div class="card-body px-4 rental-menu-groups">
                                         {% for group in app.menu_groups %}
                                             <section class="rental-menu-group{% if not forloop.last %} rental-menu-group--spaced{% endif %}">
@@ -107,7 +107,32 @@
                                             </section>
                                         {% endfor %}
                                     </div>
-                                {% else %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="card admin-card border-0">
+                            <div class="card-body">
+                                <p class="mb-0">{% translate 'Anda tidak memiliki izin untuk melihat atau mengubah data.' %}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-4">
+            {% if app_list %}
+                <div class="row g-4 mb-4">
+                    {% for app in app_list %}
+                        {% if app.app_label != 'rentals' %}
+                            <div class="col-12">
+                                <div class="card admin-card border-0">
+                                    <div class="card-header bg-white border-bottom">
+                                        <h2 class="h6 fw-bold text-uppercase mb-0">{{ app.name }}</h2>
+                                    </div>
                                     <div class="card-body p-0">
                                         <div class="list-group list-group-flush">
                                             {% for model in app.models %}
@@ -133,23 +158,13 @@
                                             {% endfor %}
                                         </div>
                                     </div>
-                                {% endif %}
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     {% endfor %}
-                {% else %}
-                    <div class="col-12">
-                        <div class="card admin-card border-0">
-                            <div class="card-body">
-                                <p class="mb-0">{% translate 'Anda tidak memiliki izin untuk melihat atau mengubah data.' %}</p>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
+                </div>
+            {% endif %}
 
-        <div class="col-12 col-xl-3">
             <div class="card admin-card border-0">
                 <div class="card-header bg-white border-bottom">
                     <h2 class="h6 fw-bold mb-0">{% translate 'Tindakan terbaru' %}</h2>

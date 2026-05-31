@@ -3,6 +3,43 @@
 
 {% block title %}Laporan Keuangan{% endblock %}
 
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .transaction-table-toolbar {
+    max-width: 360px;
+  }
+
+  .transaction-sort {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    display: inline-flex;
+    font: inherit;
+    gap: .35rem;
+    padding: 0;
+    text-align: inherit;
+    width: 100%;
+  }
+
+  .transaction-sort::after {
+    color: var(--bs-secondary-color, #6c757d);
+    content: "\2195";
+    font-size: .75rem;
+    line-height: 1;
+  }
+
+  .transaction-sort[aria-sort="ascending"]::after {
+    content: "\2191";
+  }
+
+  .transaction-sort[aria-sort="descending"]::after {
+    content: "\2193";
+  }
+</style>
+{% endblock %}
+
 {% block breadcrumbs %}
   <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">{% translate 'Beranda' %}</a>
@@ -54,63 +91,71 @@
       </div>
 
       <h2 class="h6 mb-2">Detail Transaksi</h2>
+      <div class="transaction-table-toolbar mb-2">
+        <label for="transaction-search" class="visually-hidden">Cari transaksi</label>
+        <input type="search" id="transaction-search" class="form-control form-control-sm" placeholder="Cari transaksi...">
+      </div>
       <div class="card admin-card mb-4">
         <div class="card-body p-0">
-          <table class="table table-sm mb-0">
+          <table class="table table-sm mb-0" id="transaction-table">
             <thead>
               <tr>
-                <th>Tipe</th>
-                <th>Tanggal</th>
-                <th>Referensi</th>
-                <th>Deskripsi</th>
-                <th>Kredit</th>
-                <th class="text-end">Debit</th>
+                <th><button type="button" class="transaction-sort" data-sort-index="0" data-sort-type="text" aria-sort="none">Tipe</button></th>
+                <th><button type="button" class="transaction-sort" data-sort-index="1" data-sort-type="date" aria-sort="none">Tanggal</button></th>
+                <th><button type="button" class="transaction-sort" data-sort-index="2" data-sort-type="text" aria-sort="none">Referensi</button></th>
+                <th><button type="button" class="transaction-sort" data-sort-index="3" data-sort-type="text" aria-sort="none">Deskripsi</button></th>
+                <th><button type="button" class="transaction-sort" data-sort-index="4" data-sort-type="number" aria-sort="none">Kredit</button></th>
+                <th class="text-end"><button type="button" class="transaction-sort justify-content-end" data-sort-index="5" data-sort-type="number" aria-sort="none">Debit</button></th>
               </tr>
             </thead>
             <tbody>
               {% for p in payments_display %}
               <tr>
-                  <td>Pembayaran</td>
-                  <td>{{ p.obj.payment_date|date:"Y-m-d" }}</td>
-                  <td>{{ p.obj.rental.invoice_number }}</td>
-                  <td>{{ p.obj.method }}</td>
-                  <td class="text-end text-success">{{ p.amount_fmt }}</td>
-                  <td class="text-end">-</td>
+                  <td data-sort-value="Pembayaran">Pembayaran</td>
+                  <td data-sort-value="{{ p.obj.payment_date|date:"Y-m-d" }}">{{ p.obj.payment_date|date:"Y-m-d" }}</td>
+                  <td data-sort-value="{{ p.obj.rental.invoice_number|escape }}">{{ p.obj.rental.invoice_number }}</td>
+                  <td data-sort-value="{{ p.obj.method|escape }}">{{ p.obj.method }}</td>
+                  <td class="text-end text-success" data-sort-value="{{ p.obj.amount }}">{{ p.amount_fmt }}</td>
+                  <td class="text-end" data-sort-value="0">-</td>
               </tr>
               {% endfor %}
 
               {% for o in other_expenses_display %}
               <tr>
-                  <td>Biaya Lain</td>
-                  <td>{{ o.obj.expense_date|date:"Y-m-d" }}</td>
-                  <td>{{ o.obj.reference_number }}</td>
-                  <td>{{ o.obj.description }}</td>
-                  <td class="text-end">-</td>
-                  <td class="text-end text-danger">{{ o.total_cost_fmt }}</td>
+                  <td data-sort-value="Biaya Lain">Biaya Lain</td>
+                  <td data-sort-value="{{ o.obj.expense_date|date:"Y-m-d" }}">{{ o.obj.expense_date|date:"Y-m-d" }}</td>
+                  <td data-sort-value="{{ o.obj.reference_number|escape }}">{{ o.obj.reference_number }}</td>
+                  <td data-sort-value="{{ o.obj.description|escape }}">{{ o.obj.description }}</td>
+                  <td class="text-end" data-sort-value="0">-</td>
+                  <td class="text-end text-danger" data-sort-value="{{ o.obj.total_cost }}">{{ o.total_cost_fmt }}</td>
               </tr>
               {% endfor %}
 
               {% for m in maintenances_display %}
               <tr>
-                  <td>Maintenance</td>
-                  <td>{{ m.obj.maintenance_date|date:"Y-m-d" }}</td>
-                  <td>{{ m.obj.vendor.name }}</td>
-                  <td>{{ m.obj.issue_description }}</td>
-                  <td class="text-end">-</td>
-                  <td class="text-end text-danger">{{ m.total_cost_fmt }}</td>
+                  <td data-sort-value="Maintenance">Maintenance</td>
+                  <td data-sort-value="{{ m.obj.maintenance_date|date:"Y-m-d" }}">{{ m.obj.maintenance_date|date:"Y-m-d" }}</td>
+                  <td data-sort-value="{{ m.obj.vendor.name|escape }}">{{ m.obj.vendor.name }}</td>
+                  <td data-sort-value="{{ m.obj.issue_description|escape }}">{{ m.obj.issue_description }}</td>
+                  <td class="text-end" data-sort-value="0">-</td>
+                  <td class="text-end text-danger" data-sort-value="{{ m.obj.total_cost }}">{{ m.total_cost_fmt }}</td>
               </tr>
               {% endfor %}
 
               {% for r in rentals %}
               <tr>
-                  <td>Order Rental</td>
-                  <td>{{ r.start_at|date:"Y-m-d" }}</td>
-                  <td>{{ r.invoice_number }}</td>
-                  <td>Customer: {{ r.customer.full_name }}</td>
-                  <td class="text-end">-</td>
-                  <td class="text-end">-</td>
+                  <td data-sort-value="Order Rental">Order Rental</td>
+                  <td data-sort-value="{{ r.start_at|date:"Y-m-d" }}">{{ r.start_at|date:"Y-m-d" }}</td>
+                  <td data-sort-value="{{ r.invoice_number|escape }}">{{ r.invoice_number }}</td>
+                  <td data-sort-value="Customer: {{ r.customer.full_name|escape }}">Customer: {{ r.customer.full_name }}</td>
+                  <td class="text-end" data-sort-value="0">-</td>
+                  <td class="text-end" data-sort-value="0">-</td>
               </tr>
               {% endfor %}
+
+              <tr id="transaction-empty-row" class="d-none">
+                <td colspan="6" class="text-center text-secondary py-4">Tidak ada transaksi yang cocok.</td>
+              </tr>
           </tbody>
           </table>
         </div>
@@ -118,4 +163,87 @@
     </div>
   </div>
 </div>
+<script>
+  (function () {
+    const table = document.getElementById('transaction-table');
+    const searchInput = document.getElementById('transaction-search');
+
+    if (!table || !searchInput) {
+      return;
+    }
+
+    const tbody = table.tBodies[0];
+    const emptyRow = document.getElementById('transaction-empty-row');
+    const sortButtons = Array.from(table.querySelectorAll('.transaction-sort'));
+
+    function transactionRows() {
+      return Array.from(tbody.querySelectorAll('tr')).filter((row) => row !== emptyRow);
+    }
+
+    function normalizeNumber(value) {
+      const parsed = Number(String(value || '').replace(/[^\d.-]/g, ''));
+      return Number.isNaN(parsed) ? 0 : parsed;
+    }
+
+    function getCellValue(row, index, type) {
+      const cell = row.cells[index];
+      const value = cell ? (cell.dataset.sortValue || cell.textContent || '') : '';
+
+      if (type === 'number') {
+        return normalizeNumber(value);
+      }
+
+      if (type === 'date') {
+        return value ? Date.parse(value) || 0 : 0;
+      }
+
+      return value.trim().toLocaleLowerCase('id-ID');
+    }
+
+    function applySearch() {
+      const keyword = searchInput.value.trim().toLocaleLowerCase('id-ID');
+      let visibleCount = 0;
+
+      transactionRows().forEach((row) => {
+        const isVisible = !keyword || row.textContent.toLocaleLowerCase('id-ID').includes(keyword);
+        row.classList.toggle('d-none', !isVisible);
+        if (isVisible) {
+          visibleCount += 1;
+        }
+      });
+
+      emptyRow.classList.toggle('d-none', visibleCount !== 0);
+    }
+
+    sortButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const index = Number(button.dataset.sortIndex);
+        const type = button.dataset.sortType || 'text';
+        const currentSort = button.getAttribute('aria-sort');
+        const nextSort = currentSort === 'ascending' ? 'descending' : 'ascending';
+        const direction = nextSort === 'ascending' ? 1 : -1;
+
+        sortButtons.forEach((sortButton) => sortButton.setAttribute('aria-sort', 'none'));
+        button.setAttribute('aria-sort', nextSort);
+
+        transactionRows()
+          .sort((a, b) => {
+            const first = getCellValue(a, index, type);
+            const second = getCellValue(b, index, type);
+
+            if (type === 'text') {
+              return first.localeCompare(second, 'id-ID', { numeric: true, sensitivity: 'base' }) * direction;
+            }
+
+            return (first - second) * direction;
+          })
+          .forEach((row) => tbody.insertBefore(row, emptyRow));
+
+        applySearch();
+      });
+    });
+
+    searchInput.addEventListener('input', applySearch);
+  })();
+</script>
 {% endblock %}

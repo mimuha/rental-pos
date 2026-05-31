@@ -21,6 +21,9 @@
             if (collapseButton) {
                 collapseButton.setAttribute('aria-label', isCollapsed ? 'Tampilkan menu' : 'Sembunyikan menu');
             }
+            if (!isCollapsed) {
+                closePopup();
+            }
         }
 
         if (collapseButton) {
@@ -70,6 +73,175 @@
                 }
             });
         }
+
+        // Popup handling for collapsed menu
+        let currentPopup = null;
+        let currentAnchor = null;
+        let docMousedownHandler = null;
+        let docKeydownHandler = null;
+        let popupCloseTimer = null;
+        const desktopCollapsedMedia = window.matchMedia('(min-width: 1200px)');
+
+        function isDesktopCollapsedMode() {
+            return Boolean(
+                sidebarColumn
+                && sidebarColumn.classList.contains('rental-nav-collapsed')
+                && desktopCollapsedMedia.matches
+            );
+        }
+
+        function isCollapsedMode() {
+            return Boolean(sidebarColumn && sidebarColumn.classList.contains('rental-nav-collapsed'));
+        }
+
+        function clearPopupCloseTimer() {
+            if (popupCloseTimer) {
+                window.clearTimeout(popupCloseTimer);
+                popupCloseTimer = null;
+            }
+        }
+
+        function scheduleHoverPopupClose() {
+            clearPopupCloseTimer();
+            popupCloseTimer = window.setTimeout(function () {
+                const isStillHoveringPopup = currentPopup && currentPopup.matches(':hover');
+                const isStillHoveringAnchor = currentAnchor && currentAnchor.matches(':hover');
+                if (!isStillHoveringPopup && !isStillHoveringAnchor) {
+                    closePopup();
+                }
+            }, 120);
+        }
+
+        function closePopup() {
+            if (!currentPopup) return;
+            clearPopupCloseTimer();
+            try { currentPopup.remove(); } catch (e) {}
+            currentPopup = null;
+            currentAnchor = null;
+            if (docMousedownHandler) document.removeEventListener('mousedown', docMousedownHandler, true);
+            if (docKeydownHandler) document.removeEventListener('keydown', docKeydownHandler, true);
+            window.removeEventListener('resize', closePopup);
+            window.removeEventListener('scroll', closePopup, true);
+        }
+
+        function showPopupForItem(item, summary) {
+            closePopup();
+            const submenu = item.querySelector('.rental-nav-submenu');
+            if (!submenu) return;
+
+            const labelEl = item.querySelector('.rental-nav-label');
+            const label = labelEl ? labelEl.textContent.trim() : '';
+
+            const popup = document.createElement('div');
+            popup.className = 'rental-nav-popup';
+            popup.setAttribute('role', 'menu');
+
+            const inner = document.createElement('div');
+            inner.className = 'rental-nav-popup-inner';
+
+            if (label) {
+                const title = document.createElement('div');
+                title.className = 'rental-nav-popup-title';
+                title.textContent = label;
+                inner.appendChild(title);
+            }
+
+            const submenuClone = submenu.cloneNode(true);
+            submenuClone.style.display = 'block';
+            inner.appendChild(submenuClone);
+            popup.appendChild(inner);
+            document.body.appendChild(popup);
+            popup.addEventListener('mouseenter', clearPopupCloseTimer);
+            popup.addEventListener('mouseleave', function () {
+                if (isDesktopCollapsedMode()) {
+                    scheduleHoverPopupClose();
+                }
+            });
+
+            const anchorRect = summary.getBoundingClientRect();
+            const sidebarRect = sidebarColumn ? sidebarColumn.getBoundingClientRect() : sidebar.getBoundingClientRect();
+            const popupRect = popup.getBoundingClientRect();
+
+            const margin = 8;
+            let left = sidebarRect.right + margin + window.scrollX - 20;
+            let top = anchorRect.top + (anchorRect.height / 2) - (popupRect.height / 2) + window.scrollY;
+
+            if (top + popupRect.height > window.innerHeight - margin) {
+                top = window.innerHeight - popupRect.height - margin;
+            }
+            if (top < margin) top = margin;
+
+            if (left + popupRect.width > window.innerWidth - margin) {
+                left = window.innerWidth - popupRect.width - margin;
+            }
+
+            popup.style.position = 'absolute';
+            popup.style.left = left + 'px';
+            popup.style.top = top + 'px';
+            window.requestAnimationFrame(function () {
+                popup.classList.add('is-visible');
+            });
+
+            docMousedownHandler = function (e) {
+                if (popup.contains(e.target) || summary.contains(e.target)) return;
+                closePopup();
+            };
+            docKeydownHandler = function (e) {
+                if (e.key === 'Escape') closePopup();
+            };
+
+            document.addEventListener('mousedown', docMousedownHandler, true);
+            document.addEventListener('keydown', docKeydownHandler, true);
+            window.addEventListener('resize', closePopup);
+            window.addEventListener('scroll', closePopup, true);
+
+            popup.querySelectorAll('a').forEach(function (a) {
+                a.addEventListener('click', function () {
+                    closePopup();
+                });
+            });
+
+            currentPopup = popup;
+            currentAnchor = item;
+        }
+
+        items.forEach(function (item) {
+            const summary = item.querySelector('summary');
+            if (!summary) return;
+
+            item.addEventListener('mouseenter', function () {
+                if (!isDesktopCollapsedMode()) {
+                    return;
+                }
+                clearPopupCloseTimer();
+                if (currentAnchor !== item) {
+                    showPopupForItem(item, summary);
+                }
+            });
+
+            item.addEventListener('mouseleave', function () {
+                if (isDesktopCollapsedMode()) {
+                    scheduleHoverPopupClose();
+                }
+            });
+
+            summary.addEventListener('click', function (event) {
+                if (!isCollapsedMode()) {
+                    return;
+                }
+                event.preventDefault();
+                event.stopPropagation();
+                if (isDesktopCollapsedMode()) {
+                    showPopupForItem(item, summary);
+                    return;
+                }
+                if (currentAnchor === item) {
+                    closePopup();
+                    return;
+                }
+                showPopupForItem(item, summary);
+            });
+        });
     }
 
     if (document.readyState === 'loading') {

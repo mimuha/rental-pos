@@ -797,6 +797,14 @@ a.button:hover {
 .recent-actions .list-group-item:first-child {
     padding-top: 0;
 }
+.recent-actions {
+    max-height: 38rem;
+}
+@media (min-width: 1487px) {
+    .recent-actions {
+        max-height: 26rem;
+    }
+}
 
 @media (max-width: 767px) {
     #header {
@@ -1064,3 +1072,17 @@ input[value="Simpan dan terus mengedit"], input[value="Simpan dan tambahkan lagi
     background: #6d4be882 !important;
 }
 /* end css button python */
+/* css responsive python */
+@media (max-width: 767px) {
+    .aligned .form-row input, .aligned .form-row select {
+        max-width: 48% !important;
+    }
+    .aligned .form-row textarea {
+        max-width: 68% !important;
+        min-height: 100px !important;
+    }
+    .aligned legend, .aligned label,.aligned label + p, .aligned label + div.help, .aligned label + div.readonly,.aligned .form-row textarea,.aligned .form-row input, .aligned .form-row select {
+        margin-left: .5rem !important;
+    }
+}
+/* end responsive python */
