@@ -997,6 +997,11 @@ a:focus {
 #toolbar #searchbar:focus {
     border-color: var(--rental-primary) !important;
 }
+@media (max-width: 1024px) {
+    #toolbar form #searchbar {
+        width: 10rem !important;
+    }
+}
 /* end untuk button dari changelist */
 /* css untuk widgets pyhon */
 .datetimeshortcuts .date-icon {
