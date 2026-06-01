@@ -23,8 +23,8 @@
     flex-direction: column;
     min-height: calc(100vh - 8rem);
     padding: 1.25rem;
-    background: rgba(255, 255, 255, .96);
-    border: 1px solid #e8edf3;
+    background: var(--white2);
+    border: 1px solid #aaacaf1a;
     border-radius: 1rem;
     box-shadow: var(--rental-box-shadow);
     margin-bottom: 1.5rem;
@@ -206,12 +206,12 @@
 
 .rental-nav-items {
     overflow: hidden;
-    background: #ffffff;
+    background: var(--white2);
 }
 
 .rental-nav-section .rental-nav-items {
     margin: 1rem 0;
-    border: 0.1px solid #f9f9f9;
+    border: 0.1px solid var(--abu2header);
     border-radius: .75rem;
     box-shadow: var(--rental-box-shadow);
 }
@@ -251,7 +251,7 @@
 .rental-nav-item summary:hover,
 .rental-nav-item[open] summary,
 .rental-nav-item.current-model summary {
-    background: #fbf8ff;
+    background: var(--unguhover);
 }
 
 .rental-nav-label {
@@ -343,7 +343,26 @@
 .rental-nav-subicon.list::after {
     top: 7px;
 }
+.rental-nav-subicon.calendar::before {
+    content: "";
+    display: block;
+    width: 12px;
+    height: 6px;
+    border: 2px solid currentColor;
+    border-radius: 3px;
+    top: -4px;
+    position: absolute;
+}
 
+.rental-nav-subicon.calendar::after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 2px;
+    background: currentColor;
+    top: 6px;
+    left: 3px;
+}
 .rental-nav-subicon.add {
     border-radius: 50%;
 }
@@ -656,7 +675,6 @@
 }
 
 .rental-nav-popup .rental-nav-submenu .rental-nav-subicon {
-    border: 0;
     width: 1rem;
     height: 1rem;
 }

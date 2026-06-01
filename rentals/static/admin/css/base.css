@@ -464,7 +464,7 @@ a.button:hover {
     align-items: center;
     min-height: 2.4rem;
     margin-left: .25rem;
-    color: #495057;
+    color: var(--rental-pos-subtitle) !important;
 }
 
 .results {
@@ -626,7 +626,7 @@ a.button:hover {
     min-height: 10.5rem;
     padding: 1.25rem 1rem;
     color: #425a74 !important;
-    background: #ffffff;
+    background: var(--white2) !important;
     border-radius: 1.25rem;
     box-shadow: var(--rental-box-shadow);
     border: .1px solid rgba(109, 75, 232, .14);

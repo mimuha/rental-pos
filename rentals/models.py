@@ -1,6 +1,7 @@
 import re
 
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.utils import timezone
 from decimal import Decimal
@@ -302,6 +303,32 @@ class Rental(TimeStampedModel):
     def __str__(self):
         return f'{self.invoice_number} - {self.customer}'
 
+    def clean(self):
+        super().clean()
+
+        if self.start_at and self.expected_return_at and self.expected_return_at <= self.start_at:
+            raise ValidationError({
+                'expected_return_at': 'Rencana kembali harus setelah mulai sewa.',
+            })
+
+        if not (self.vehicle_id and self.start_at and self.expected_return_at):
+            return
+
+        overlapping_rentals = Rental.objects.filter(
+            vehicle_id=self.vehicle_id,
+            start_at__lt=self.expected_return_at,
+            expected_return_at__gt=self.start_at,
+        ).exclude(
+            status=Rental.Status.CANCELLED,
+        )
+        if self.pk:
+            overlapping_rentals = overlapping_rentals.exclude(pk=self.pk)
+
+        if overlapping_rentals.exists():
+            raise ValidationError({
+                'vehicle': 'Kendaraan sudah memiliki booking pada rentang tanggal tersebut.',
+            })
+
     @classmethod
     def generate_invoice_number(cls, year):
         prefix = f'{cls.INVOICE_PREFIX}-{year}-'
@@ -329,6 +356,7 @@ class Rental(TimeStampedModel):
     def save(self, *args, **kwargs):
         if not self.invoice_number:
             self.invoice_number = self.generate_invoice_number(self.get_invoice_year())
+        self.full_clean()
         super().save(*args, **kwargs)
 
     @property

@@ -1,4 +1,7 @@
 :root {
+    --white: #ffffff;
+    --white2: #ffffffe5;
+    --white3: #ffffffd5;
     --primary: #6d4be8;
     --secondary: #8b78d8;
     --link-fg: #6d4be8;
@@ -8,6 +11,8 @@
     --breadcrumbs-bg: #f8f9fa;
     --body-bg: #f4f6f8;
     --body-fg: #212529;
+    --rental-pos-title: #212529;
+    --rental-pos-subtitle: #6c757d;
     --border-color: #dee2e6;
     --rental-primary: #6d4be8;
     --rental-primary-dark: #5638c9;
@@ -24,6 +29,8 @@
     --bs-success-rgb: 109, 75, 232;
     --bs-info: #8b78d8;
     --bs-info-rgb: 139, 120, 216;
+    --unguhover: #f7f3ff;
+    --abu2header: #f8f9fa;
 }
 
 body {
@@ -43,8 +50,8 @@ textarea {
 }
 
 #header {
-    background: #ffffff !important;
-    color: #212529 !important;
+    background: var(--white) !important;
+    color: var(--rental-pos-title) !important;
     min-height: 64px !important;
     padding: 0 !important;
     border-bottom: 1px solid var(--border-color) !important;
@@ -65,7 +72,7 @@ textarea {
 #site-name,
 #site-name a:link,
 #site-name a:visited {
-    color: #212529 !important;
+    color: var(--rental-pos-title) !important;
     font-size: 1.15rem !important;
     font-weight: 700 !important;
     text-decoration: none !important;
@@ -98,7 +105,7 @@ textarea {
 
 #user-tools
 {
-    color: #495057 !important;
+    color: var(--rental-pos-title) !important;
     font-size: .875rem !important;
 }
 #user-tools a,
@@ -108,7 +115,7 @@ textarea {
 }
 
 #user-tools a{
-    color: var(--rental-primary) !important;
+    color: var(--primary) !important;
 }
 
 #logout-form button {
@@ -121,7 +128,7 @@ textarea {
 }
 
 div.breadcrumbs {
-    background: #f8f9fa !important;
+    background: var(--abu2header) !important;
     color: #6c757d !important;
     padding: .85rem 1.5rem !important;
     border-bottom: 1px solid var(--border-color) !important;
@@ -142,14 +149,14 @@ div.breadcrumbs a {
     width: 100% !important;
     margin: 0 auto 2.5rem !important;
     padding: 1.5rem !important;
-    background: #ffffff !important;
-    border: 1px solid #fff;
+    background: var(--white2) !important;
+    border: 1px solid var(--white2) !important;
     border-radius: 1rem !important;
     box-shadow: var(--rental-box-shadow);
 }
 
 .admin-content-container .admin-card{
-    border: .1px solid #f1f1f1 !important;
+    border: .1px solid var(--abu2header) !important;
     padding: .7rem;
 }
 
@@ -188,10 +195,16 @@ div.breadcrumbs a {
 }
 
 #content h1 {
-    color: #212529;
+    color: var(--rental-pos-title);
     font-size: 1.5rem;
     font-weight: 600;
     margin: 0 0 1.25rem;
+}
+.rental-dashboard-summary h2 {
+    color: var(--rental-pos-title);
+}
+.rental-dashboard-summary p.text-secondary {
+    color: var(--rental-pos-subtitle) !important;
 }
 
 .module,
@@ -206,7 +219,7 @@ div.breadcrumbs a {
 .module h2,
 .module caption,
 .inline-group h2 {
-    background: #f8f9fa;
+    background: var(--abu2header);
     color: #212529;
     font-size: .95rem;
     font-weight: 700;
@@ -231,7 +244,7 @@ thead th a:visited {
 
 thead th,
 tfoot td {
-    background: #f8f9fa;
+    background: var(--abu2header) !important;
     color: #212529;
 }
 tbody tr{
@@ -326,7 +339,7 @@ a.button:hover {
 }
 
 #changelist {
-    background: #ffffff;
+    background: var(--white2);
     border: 1px solid var(--border-color);
     border-radius: .5rem;
     box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .03);
@@ -702,7 +715,7 @@ a.button:hover {
 .rental-dashboard-summary__filter .form-label {
     font-size: .875rem;
     font-weight: 600;
-    color: #6c757d;
+    color: var(--rental-pos-subtitle);
 }
 
 .rental-dashboard-summary__filter .form-control {
@@ -775,8 +788,14 @@ a.button:hover {
     padding-bottom: 1rem;
 }
 
+.card {
+    background: var(--white3) !important;
+}
+
 .admin-card .card-header {
     padding: 1rem 1.25rem;
+    background: var(--white3) !important;
+    border-radius: .7rem .7rem 0 0 !important;
 }
 
 .admin-card .card-body {
@@ -786,6 +805,7 @@ a.button:hover {
 .admin-card .list-group-item {
     border-color: #edf0f2;
     padding: .9rem 1.25rem;
+    background: transparent !important;
 }
 
 .admin-card .btn {
@@ -1072,8 +1092,152 @@ input[value="Simpan dan terus mengedit"], input[value="Simpan dan tambahkan lagi
     background: #6d4be882 !important;
 }
 /* end css button python */
+
+/* css kalender booking */
+.booking-calendar-page {
+    display: grid;
+    gap: 1rem;
+}
+
+.booking-calendar-toolbar {
+    display: grid;
+    grid-template-columns: minmax(14rem, 1fr) minmax(12rem, 16rem) auto;
+    align-items: end;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #edf0f2;
+}
+
+.booking-calendar-filters .form-label {
+    margin-bottom: .35rem;
+    color: var(--rental-pos-subtitle);
+    font-size: .82rem;
+    font-weight: 700;
+}
+
+.booking-calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .65rem;
+    min-width: 16rem;
+    color: #374151;
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.booking-calendar-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    white-space: nowrap;
+}
+
+.booking-calendar-dot {
+    display: inline-block;
+    width: .65rem;
+    height: .65rem;
+    border-radius: 999px;
+}
+
+.booking-calendar-dot--available {
+    background: #16a34a;
+}
+
+.booking-calendar-dot--rented {
+    background: #2563eb;
+}
+
+.booking-calendar-dot--maintenance {
+    background: #dc2626;
+}
+
+#booking-calendar {
+    min-height: 42rem;
+}
+
+#booking-calendar .fc-toolbar-title {
+    color: var(--rental-pos-title);
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+
+#booking-calendar .fc-button-primary {
+    color: #ffffff !important;
+    background: var(--rental-primary) !important;
+    border-color: var(--rental-primary) !important;
+    border-radius: .42rem !important;
+    font-weight: 700 !important;
+}
+
+#booking-calendar .fc-button-primary:hover,
+#booking-calendar .fc-button-primary:focus {
+    background: var(--rental-primary-dark) !important;
+    border-color: var(--rental-primary-dark) !important;
+}
+
+#booking-calendar .fc-daygrid-day {
+    cursor: pointer;
+}
+
+#booking-calendar .fc-event {
+    border-radius: .35rem;
+    padding: .12rem .22rem;
+}
+
+.booking-calendar-event {
+    display: grid;
+    gap: .05rem;
+    min-width: 0;
+    overflow: hidden;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.booking-calendar-event strong,
+.booking-calendar-event span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.booking-calendar-event strong {
+    font-size: .75rem;
+}
+
+.booking-calendar-event span {
+    font-size: .68rem;
+}
+
+#booking-calendar .fc-button-group {
+    gap: .75rem;
+}
+/* end css kalender booking */
+
 /* css responsive python */
 @media (max-width: 767px) {
+    .booking-calendar-toolbar {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-calendar-legend {
+        justify-content: flex-start;
+        min-width: 0;
+    }
+
+    #booking-calendar .fc-header-toolbar {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: .75rem;
+    }
+
+    #booking-calendar .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+    }
+
     .aligned .form-row input, .aligned .form-row select {
         max-width: 48% !important;
     }

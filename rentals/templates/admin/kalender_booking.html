@@ -1,0 +1,169 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div class="booking-calendar-page">
+    <div class="booking-calendar-toolbar">
+        <div class="booking-calendar-filters">
+            <label class="form-label" for="booking-vehicle-filter">Kendaraan</label>
+            <select id="booking-vehicle-filter" class="form-select">
+                <option value="">Semua kendaraan</option>
+                {% for vehicle in vehicles %}
+                    <option value="{{ vehicle.pk }}">{{ vehicle.plate_number }} - {{ vehicle.brand }} {{ vehicle.model }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="booking-calendar-filters">
+            <label class="form-label" for="booking-status-filter">Status</label>
+            <select id="booking-status-filter" class="form-select">
+                {% for value, label in status_options %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="booking-calendar-legend" aria-label="Legenda kalender">
+            <span><i class="booking-calendar-dot booking-calendar-dot--available"></i>Tersedia</span>
+            <span><i class="booking-calendar-dot booking-calendar-dot--rented"></i>Sedang dirental</span>
+            <span><i class="booking-calendar-dot booking-calendar-dot--maintenance"></i>Maintenance</span>
+        </div>
+    </div>
+
+    <div id="booking-calendar"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales/id.global.min.js"></script>
+<script>
+    (function () {
+        const calendarElement = document.getElementById('booking-calendar');
+        const vehicleFilter = document.getElementById('booking-vehicle-filter');
+        const statusFilter = document.getElementById('booking-status-filter');
+        const eventsUrl = '{{ events_url }}';
+        const rescheduleUrl = '{{ reschedule_url }}';
+        const addUrl = '{{ rental_add_url }}';
+
+        function getCookie(name) {
+            const cookies = document.cookie ? document.cookie.split(';') : [];
+            for (const cookie of cookies) {
+                const trimmed = cookie.trim();
+                if (trimmed.substring(0, name.length + 1) === (name + '=')) {
+                    return decodeURIComponent(trimmed.substring(name.length + 1));
+                }
+            }
+            return '';
+        }
+
+        function buildAddUrl(dateStr) {
+            const params = new URLSearchParams({
+                start_at: dateStr + ' 09:00:00',
+                expected_return_at: dateStr + ' 17:00:00'
+            });
+            if (vehicleFilter.value) {
+                params.set('vehicle', vehicleFilter.value);
+            }
+            return addUrl + '?' + params.toString();
+        }
+
+        const calendar = new FullCalendar.Calendar(calendarElement, {
+            initialView: 'dayGridMonth',
+            locale: 'id',
+            height: 'auto',
+            firstDay: 1,
+            editable: true,
+            eventStartEditable: true,
+            eventDurationEditable: false,
+            dayMaxEvents: 4,
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth'
+            },
+            events: function (info, successCallback, failureCallback) {
+                const params = new URLSearchParams({
+                    start: info.startStr,
+                    end: info.endStr,
+                    vehicle: vehicleFilter.value,
+                    status: statusFilter.value
+                });
+
+                fetch(eventsUrl + '?' + params.toString(), {
+                    headers: {'X-Requested-With': 'XMLHttpRequest'}
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error('Gagal memuat event kalender.');
+                        }
+                        return response.json();
+                    })
+                    .then(successCallback)
+                    .catch(failureCallback);
+            },
+            eventContent: function (arg) {
+                const plate = arg.event.extendedProps.plate_number || arg.event.title;
+                const customer = arg.event.extendedProps.customer_name || '';
+                const wrapper = document.createElement('div');
+                wrapper.className = 'booking-calendar-event';
+
+                const plateElement = document.createElement('strong');
+                plateElement.textContent = plate;
+                wrapper.appendChild(plateElement);
+
+                if (customer) {
+                    const customerElement = document.createElement('span');
+                    customerElement.textContent = customer;
+                    wrapper.appendChild(customerElement);
+                }
+
+                return {domNodes: [wrapper]};
+            },
+            eventClick: function (info) {
+                if (info.event.url) {
+                    info.jsEvent.preventDefault();
+                    window.location.href = info.event.url;
+                }
+            },
+            dateClick: function (info) {
+                window.location.href = buildAddUrl(info.dateStr);
+            },
+            eventDrop: function (info) {
+                fetch(rescheduleUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        event_id: info.event.id,
+                        start: info.event.startStr
+                    })
+                })
+                    .then(function (response) {
+                        return response.json().then(function (data) {
+                            if (!response.ok || !data.ok) {
+                                throw new Error(data.error || 'Reschedule gagal.');
+                            }
+                            return data;
+                        });
+                    })
+                    .then(function () {
+                        calendar.refetchEvents();
+                    })
+                    .catch(function (error) {
+                        info.revert();
+                        window.alert(error.message);
+                    });
+            }
+        });
+
+        vehicleFilter.addEventListener('change', function () {
+            calendar.refetchEvents();
+        });
+        statusFilter.addEventListener('change', function () {
+            calendar.refetchEvents();
+        });
+
+        calendar.render();
+    })();
+</script>
+{% endblock %}

@@ -24,6 +24,7 @@ from .models import (
     VehicleCategory,
     VehicleMaintenance,
 )
+from .views import booking_calendar, booking_calendar_events, booking_calendar_reschedule
 
 
 admin.site.site_header = 'Admin POS Rental Mobil'
@@ -348,6 +349,24 @@ class RentalAdmin(BaseModelAdmin):
             obj.get_status_display(),
         )
 
+    def get_changeform_initial_data(self, request):
+        initial = super().get_changeform_initial_data(request)
+        for field_name in ('start_at', 'expected_return_at'):
+            raw_value = request.GET.get(field_name)
+            if not raw_value:
+                continue
+
+            try:
+                parsed_value = datetime.fromisoformat(raw_value)
+            except ValueError:
+                continue
+
+            if timezone.is_naive(parsed_value):
+                parsed_value = timezone.make_aware(parsed_value, timezone.get_current_timezone())
+            initial[field_name] = parsed_value
+
+        return initial
+
     def response_change(self, request, obj):
         if '_activate_rental' in request.POST:
             if obj.status == Rental.Status.DRAFT:
@@ -626,10 +645,12 @@ from django.urls import path
 def _get_urls():
     urls = admin.AdminSite.get_urls(admin.site)
     my_urls = [
+        path('rentals/booking-calendar/', admin.site.admin_view(booking_calendar), name='rental_booking_calendar'),
+        path('rentals/booking-calendar/events/', admin.site.admin_view(booking_calendar_events), name='rental_booking_calendar_events'),
+        path('rentals/booking-calendar/reschedule/', admin.site.admin_view(booking_calendar_reschedule), name='rental_booking_calendar_reschedule'),
         path('rentals/financial-report/', admin.site.admin_view(financial_report), name='rental_financial_report'),
         path('rentals/financial-report/export/', admin.site.admin_view(financial_report_csv), name='rental_financial_report_export'),
     ]
     return my_urls + urls
 
 admin.site.get_urls = _get_urls
-

@@ -1,4 +1,5 @@
 {% load i18n %}
+{% url 'admin:rental_booking_calendar' as booking_calendar_url %}
 <button class="sticky toggle-nav-sidebar" id="toggle-nav-sidebar" aria-label="{% translate 'Alihkan navigasi' %}"></button>
 <nav class="sticky rental-nav" id="nav-sidebar" aria-label="{% translate 'Sidebar' %}">
   <div class="rental-nav-shell">
@@ -34,7 +35,7 @@
                     <h3 class="rental-nav-group-title">{{ group.title }}</h3>
                     {% for model in group.models %}
                       {% with model_name=model.object_name|lower %}
-                        <details class="rental-nav-item model-{{ model_name }}{% if model.admin_url in request.path|urlencode %} current-model{% endif %}" data-menu-title="{{ model.name }}" {% if model.admin_url in request.path|urlencode %}open{% endif %}>
+                        <details class="rental-nav-item model-{{ model_name }}{% if model.admin_url in request.path|urlencode or model_name == 'rental' and booking_calendar_url in request.path|urlencode %} current-model{% endif %}" data-menu-title="{{ model.name }}" {% if model.admin_url in request.path|urlencode or model_name == 'rental' and booking_calendar_url in request.path|urlencode %}open{% endif %}>
                           <summary>
                             <span class="rental-nav-icon" aria-hidden="true">
                               {% if model_name == 'group' %}
@@ -85,6 +86,12 @@
                               <a href="{{ model.add_url }}">
                                 <span class="rental-nav-subicon add" aria-hidden="true"></span>
                                 <span>Tambah {{ model.name|lower }}</span>
+                              </a>
+                            {% endif %}
+                            {% if model_name == 'rental' %}
+                              <a href="{{ booking_calendar_url }}"{% if booking_calendar_url in request.path|urlencode %} aria-current="page"{% endif %}>
+                                <span class="rental-nav-subicon calendar" aria-hidden="true"></span>
+                                <span>Kalender Booking</span>
                               </a>
                             {% endif %}
                           </div>
