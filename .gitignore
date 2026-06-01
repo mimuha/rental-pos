@@ -1,0 +1,6 @@
+.env
+*.sqlite3
+sqlite_dump.json
+__pycache__/
+*.py[cod]
+.venv/
