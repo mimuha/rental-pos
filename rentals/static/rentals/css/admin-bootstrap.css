@@ -997,6 +997,10 @@ a:focus {
 #toolbar #searchbar:focus {
     border-color: var(--rental-primary) !important;
 }
+
+#changelist .toplinks {
+    padding-left: .6rem;
+}
 @media (max-width: 1024px) {
     #toolbar form #searchbar {
         width: 10rem !important;
