@@ -48,19 +48,13 @@
               </td>
 
               <td class="field-photo-file">
-                {% for field in inline_admin_form.visible_fields %}
-                  {% if field.name == 'image' %}
-                    <span class="photo-file-input">{{ field }} {{ field.errors }}</span>
-                  {% endif %}
-                {% endfor %}
+                {{ inline_admin_form.form.image }}
+                {{ inline_admin_form.form.image.errors }}
               </td>
 
               <td class="field-photo-order">
-                {% for field in inline_admin_form.visible_fields %}
-                  {% if field.name == 'order' %}
-                    {{ field }} {{ field.errors }}
-                  {% endif %}
-                {% endfor %}
+                {{ inline_admin_form.form.order }}
+                {{ inline_admin_form.form.order.errors }}
               </td>
 
               <td class="field-photo-delete">
@@ -73,12 +67,8 @@
                       <path fill-rule="evenodd" clip-rule="evenodd" d="M8.75 13C8.75 12.5858 9.08579 12.25 9.5 12.25H14.5C14.9142 12.25 15.25 12.5858 15.25 13C15.25 13.4142 14.9142 13.75 14.5 13.75H9.5C9.08579 13.75 8.75 13.4142 8.75 13Z" fill="#dc2626"/>
                     </svg>
                   </button>
+                  {{ inline_admin_form.form.DELETE }}
                 {% endif %}
-                {% for field in inline_admin_form.visible_fields %}
-                  {% if field.name == 'DELETE' %}
-                    {{ field }}
-                  {% endif %}
-                {% endfor %}
               </td>
             </tr>
           {% endfor %}
