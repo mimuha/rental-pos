@@ -1,0 +1,224 @@
+/* Vehicle Photos Inline — Custom Table Styling */
+
+.vehicle-photos-inline .vehicle-photos-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+
+.vehicle-photos-table thead th {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c757d;
+  background: #f7f3ff;
+  border-bottom: 2px solid #ded4ff;
+  white-space: nowrap;
+}
+
+.vehicle-photos-table tbody td {
+  padding: 12px 14px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.vehicle-photos-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.vehicle-photos-table tbody tr:hover {
+  background: #fdfaff;
+}
+
+/* Column widths */
+.col-photo-preview { width: 100px; text-align: center; }
+.col-photo-file   { width: auto; }
+.col-photo-order  { width: 80px; text-align: center; }
+.col-photo-delete { width: 60px; text-align: center; }
+
+/* Photo thumbnail */
+.photo-thumb {
+  width: 72px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  transition: opacity .3s, filter .3s;
+}
+
+.photo-thumb-deleted {
+  opacity: .35;
+  filter: grayscale(1);
+}
+
+.no-photo {
+  color: #adb5bd;
+  font-size: 13px;
+}
+
+/* Delete button */
+.photo-delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: background .2s, transform .15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-delete-btn:hover {
+  background: #fef2f2;
+  transform: scale(1.1);
+}
+
+.photo-delete-icon {
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.photo-delete-active .photo-delete-icon path {
+  fill: #6d4be8 !important;
+}
+
+/* Deleted row */
+.photo-row-deleted {
+  background: #fef2f2 !important;
+  opacity: .65;
+}
+
+.photo-row-deleted .photo-file-input input[type="file"] {
+  pointer-events: none;
+  opacity: .4;
+}
+
+.photo-row-deleted .field-photo-order input {
+  pointer-events: none;
+  opacity: .4;
+}
+
+/* File input styling */
+.photo-file-input {
+  display: block;
+}
+
+.photo-file-input input[type="file"] {
+  font-size: 13px;
+  color: #495057;
+  padding: 6px 0;
+}
+
+.photo-file-input input[type="file"]::file-selector-button {
+  background: #f7f3ff;
+  color: #6d4be8;
+  border: 1px solid #ded4ff;
+  border-radius: 6px;
+  padding: 6px 14px;
+  margin-right: 10px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.photo-file-input input[type="file"]::file-selector-button:hover {
+  background: #ded4ff;
+}
+
+/* Order input */
+.field-photo-order input[type="number"] {
+  width: 56px;
+  text-align: center;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 6px;
+  font-size: 13px;
+}
+
+/* Mobile order row - hide by default, show on mobile */
+.photo-order-mobile {
+  display: none;
+}
+
+/* Empty form row */
+.empty-form {
+  display: none;
+}
+
+/* Add button styling */
+.vehicle-photos-inline .add-row a {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: #6d4be8;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .2s;
+  margin-top: 12px;
+}
+
+.vehicle-photos-inline .add-row a:hover {
+  background: #5638c9;
+  color: #fff;
+}
+
+/* Max photos reached */
+.vehicle-photos-inline .add-row {
+  text-align: left;
+}
+
+/* Error messages */
+.vehicle-photos-inline .errorlist {
+  color: #dc2626;
+  font-size: 12px;
+  list-style: none;
+  margin: 4px 0;
+  padding: 0;
+}
+
+/* Hide default delete text label */
+.field-photo-delete label[for$="-DELETE"] {
+  display: none;
+}
+
+/* Keep checkbox functional but visually hidden */
+.field-photo-delete input[type="checkbox"][id$="-DELETE"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .col-photo-order {
+    display: none;
+  }
+  .photo-order-mobile {
+    display: block;
+    margin-top: 6px;
+  }
+  .photo-order-mobile label {
+    font-size: 12px;
+    color: #6c757d;
+    margin-right: 6px;
+  }
+  .photo-order-mobile input {
+    width: 56px;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 4px;
+    font-size: 13px;
+  }
+}

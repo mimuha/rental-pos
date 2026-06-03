@@ -126,11 +126,15 @@ class VehicleCategoryAdmin(BaseModelAdmin):
 class VehiclePhotoInline(admin.TabularInline):
     model = VehiclePhoto
     form = VehiclePhotoForm
+    template = "admin/edit_inline/tabular_vehicle_photos.html"
     extra = 1
     max_num = 5
     fields = ['image', 'order']
     verbose_name = 'Foto kendaraan'
     verbose_name_plural = 'Foto kendaraan (maks. 5, @max 1MB)'
+
+    class Media:
+        css = {"all": ("admin/css/vehicle_photos_inline.css",)}
 
     def get_queryset(self, request):
         return super().get_queryset(request).order_by('order')
