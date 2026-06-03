@@ -78,6 +78,15 @@
   text-align: center;
 }
 
+.no-photos-msg {
+  text-align: center;
+  padding: 24px 16px;
+  color: #6c757d;
+  font-size: 14px;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
 /* Delete button */
 .photo-delete-btn {
   background: transparent;
@@ -128,26 +137,37 @@
 }
 
 .photo-file-input input[type="file"] {
-  font-size: 13px;
+  font-size: 14px;
   color: #495057;
-  padding: 6px 0;
+  padding: 8px 0;
 }
 
 .photo-file-input input[type="file"]::file-selector-button {
   background: #f7f3ff;
   color: #6d4be8;
-  border: 1px solid #ded4ff;
-  border-radius: 6px;
-  padding: 6px 14px;
-  margin-right: 10px;
-  font-weight: 600;
-  font-size: 12px;
+  border: 2px solid #ded4ff;
+  border-radius: 8px;
+  padding: 8px 18px;
+  margin-right: 12px;
+  font-weight: 700;
+  font-size: 13px;
   cursor: pointer;
-  transition: background .15s;
+  transition: background .15s, border-color .15s;
 }
 
 .photo-file-input input[type="file"]::file-selector-button:hover {
   background: #ded4ff;
+  border-color: #c4b5ff;
+}
+
+/* Hide "Currently:" link from ClearableFileInput */
+.photo-file-input br + a,
+.photo-file-input label[for$="-clear_id"] {
+  display: none;
+}
+
+.photo-file-input input[type="checkbox"][id$="-clear_id"] {
+  display: none;
 }
 
 /* Order input */

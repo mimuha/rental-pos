@@ -17,12 +17,19 @@
         <thead>
           <tr>
             <th class="col-photo-preview">Pratinjau</th>
-            <th class="col-photo-file">Pilih Gambar</th>
+            <th class="col-photo-file">Upload Foto</th>
             <th class="col-photo-order">Urutan</th>
             <th class="col-photo-delete">Hapus</th>
           </tr>
         </thead>
         <tbody>
+          {% if not inline_admin_formset.formset.initial_forms %}
+            <tr>
+              <td colspan="4" class="no-photos-msg">
+                Belum ada foto. Klik <strong>➕ Tambah Foto</strong> di bawah untuk upload.
+              </td>
+            </tr>
+          {% endif %}
           {% for inline_admin_form in inline_admin_formset %}
             {% if inline_admin_form.form.non_field_errors %}
               <tr class="row-form-errors">

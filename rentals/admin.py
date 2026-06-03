@@ -129,7 +129,6 @@ class VehiclePhotoInline(admin.TabularInline):
     template = "admin/edit_inline/tabular_vehicle_photos.html"
     extra = 0
     max_num = 5
-    fields = ['image', 'order']
     verbose_name = 'Foto kendaraan'
     verbose_name_plural = 'Foto kendaraan (maks. 5, @max 1MB)'
 
