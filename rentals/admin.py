@@ -140,14 +140,6 @@ class VehiclePhotoInline(admin.TabularInline):
             return False
         return VehiclePhoto.objects.filter(vehicle=obj).count() < 5
 
-    def save_model(self, request, obj, form, change):
-        from .forms import upload_to_supabase
-        image = form.cleaned_data.get("image")
-        if image:
-            url = upload_to_supabase(image, obj.vehicle_id)
-            obj.url = url
-        super().save_model(request, obj, form, change)
-
 
 @admin.register(Vehicle)
 class VehicleAdmin(BaseModelAdmin):

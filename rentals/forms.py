@@ -51,3 +51,12 @@ class VehiclePhotoForm(forms.ModelForm):
         if self.instance.pk is None and not image:
             raise ValidationError("Pilih gambar untuk diupload.")
         return cleaned_data
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        image = self.cleaned_data.get("image")
+        if image and not instance.url:
+            instance.url = upload_to_supabase(image, instance.vehicle_id)
+        if commit:
+            instance.save()
+        return instance
