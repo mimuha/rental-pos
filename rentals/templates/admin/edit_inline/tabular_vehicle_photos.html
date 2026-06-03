@@ -90,6 +90,15 @@
   function getCheckbox(row) { return row.querySelector('input[type="checkbox"][name$="-DELETE"]'); }
   function getThumb(row) { return row.querySelector('.photo-thumb'); }
 
+  // --- Klik gambar buka di new tab ---
+  container.querySelectorAll('.photo-thumb').forEach(function(img) {
+    img.title = 'Klik untuk melihat ukuran penuh';
+    img.addEventListener('click', function() {
+      if (img.src) window.open(img.src, '_blank');
+    });
+  });
+
+  // --- Delete icon: toggle hidden checkbox ---
   container.querySelectorAll('.photo-delete-btn').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
