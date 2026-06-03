@@ -53,7 +53,6 @@
 }
 
 .rental-nav-brand-mark,
-.rental-nav-icon,
 .rental-nav-favorite-icon {
     position: relative;
     display: inline-flex;
@@ -64,6 +63,19 @@
     height: 2rem;
     color: #353438;
     background: rgba(226, 203, 68, 0.08);
+    border-radius: .55rem;
+}
+
+.rental-nav-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    color: #353438;
+    background: rgb(195 195 195 / 10%);
     border-radius: .55rem;
 }
 
@@ -620,9 +632,6 @@
     .admin-sidebar-col.rental-nav-collapsed .rental-nav-icon {
         width: 2.75rem;
         height: 2.75rem;
-        color: #353438;
-        background: rgb(195 195 195 / 10%);
-        border-radius: .85rem;
     }
 
     .rental-nav-popup {

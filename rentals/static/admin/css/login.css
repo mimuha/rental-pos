@@ -70,8 +70,8 @@ body.login #content {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 3.25rem;
-    height: 3.25rem;
+    width: 6.25rem;
+    height: 6.25rem;
     margin: 0 auto 1rem;
     color: #353438;
     background: rgba(226, 203, 68, 0.12);
