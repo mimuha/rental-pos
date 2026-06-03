@@ -225,8 +225,8 @@ class VehicleMaintenanceAdmin(BaseModelAdmin):
     def status_badge(self, obj):
         colors = {
             VehicleMaintenance.Status.PLANNED: '#6b7280',
-            VehicleMaintenance.Status.IN_PROGRESS: '#6d4be8',
-            VehicleMaintenance.Status.COMPLETED: '#5638c9',
+            VehicleMaintenance.Status.IN_PROGRESS: '#e2cb44',
+            VehicleMaintenance.Status.COMPLETED: '#353438',
             VehicleMaintenance.Status.CANCELLED: '#dc2626',
         }
         return format_html(
@@ -286,8 +286,8 @@ class OtherExpenseAdmin(BaseModelAdmin):
     def status_badge(self, obj):
         colors = {
             OtherExpense.Status.PLANNED: '#6b7280',
-            OtherExpense.Status.IN_PROGRESS: '#6d4be8',
-            OtherExpense.Status.COMPLETED: '#5638c9',
+            OtherExpense.Status.IN_PROGRESS: '#e2cb44',
+            OtherExpense.Status.COMPLETED: '#353438',
             OtherExpense.Status.CANCELLED: '#dc2626',
         }
         return format_html(
@@ -368,8 +368,8 @@ class RentalAdmin(BaseModelAdmin):
 
         colors = {
             Rental.Status.DRAFT: '#6b7280',
-            Rental.Status.ACTIVE: '#6d4be8',
-            Rental.Status.COMPLETED: '#5638c9',
+            Rental.Status.ACTIVE: '#e2cb44',
+            Rental.Status.COMPLETED: '#353438',
             Rental.Status.CANCELLED: '#dc2626',
         }
         return format_html(

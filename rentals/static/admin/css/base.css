@@ -12,8 +12,8 @@ html {
 
 body {
     margin: 0;
-    background: #f4f6f8;
-    color: #212529;
+    background: #ffffff;
+    color: #353438;
     font-family: 'Inter', sans-serif;
     font-size: 1rem;
     line-height: 1.5;
@@ -21,12 +21,12 @@ body {
 }
 
 a {
-    color: #6d4be8;
+    color: #353438;
     text-decoration: none !important;
     transition: .3s ease;
 }
 a:hover {
-    color: #5638c9;
+    color: #1f1e21;
     text-decoration: underline;
 }
 
@@ -324,7 +324,7 @@ textarea {
 input:focus,
 textarea:focus,
 select:focus {
-    border-color: #6d4be8;
+    border-color: #353438;
     outline: 0;
     box-shadow: 0 0 0 .25rem rgba(109, 75, 232, .18);
 }
@@ -337,8 +337,8 @@ a.button {
     display: inline-block;
     padding: .45rem .8rem;
     color: #ffffff;
-    background: #6d4be8;
-    border: 1px solid #6d4be8;
+    background: #353438;
+    border: 1px solid #353438;
     border-radius: .375rem;
     font-weight: 600;
     line-height: 1.5;
@@ -352,8 +352,8 @@ input[type="button"]:hover,
 .submit-row input:hover,
 a.button:hover {
     color: #ffffff;
-    background: #5638c9;
-    border-color: #5638c9;
+    background: #1f1e21;
+    border-color: #1f1e21;
     text-decoration: none;
 }
 
@@ -391,14 +391,14 @@ a.button:hover {
     display: inline-block;
     padding: .45rem .8rem;
     color: #ffffff;
-    background: #6d4be8;
+    background: #353438;
     border-radius: .375rem;
     font-weight: 600;
     text-decoration: none;
 }
 
 .object-tools a:hover {
-    background: #5638c9;
+    background: #1f1e21;
 }
 
 #changelist {
@@ -573,7 +573,7 @@ a.button:hover {
     z-index: 2000;
     padding: .5rem .75rem;
     background: #ffffff;
-    border: 1px solid #6d4be8;
+    border: 1px solid #353438;
     border-radius: .375rem;
     transform: translateY(-150%);
 }
@@ -629,14 +629,14 @@ a.button:hover {
     background: var(--white2) !important;
     border-radius: 1.25rem;
     box-shadow: var(--rental-box-shadow);
-    border: .1px solid rgba(109, 75, 232, .14);
+    border: .1px solid rgba(53, 52, 56, .12);
     text-align: center;
 }
 
 .rental-menu-button:hover {
-    color: #5638c9 !important;
-    border-color: #5538c93f;
-    box-shadow: 0 15px 15px -10px  rgba(100, 21, 136, 0.23);
+    color: #1f1e21 !important;
+    border-color: rgba(53, 52, 56, .25);
+    box-shadow: 0 15px 15px -10px rgba(53, 52, 56, 0.15);
     text-decoration: none;
 }
 

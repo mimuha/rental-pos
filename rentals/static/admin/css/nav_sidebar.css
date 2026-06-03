@@ -62,8 +62,8 @@
     flex: 0 0 auto;
     width: 2rem;
     height: 2rem;
-    color: #6d4be8;
-    background: #f7f3ff;
+    color: #353438;
+    background: rgba(226, 203, 68, 0.08);
     border-radius: .55rem;
 }
 
@@ -86,7 +86,7 @@
     height: 1.55rem;
 }
 .rental-nav-brand-mark svg path {
-    fill: #6d4be8;
+    fill: #353438;
 }
 
 .rental-nav-collapse {
@@ -110,8 +110,8 @@
 }
 
 .rental-nav-collapse:hover {
-    color: #6d4be8;
-    background: #f8f5ff;
+    color: #353438;
+    background: rgba(226, 203, 68, 0.12);
 }
 
 .rental-nav-search {
@@ -308,11 +308,11 @@
 }
 
 .rental-nav-submenu a:hover {
-    color: #6d4be8 !important;
+    color: #353438 !important;
 }
 
 .rental-nav-submenu a:focus {
-    color: #6d4be8 !important;
+    color: #353438 !important;
 }
 
 .rental-nav-subicon {
@@ -390,17 +390,17 @@
     gap: .75rem;
     margin-top: auto;
     padding: .9rem;
-    color: #6d4be8;
-    background: #fbf8ff;
-    border: 1px solid #e7dcff;
+    color: #353438;
+    background: rgba(226, 203, 68, 0.08);
+    border: 1px solid rgba(226, 203, 68, 0.25);
     border-radius: .75rem;
     text-decoration: none !important;
-    box-shadow: 0 10px 22px rgba(109, 75, 232, .08);
+    box-shadow: 0 10px 22px rgba(53, 52, 56, .06);
 }
 
 .rental-nav-favorite strong {
     display: block;
-    color: #6d4be8;
+    color: #353438;
     font-size: .82rem;
     font-weight: 900;
     line-height: 1.2;
@@ -416,7 +416,7 @@
 }
 
 .rental-nav-favorite-arrow {
-    color: #6d4be8;
+    color: #353438;
     font-size: 1.35rem;
     font-weight: 800;
 }
@@ -559,8 +559,8 @@
     .admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite-icon {
         width: 2.75rem;
         height: 2.75rem;
-        color: #7c4dff;
-        background: #f6efff;
+        color: #353438;
+        background: rgba(226, 203, 68, 0.10);
         border-radius: .85rem;
     }
 
@@ -670,8 +670,8 @@
 }
 
 .rental-nav-popup .rental-nav-submenu a:hover {
-    background: #fbf8ff;
-    color: #6d4be8 !important;
+    background: rgba(226, 203, 68, 0.08);
+    color: #353438 !important;
 }
 
 .rental-nav-popup .rental-nav-submenu .rental-nav-subicon {

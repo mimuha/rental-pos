@@ -8,15 +8,15 @@
   gap: 12px;
   padding: 16px 20px;
   margin: 0 0 16px;
-  background: #f7f3ff;
-  border: 1px solid #ded4ff;
+    background: rgba(226, 203, 68, 0.08);
+    border: 1px solid rgba(226, 203, 68, 0.25);
   border-radius: 12px;
 }
 
 .photo-upload-label {
   font-weight: 600;
   font-size: 13px;
-  color: #6d4be8;
+  color: #353438;
   white-space: nowrap;
 }
 
@@ -27,8 +27,8 @@
 
 .photo-upload-input::file-selector-button {
   background: #fff;
-  color: #6d4be8;
-  border: 2px solid #ded4ff;
+  color: #353438;
+  border: 2px solid rgba(226, 203, 68, 0.30);
   border-radius: 8px;
   padding: 8px 16px;
   margin-right: 10px;
@@ -39,8 +39,8 @@
 }
 
 .photo-upload-input::file-selector-button:hover {
-  background: #ded4ff;
-  border-color: #c4b5ff;
+  background: rgba(226, 203, 68, 0.20);
+  border-color: rgba(226, 203, 68, 0.35);
 }
 
 .photo-upload-preview {
@@ -52,7 +52,7 @@
 
 .photo-upload-btn {
   padding: 10px 24px;
-  background: #6d4be8;
+  background: #353438;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -64,7 +64,7 @@
 }
 
 .photo-upload-btn:hover {
-  background: #5638c9;
+  background: #1f1e21;
   transform: translateY(-1px);
 }
 
@@ -73,7 +73,7 @@
 }
 
 .photo-upload-btn:disabled {
-  background: #a78bfa;
+  background: #5a595d;
   cursor: not-allowed;
   transform: none;
 }
@@ -101,8 +101,8 @@
   font-size: 13px;
   font-weight: 600;
   color: #6c757d;
-  background: #f7f3ff;
-  border-bottom: 2px solid #ded4ff;
+  background: rgba(226, 203, 68, 0.08);
+  border-bottom: 2px solid rgba(226, 203, 68, 0.30);
   white-space: nowrap;
 }
 
@@ -117,7 +117,7 @@
 }
 
 .vehicle-photos-table tbody tr:hover {
-  background: #fdfaff;
+  background: rgba(226, 203, 68, 0.06);
 }
 
 /* Column widths */
@@ -153,9 +153,9 @@
 }
 
 .photo-order-input:focus {
-  border-color: #6d4be8;
+  border-color: #353438;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(109,75,232,.15);
+  box-shadow: 0 0 0 2px rgba(53, 52, 56, .15);
 }
 
 /* Delete button */

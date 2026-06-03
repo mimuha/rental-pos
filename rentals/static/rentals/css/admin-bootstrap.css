@@ -2,34 +2,37 @@
     --white: #ffffff;
     --white2: #ffffffe5;
     --white3: #ffffffd5;
-    --primary: #6d4be8;
-    --secondary: #8b78d8;
-    --link-fg: #6d4be8;
-    --link-selected-fg: #5638c9;
+    --primary: #353438;
+    --secondary: #5a595d;
+    --link-fg: #353438;
+    --link-selected-fg: #1f1e21;
     --header-bg: #ffffff;
-    --header-color: #212529;
+    --header-color: #353438;
     --breadcrumbs-bg: #f8f9fa;
-    --body-bg: #f4f6f8;
-    --body-fg: #212529;
-    --rental-pos-title: #212529;
-    --rental-pos-subtitle: #6c757d;
-    --border-color: #dee2e6;
-    --rental-primary: #6d4be8;
-    --rental-primary-dark: #5638c9;
-    --rental-primary-soft: #f7f3ff;
-    --rental-primary-border: #ded4ff;
-    --rental-primary-shadow: rgba(109, 75, 232, .22);
+    --body-bg: #ffffff;
+    --body-fg: #353438;
+    --rental-pos-title: #353438;
+    --rental-pos-subtitle: #5a595d;
+    --border-color: #d1d1d3;
+    --rental-primary: #353438;
+    --rental-primary-dark: #1f1e21;
+    --rental-primary-soft: rgba(226, 203, 68, 0.12);
+    --rental-primary-border: rgba(226, 203, 68, 0.30);
+    --rental-primary-shadow: rgba(53, 52, 56, .15);
+    --rental-gold: #e2cb44;
+    --rental-gold-soft: rgba(226, 203, 68, 0.10);
+    --rental-gold-border: rgba(226, 203, 68, 0.35);
     --rental-danger: #e84a4a;
-    --rental-box-shadow: 0px 10px 16px -12px #4679a850;
-    --bs-primary: #6d4be8;
-    --bs-primary-rgb: 109, 75, 232;
-    --bs-link-color: #6d4be8;
-    --bs-link-hover-color: #5638c9;
-    --bs-success: #6d4be8;
-    --bs-success-rgb: 109, 75, 232;
-    --bs-info: #8b78d8;
-    --bs-info-rgb: 139, 120, 216;
-    --unguhover: #f7f3ff;
+    --rental-box-shadow: 0px 10px 16px -12px rgba(53, 52, 56, 0.18);
+    --bs-primary: #353438;
+    --bs-primary-rgb: 53, 52, 56;
+    --bs-link-color: #353438;
+    --bs-link-hover-color: #1f1e21;
+    --bs-success: #353438;
+    --bs-success-rgb: 53, 52, 56;
+    --bs-info: #e2cb44;
+    --bs-info-rgb: 226, 203, 68;
+    --unguhover: rgba(226, 203, 68, 0.08);
     --abu2header: #f8f9fa;
 }
 
@@ -99,8 +102,8 @@ textarea {
     width: 1.45rem;
     height: 1.45rem;
 }
-.rental-admin-brand-icon svg path {
-    fill: #6d4be8;
+.rental-admin-brand-icon svg {
+    color: var(--rental-primary);
 }
 
 #user-tools
@@ -251,7 +254,7 @@ tbody tr{
     transition: .5s ease;
 }
 tbody tr:hover {
-    background: #f8fbff;
+    background: rgba(226, 203, 68, 0.06);
 }
 
 tbody tr th a{
@@ -532,7 +535,7 @@ a.button:hover {
 
 #changelist-filter .rental-filter-options a:hover {
     color: #111827 !important;
-    background: #f7f9fb !important;
+    background: rgba(226, 203, 68, 0.08) !important;
     border-color: #bdc7d2 !important;
 }
 
@@ -727,7 +730,7 @@ a.button:hover {
 
 .rental-dashboard-summary__filter .form-control:focus {
     border-color: var(--rental-primary);
-    box-shadow: 0 0 0 .25rem rgba(109, 75, 232, .18);
+    box-shadow: 0 0 0 .25rem rgba(53, 52, 56, .18);
 }
 
 .rental-stat-card {
@@ -951,7 +954,7 @@ a:focus {
 .form-select:focus,
 .page-link:focus {
     border-color: var(--rental-primary) !important;
-    box-shadow: 0 0 0 .25rem rgba(109, 75, 232, .18) !important;
+    box-shadow: 0 0 0 .25rem rgba(53, 52, 56, .18) !important;
 }
 
 .page-link {
@@ -1015,7 +1018,7 @@ a:focus {
     background: url(custom_icons/clock.svg) 0 0 no-repeat !important;
 }
 .selector-chosen-title {
-    background: #6d4be82e !important;
+    background: #3534382e !important;
 }
 .selector-add, .selector-remove {
     min-height: 1rem;
@@ -1098,7 +1101,7 @@ p.datetime  span {
 /* end forms python */
 /* css button python */
 input[value="Simpan dan terus mengedit"], input[value="Simpan dan tambahkan lagi"] {
-    background: #6d4be882 !important;
+    background: #35343882 !important;
 }
 /* end css button python */
 

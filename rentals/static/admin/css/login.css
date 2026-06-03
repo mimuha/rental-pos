@@ -1,8 +1,8 @@
 body.login {
     min-height: 100%;
     background:
-        radial-gradient(circle at top left, rgba(109, 75, 232, .14), transparent 30rem),
-        #f4f6f8;
+        radial-gradient(circle at top left, rgba(226, 203, 68, .18), transparent 30rem),
+        #ffffff;
     overflow-x: hidden;
 }
 
@@ -73,8 +73,8 @@ body.login #content {
     width: 3.25rem;
     height: 3.25rem;
     margin: 0 auto 1rem;
-    color: #6d4be8;
-    background: #f7f3ff;
+    color: #353438;
+    background: rgba(226, 203, 68, 0.12);
     border-radius: 1rem;
 }
 
@@ -135,15 +135,15 @@ body.login .submit-row {
 body.login .submit-row input {
     width: 100%;
     min-height: 2.85rem;
-    background: #6d4be8;
-    border-color: #6d4be8;
+    background: #353438;
+    border-color: #353438;
     border-radius: .75rem;
     font-weight: 800;
 }
 
 body.login .submit-row input:hover {
-    background: #5638c9;
-    border-color: #5638c9;
+    background: #1f1e21;
+    border-color: #1f1e21;
 }
 
 body.login .errornote {
