@@ -163,21 +163,45 @@
             const popupRect = popup.getBoundingClientRect();
 
             const margin = 8;
-            let left = sidebarRect.right + margin + window.scrollX - 20;
-            let top = anchorRect.top + (anchorRect.height / 2) - (popupRect.height / 2) + window.scrollY;
 
-            if (top + popupRect.height > window.innerHeight - margin) {
-                top = window.innerHeight - popupRect.height - margin;
+            if (isDesktopCollapsedMode()) {
+                let left = sidebarRect.right + margin + window.scrollX - 20;
+                let top = anchorRect.top + (anchorRect.height / 2) - (popupRect.height / 2) + window.scrollY;
+
+                if (top + popupRect.height > window.innerHeight - margin) {
+                    top = window.innerHeight - popupRect.height - margin;
+                }
+                if (top < margin) top = margin;
+
+                if (left + popupRect.width > window.innerWidth - margin) {
+                    left = window.innerWidth - popupRect.width - margin;
+                }
+
+                popup.style.transformOrigin = 'left center';
+                popup.style.position = 'absolute';
+                popup.style.left = left + 'px';
+                popup.style.top = top + 'px';
+            } else {
+                let left = anchorRect.left + (anchorRect.width / 2) - (popupRect.width / 2) + window.scrollX;
+                let top = anchorRect.bottom + margin + window.scrollY;
+
+                if (left < margin) {
+                    left = margin;
+                }
+                if (left + popupRect.width > window.innerWidth - margin) {
+                    left = window.innerWidth - popupRect.width - margin;
+                }
+
+                if (top + popupRect.height > window.innerHeight - margin) {
+                    top = Math.max(margin, anchorRect.top - popupRect.height - margin + window.scrollY);
+                }
+                if (top < margin) top = margin;
+
+                popup.style.transformOrigin = 'top center';
+                popup.style.position = 'absolute';
+                popup.style.left = left + 'px';
+                popup.style.top = top + 'px';
             }
-            if (top < margin) top = margin;
-
-            if (left + popupRect.width > window.innerWidth - margin) {
-                left = window.innerWidth - popupRect.width - margin;
-            }
-
-            popup.style.position = 'absolute';
-            popup.style.left = left + 'px';
-            popup.style.top = top + 'px';
             window.requestAnimationFrame(function () {
                 popup.classList.add('is-visible');
             });
