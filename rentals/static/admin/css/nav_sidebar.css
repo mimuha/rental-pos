@@ -635,8 +635,12 @@
     }
 
     .rental-nav-popup {
+        left: 50% !important;
         max-width: calc(100vw - 2rem);
         min-width: 12rem;
+    }
+    .rental-nav-popup.is-visible {
+        transform: translateX(-50%) !important;
     }
 }
 

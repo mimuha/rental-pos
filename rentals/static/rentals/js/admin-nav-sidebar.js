@@ -182,15 +182,7 @@
                 popup.style.left = left + 'px';
                 popup.style.top = top + 'px';
             } else {
-                let left = anchorRect.left + (anchorRect.width / 2) - (popupRect.width / 2) + window.scrollX;
                 let top = anchorRect.bottom + margin + window.scrollY;
-
-                if (left < margin) {
-                    left = margin;
-                }
-                if (left + popupRect.width > window.innerWidth - margin) {
-                    left = window.innerWidth - popupRect.width - margin;
-                }
 
                 if (top + popupRect.height > window.innerHeight - margin) {
                     top = Math.max(margin, anchorRect.top - popupRect.height - margin + window.scrollY);
@@ -199,7 +191,6 @@
 
                 popup.style.transformOrigin = 'top center';
                 popup.style.position = 'absolute';
-                popup.style.left = left + 'px';
                 popup.style.top = top + 'px';
             }
             window.requestAnimationFrame(function () {
