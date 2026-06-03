@@ -101,6 +101,32 @@ class Vehicle(TimeStampedModel):
         return f'{self.plate_number} - {self.brand} {self.model}'
 
 
+class VehiclePhoto(models.Model):
+    vehicle = models.ForeignKey(
+        Vehicle,
+        on_delete=models.CASCADE,
+        related_name='photos',
+        verbose_name='Kendaraan',
+    )
+    url = models.URLField('URL foto', max_length=500)
+    order = models.IntegerField('Urutan', default=0)
+    created_at = models.DateTimeField('Dibuat pada', auto_now_add=True)
+
+    class Meta:
+        db_table = 'vehicle_photos'
+        managed = False
+        ordering = ['order']
+        verbose_name = 'Foto kendaraan'
+        verbose_name_plural = 'Foto kendaraan'
+
+    def __str__(self):
+        return f'Foto {self.vehicle} - {self.order}'
+
+
+MAX_PHOTOS_PER_VEHICLE = 5
+MAX_FILE_SIZE = 1 * 1024 * 1024  # 1 MB
+
+
 class MaintenanceCategory(TimeStampedModel):
     class CategoryType(models.TextChoices):
         OIL = 'oil', 'Penggantian oli'

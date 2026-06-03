@@ -23,8 +23,10 @@ from .models import (
     Vehicle,
     VehicleCategory,
     VehicleMaintenance,
+    VehiclePhoto,
 )
 from .views import booking_calendar, booking_calendar_events, booking_calendar_reschedule
+from .forms import VehiclePhotoForm
 
 
 admin.site.site_header = 'Admin POS Rental Mobil'
@@ -121,6 +123,32 @@ class VehicleCategoryAdmin(BaseModelAdmin):
     search_fields = ['name']
 
 
+class VehiclePhotoInline(admin.TabularInline):
+    model = VehiclePhoto
+    form = VehiclePhotoForm
+    extra = 1
+    max_num = 5
+    fields = ['image', 'order']
+    verbose_name = 'Foto kendaraan'
+    verbose_name_plural = 'Foto kendaraan (maks. 5, @max 1MB)'
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).order_by('order')
+
+    def has_add_permission(self, request, obj=None):
+        if obj is None:
+            return False
+        return VehiclePhoto.objects.filter(vehicle=obj).count() < 5
+
+    def save_model(self, request, obj, form, change):
+        from .forms import upload_to_supabase
+        image = form.cleaned_data.get("image")
+        if image:
+            url = upload_to_supabase(image, obj.vehicle_id)
+            obj.url = url
+        super().save_model(request, obj, form, change)
+
+
 @admin.register(Vehicle)
 class VehicleAdmin(BaseModelAdmin):
     list_display = [
@@ -135,6 +163,7 @@ class VehicleAdmin(BaseModelAdmin):
     list_filter = ['status', 'category', 'transmission', 'fuel_type']
     search_fields = ['plate_number', 'brand', 'model']
     list_per_page = 25
+    inlines = [VehiclePhotoInline]
 
     @admin.display(description='Tarif harian')
     def daily_rate_rupiah(self, obj):
