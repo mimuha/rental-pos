@@ -33,6 +33,12 @@ class VehiclePhotoForm(forms.ModelForm):
         required=False,
         widget=forms.ClearableFileInput(attrs={"accept": "image/*"}),
     )
+    order = forms.IntegerField(
+        label="Urutan",
+        required=False,
+        initial=0,
+        min_value=0,
+    )
 
     class Meta:
         model = VehiclePhoto
