@@ -1,7 +1,8 @@
 from django.contrib import admin
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
+from django.views.decorators.http import require_POST
 from decimal import Decimal
 from django.db.models import Sum, Q
 from datetime import datetime, timedelta, date
@@ -26,7 +27,7 @@ from .models import (
     VehiclePhoto,
 )
 from .views import booking_calendar, booking_calendar_events, booking_calendar_reschedule
-from .forms import VehiclePhotoForm
+from .forms import VehiclePhotoForm, upload_to_supabase, MAX_FILE_SIZE
 
 
 admin.site.site_header = 'Admin POS Rental Mobil'
@@ -125,23 +126,27 @@ class VehicleCategoryAdmin(BaseModelAdmin):
 
 class VehiclePhotoInline(admin.TabularInline):
     model = VehiclePhoto
-    form = VehiclePhotoForm
     template = "admin/edit_inline/tabular_vehicle_photos.html"
     extra = 0
     max_num = 5
+    can_delete = False
+    fields = []
     verbose_name = 'Foto kendaraan'
     verbose_name_plural = 'Foto kendaraan (maks. 5, @max 1MB)'
+    readonly_fields = []
 
     class Media:
         css = {"all": ("admin/css/vehicle_photos_inline.css",)}
+        js = ("admin/js/vehicle_photos_inline.js",)
 
     def get_queryset(self, request):
         return super().get_queryset(request).order_by('order')
 
     def has_add_permission(self, request, obj=None):
-        if obj is None:
-            return False
-        return VehiclePhoto.objects.filter(vehicle=obj).count() < 5
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(Vehicle)
@@ -666,6 +671,59 @@ def financial_report_csv(request):
 
 from django.urls import path
 
+
+@require_POST
+def vehicle_photo_upload(request, vehicle_id):
+    vehicle = get_object_or_404(Vehicle, pk=vehicle_id)
+    count = VehiclePhoto.objects.filter(vehicle=vehicle).count()
+    if count >= 5:
+        return JsonResponse({"ok": False, "error": "Maksimal 5 foto per kendaraan."}, status=400)
+
+    image = request.FILES.get("image")
+    if not image:
+        return JsonResponse({"ok": False, "error": "Pilih gambar untuk diupload."}, status=400)
+
+    if image.size > MAX_FILE_SIZE:
+        return JsonResponse({"ok": False, "error": "Ukuran gambar maksimal 1 MB."}, status=400)
+
+    try:
+        url = upload_to_supabase(image, vehicle.id)
+    except Exception as e:
+        return JsonResponse({"ok": False, "error": f"Gagal upload: {e}"}, status=500)
+
+    last_order = VehiclePhoto.objects.filter(vehicle=vehicle).count()
+    photo = VehiclePhoto(vehicle=vehicle, url=url, order=last_order + 1)
+    photo.save()
+
+    return JsonResponse({
+        "ok": True,
+        "photo": {
+            "id": photo.id,
+            "url": photo.url,
+            "order": photo.order,
+        }
+    })
+
+
+@require_POST
+def vehicle_photo_delete(request, vehicle_id, photo_id):
+    vehicle = get_object_or_404(Vehicle, pk=vehicle_id)
+    photo = get_object_or_404(VehiclePhoto, pk=photo_id, vehicle=vehicle)
+    photo.delete()
+    return JsonResponse({"ok": True})
+
+
+@require_POST
+def vehicle_photo_update_order(request, vehicle_id, photo_id):
+    vehicle = get_object_or_404(Vehicle, pk=vehicle_id)
+    photo = get_object_or_404(VehiclePhoto, pk=photo_id, vehicle=vehicle)
+    new_order = request.POST.get("order")
+    if new_order is not None:
+        photo.order = int(new_order)
+        photo.save(update_fields=["order"])
+    return JsonResponse({"ok": True})
+
+
 def _get_urls():
     urls = admin.AdminSite.get_urls(admin.site)
     my_urls = [
@@ -674,6 +732,9 @@ def _get_urls():
         path('rentals/booking-calendar/reschedule/', admin.site.admin_view(booking_calendar_reschedule), name='rental_booking_calendar_reschedule'),
         path('rentals/financial-report/', admin.site.admin_view(financial_report), name='rental_financial_report'),
         path('rentals/financial-report/export/', admin.site.admin_view(financial_report_csv), name='rental_financial_report_export'),
+        path('rentals/vehicle/<int:vehicle_id>/photos/upload/', admin.site.admin_view(vehicle_photo_upload), name='vehicle_photo_upload'),
+        path('rentals/vehicle/<int:vehicle_id>/photos/<int:photo_id>/delete/', admin.site.admin_view(vehicle_photo_delete), name='vehicle_photo_delete'),
+        path('rentals/vehicle/<int:vehicle_id>/photos/<int:photo_id>/order/', admin.site.admin_view(vehicle_photo_update_order), name='vehicle_photo_update_order'),
     ]
     return my_urls + urls
 
