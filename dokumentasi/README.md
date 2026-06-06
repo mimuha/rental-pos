@@ -2,7 +2,7 @@
 
 Aplikasi POS (Point of Sale) untuk manajemen rental mobil berbasis web. Dibangun dengan Django 6.0.
 
-**URL Production:** [rental-pos.onrender.com](https://rental-pos.onrender.com) (Render) | [rental-pos-production.up.railway.app](https://rental-pos-production.up.railway.app) (Railway)
+**URL Production:** [rental-pos.onrender.com](https://rental-pos.onrender.com)
 
 ## Tech Stack
 

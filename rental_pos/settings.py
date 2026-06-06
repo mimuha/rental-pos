@@ -40,22 +40,11 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-3n0slt74&b-^aj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-_ALLOWED_HOSTS = []
-
-_manual = os.environ.get('DJANGO_ALLOWED_HOSTS', '')
-if _manual:
-    _ALLOWED_HOSTS.extend(h.strip() for h in _manual.split(',') if h.strip())
-
-if os.environ.get('RENDER_EXTERNAL_HOSTNAME'):
-    _ALLOWED_HOSTS.append(os.environ['RENDER_EXTERNAL_HOSTNAME'])
-
-if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
-    _ALLOWED_HOSTS.append(os.environ['RAILWAY_PUBLIC_DOMAIN'])
-
-if not _ALLOWED_HOSTS:
-    _ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
-ALLOWED_HOSTS = _ALLOWED_HOSTS
+_ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '')
+if _ALLOWED_HOSTS:
+    ALLOWED_HOSTS = [h.strip() for h in _ALLOWED_HOSTS.split(',') if h.strip()]
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -182,10 +171,10 @@ LOGIN_REDIRECT_URL = '/admin/'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_TRUSTED_ORIGINS = []
-_is_localhost = any(h in ('localhost', '127.0.0.1') for h in _ALLOWED_HOSTS)
+_is_localhost = any(h in ('localhost', '127.0.0.1') for h in ALLOWED_HOSTS)
 if _is_localhost:
     CSRF_TRUSTED_ORIGINS.extend(['http://localhost:8000', 'http://127.0.0.1:8000'])
-for host in _ALLOWED_HOSTS:
+for host in ALLOWED_HOSTS:
     if host not in ('localhost', '127.0.0.1'):
         CSRF_TRUSTED_ORIGINS.append(f'https://{host}')
 
