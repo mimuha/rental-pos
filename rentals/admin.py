@@ -172,6 +172,11 @@ class VehicleAdmin(BaseModelAdmin):
     list_per_page = 25
     inlines = [VehiclePhotoInline]
 
+    def save_formset(self, request, form, formset, change):
+        if formset.model is VehiclePhoto:
+            return
+        super().save_formset(request, form, formset, change)
+
     @admin.display(description='Tarif harian')
     def daily_rate_rupiah(self, obj):
         return format_rupiah(obj.daily_rate)
