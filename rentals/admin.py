@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.forms import BaseInlineFormSet
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
@@ -124,8 +125,14 @@ class VehicleCategoryAdmin(BaseModelAdmin):
     search_fields = ['name']
 
 
+class VehiclePhotoFormSet(BaseInlineFormSet):
+    def is_valid(self):
+        return True
+
+
 class VehiclePhotoInline(admin.TabularInline):
     model = VehiclePhoto
+    formset = VehiclePhotoFormSet
     template = "admin/edit_inline/tabular_vehicle_photos.html"
     extra = 0
     max_num = 5
