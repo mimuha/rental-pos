@@ -38,6 +38,14 @@ Dokumentasi langkah keamanan yang telah diterapkan pada aplikasi.
 - Counter otomatis reset saat login berhasil
 - Mendeteksi IP asli via `X-Forwarded-For` (Render proxy)
 
+## Session Idle Timeout
+
+- User otomatis logout setelah tidak ada aktivitas **server** (navigasi halaman, submit form)
+- Dikonfigurasi via `DJANGO_SESSION_TIMEOUT`, default **1 jam (3600 detik)**
+- Server-side: `SESSION_COOKIE_AGE` + `SESSION_SAVE_EVERY_REQUEST` — session diperbarui setiap request
+- Client-side: JavaScript `setTimeout` murni dari halaman dimuat — tanpa reset dari mouse/keyboard
+- Keyboard dan mouse **tidak** memperpanjang session — hanya request ke server
+
 ## Browser Security Headers
 
 | Header | Status |

@@ -76,6 +76,7 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 ## Keamanan
 
 - **Rate limiting login admin** — maks 5 percobaan gagal per 15 menit, block 30 menit
+- **Auto logout idle** — user otomatis logout setelah tidak ada aktivitas server (lama dikonfigurasi via `DJANGO_SESSION_TIMEOUT`, default 1 jam)
 - HTTPS enforced + HSTS 1 tahun + preload
 - Secure cookies (session + CSRF)
 - ALLOWED_HOSTS dibatasi otomatis via Render

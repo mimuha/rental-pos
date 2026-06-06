@@ -36,6 +36,7 @@ Semua environment variable wajib diset di Render dashboard → Environment → E
 | Variable | Keterangan |
 |----------|------------|
 | `DJANGO_SECRET_KEY` | Secret key Django (wajib 50+ karakter random) |
+| `DJANGO_SESSION_TIMEOUT` | Auto logout idle (detik), default `3600` (1 jam) |
 
 ### Database (Supabase)
 
