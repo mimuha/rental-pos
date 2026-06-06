@@ -35,12 +35,16 @@ load_dotenv(BASE_DIR / '.env')
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3n0slt74&b-^aj*+y)lmy00qodu&fl^bmphhrf0knm7)+ll1&p'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-3n0slt74&b-^aj*+y)lmy00qodu&fl^bmphhrf0knm7)+ll1&p')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+_RENDER_HOST = os.environ.get('RENDER_EXTERNAL_HOSTNAME', '')
+if _RENDER_HOST:
+    ALLOWED_HOSTS = [_RENDER_HOST]
+else:
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -158,3 +162,31 @@ STATICFILES_DIRS = [
 
 LOGIN_URL = '/admin/login/'
 LOGIN_REDIRECT_URL = '/admin/'
+
+# ---- Production Security Settings ----
+# Render terminates SSL at load balancer, forwards internally as HTTP
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+CSRF_TRUSTED_ORIGINS = (
+    [f'https://{_RENDER_HOST}']
+    if _RENDER_HOST
+    else ['http://localhost:8000']
+)
+
+SECURE_SSL_REDIRECT = (
+    os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'True').lower() == 'true'
+)
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+SECURE_HSTS_SECONDS = int(os.environ.get('DJANGO_HSTS_SECONDS', '3600'))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = (
+    os.environ.get('DJANGO_HSTS_INCLUDE_SUBDOMAINS', 'True').lower() == 'true'
+)
+SECURE_HSTS_PRELOAD = (
+    os.environ.get('DJANGO_HSTS_PRELOAD', 'False').lower() == 'true'
+)
+
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
