@@ -16,7 +16,7 @@ def upload_to_supabase(file_obj, vehicle_id):
 
     url = f"{supabase_url}/storage/v1/object/vehicle-photos/{file_path}"
     headers = {
-        "Authorization": f"Bearer {service_key}",
+        "apikey": service_key,
         "Content-Type": file_obj.content_type or "image/jpeg",
         "x-upsert": "true",
     }
