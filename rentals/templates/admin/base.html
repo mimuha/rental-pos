@@ -141,7 +141,6 @@
   var timeoutSec = {{ SESSION_TIMEOUT }};
   if (!timeoutSec || timeoutSec <= 0) return;
 
-  var timer;
   var logoutForm = document.getElementById('logout-form');
 
   function logout() {
@@ -152,18 +151,7 @@
     }
   }
 
-  function resetTimer() {
-    clearTimeout(timer);
-    timer = setTimeout(logout, timeoutSec * 1000);
-  }
-
-  document.addEventListener('mousemove', resetTimer, {passive: true});
-  document.addEventListener('keydown', resetTimer, {passive: true});
-  document.addEventListener('click', resetTimer, {passive: true});
-  document.addEventListener('scroll', resetTimer, {passive: true});
-  document.addEventListener('touchstart', resetTimer, {passive: true});
-
-  resetTimer();
+  setTimeout(logout, timeoutSec * 1000);
 })();
 </script>
 </body>
