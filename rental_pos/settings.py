@@ -180,12 +180,12 @@ SECURE_SSL_REDIRECT = (
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-SECURE_HSTS_SECONDS = int(os.environ.get('DJANGO_HSTS_SECONDS', '3600'))
+SECURE_HSTS_SECONDS = int(os.environ.get('DJANGO_HSTS_SECONDS', '31536000'))
 SECURE_HSTS_INCLUDE_SUBDOMAINS = (
     os.environ.get('DJANGO_HSTS_INCLUDE_SUBDOMAINS', 'True').lower() == 'true'
 )
 SECURE_HSTS_PRELOAD = (
-    os.environ.get('DJANGO_HSTS_PRELOAD', 'False').lower() == 'true'
+    os.environ.get('DJANGO_HSTS_PRELOAD', 'True').lower() == 'true'
 )
 
 SECURE_BROWSER_XSS_FILTER = True
