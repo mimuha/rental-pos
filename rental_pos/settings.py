@@ -83,6 +83,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'rentals.context_processors.session_timeout',
             ],
         },
     },
@@ -180,6 +181,9 @@ SECURE_SSL_REDIRECT = (
 
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+SESSION_COOKIE_AGE = int(os.environ.get('DJANGO_SESSION_TIMEOUT', '3600'))
+SESSION_SAVE_EVERY_REQUEST = True
 
 SECURE_HSTS_SECONDS = int(os.environ.get('DJANGO_HSTS_SECONDS', '31536000'))
 SECURE_HSTS_INCLUDE_SUBDOMAINS = (
