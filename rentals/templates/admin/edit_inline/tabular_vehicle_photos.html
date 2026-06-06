@@ -32,6 +32,10 @@
           {% for inline_admin_form in inline_admin_formset %}
             {% if inline_admin_form.original %}
               <tr class="photo-row" data-photo-id="{{ inline_admin_form.original.pk }}">
+                <td style="display:none">
+                  {{ inline_admin_form.form.id }}
+                  {{ inline_admin_form.form.order.as_hidden }}
+                </td>
                 <td class="field-photo-preview">
                   <img src="{{ inline_admin_form.original.url }}" alt="Foto" class="photo-thumb" title="Klik untuk melihat ukuran penuh">
                 </td>
