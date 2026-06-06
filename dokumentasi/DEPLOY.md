@@ -1,17 +1,17 @@
-# Deployment (Render.com)
+# Deployment (Render.com / Railway)
 
-Aplikasi di-deploy di [Render.com](https://render.com) sebagai **Web Service**.
+Aplikasi dapat di-deploy di [Render.com](https://render.com) atau [Railway](https://railway.app) sebagai **Web Service**.
 
 ## Ringkasan
 
-| Item | Nilai |
-|------|-------|
-| URL | [https://rental-pos.onrender.com](https://rental-pos.onrender.com) |
-| Branch | `dev` (auto-deploy on push) |
-| Region | Singapore |
-| WSGI Server | Gunicorn |
-| Database | Supabase PostgreSQL (Singapore) |
-| Foto Storage | Supabase Storage |
+| Item | Render | Railway |
+|------|--------|---------|
+| URL | [rental-pos.onrender.com](https://rental-pos.onrender.com) | [rental-pos-production.up.railway.app](https://rental-pos-production.up.railway.app) |
+| Branch | `dev` (auto-deploy) | `dev` (auto-deploy) |
+| WSGI Server | Gunicorn | Gunicorn |
+| Database | Supabase PostgreSQL | Supabase PostgreSQL |
+| Foto Storage | Supabase Storage | Supabase Storage |
+| Static Files | Whitenoise | Whitenoise |
 
 ## Build & Start Command
 
@@ -33,10 +33,19 @@ Semua environment variable wajib diset di Render dashboard → Environment → E
 
 ### Django
 
-| Variable | Keterangan |
-|----------|------------|
-| `DJANGO_SECRET_KEY` | Secret key Django (wajib 50+ karakter random) |
-| `DJANGO_SESSION_TIMEOUT` | Auto logout idle (detik), default `3600` (1 jam) |
+| Variable | Wajib? | Keterangan |
+|----------|--------|------------|
+| `DJANGO_SECRET_KEY` | ✅ | Secret key Django (wajib 50+ karakter random) |
+| `DJANGO_SESSION_TIMEOUT` | ❌ | Auto logout idle (detik), default `3600` (1 jam) |
+| `DJANGO_ALLOWED_HOSTS` | ❌ | Domain manual tambahan (comma-separated). Untuk domain custom di luar Render/Railway. Format: `domain1.com,domain2.com` |
+
+### Static Files
+
+| Item | Keterangan |
+|------|------------|
+| Storage | `CompressedStaticFilesStorage` (non-manifest) |
+| Finder | `WHITENOISE_USE_FINDERS = True` — Whitenoise langsung serve dari app directory, tidak butuh `collectstatic` |
+| Command | `collectstatic --noinput` di build command (opsional tapi disarankan) |
 
 ### Database (Supabase)
 
@@ -71,7 +80,10 @@ Semua environment variable wajib diset di Render dashboard → Environment → E
 |----------|---------|------------|
 | `DJANGO_SECURE_SSL_REDIRECT` | `True` | Redirect HTTP→HTTPS |
 
-> **Catatan:** `RENDER_EXTERNAL_HOSTNAME` diset otomatis oleh Render, tidak perlu ditambah manual. Dipakai untuk `ALLOWED_HOSTS` dan `CSRF_TRUSTED_ORIGINS`.
+> **Catatan ALLOWED_HOSTS:** Platform berikut auto-detected — tidak perlu set manual:
+> - Render: `RENDER_EXTERNAL_HOSTNAME`
+> - Railway: `RAILWAY_PUBLIC_DOMAIN`
+> - Untuk domain custom, gunakan `DJANGO_ALLOWED_HOSTS`.
 
 ## Deploy Pertama Kali
 

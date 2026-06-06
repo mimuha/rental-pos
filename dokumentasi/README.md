@@ -2,7 +2,7 @@
 
 Aplikasi POS (Point of Sale) untuk manajemen rental mobil berbasis web. Dibangun dengan Django 6.0.
 
-**URL Production:** [https://rental-pos.onrender.com](https://rental-pos.onrender.com)
+**URL Production:** [rental-pos.onrender.com](https://rental-pos.onrender.com) (Render) | [rental-pos-production.up.railway.app](https://rental-pos-production.up.railway.app) (Railway)
 
 ## Tech Stack
 
@@ -12,7 +12,7 @@ Aplikasi POS (Point of Sale) untuk manajemen rental mobil berbasis web. Dibangun
 | Database | PostgreSQL (Supabase) / SQLite (dev) |
 | Storage Foto | Supabase Storage |
 | Static Files | Whitenoise |
-| Deployment | Render.com + Gunicorn |
+| Deployment | Render.com / Railway + Gunicorn |
 | Frontend | Bootstrap 5.3, FullCalendar 6.1 |
 
 ## Fitur Utama
