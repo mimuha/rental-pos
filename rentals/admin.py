@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.forms import BaseInlineFormSet
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
@@ -125,19 +124,14 @@ class VehicleCategoryAdmin(BaseModelAdmin):
     search_fields = ['name']
 
 
-class VehiclePhotoFormSet(BaseInlineFormSet):
-    def is_valid(self):
-        return True
-
-
 class VehiclePhotoInline(admin.TabularInline):
     model = VehiclePhoto
-    formset = VehiclePhotoFormSet
     template = "admin/edit_inline/tabular_vehicle_photos.html"
     extra = 0
     max_num = 5
     can_delete = False
-    fields = []
+    fields = ('url', 'order')
+    readonly_fields = ('url', 'order')
     verbose_name = 'Foto kendaraan'
     verbose_name_plural = 'Foto kendaraan (maks. 5, @max 1MB)'
     readonly_fields = []
@@ -171,11 +165,6 @@ class VehicleAdmin(BaseModelAdmin):
     search_fields = ['plate_number', 'brand', 'model']
     list_per_page = 25
     inlines = [VehiclePhotoInline]
-
-    def save_formset(self, request, form, formset, change):
-        if formset.model is VehiclePhoto:
-            return
-        super().save_formset(request, form, formset, change)
 
     @admin.display(description='Tarif harian')
     def daily_rate_rupiah(self, obj):

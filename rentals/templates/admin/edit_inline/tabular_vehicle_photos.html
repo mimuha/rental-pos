@@ -34,6 +34,7 @@
               <tr class="photo-row" data-photo-id="{{ inline_admin_form.original.pk }}">
                 <td style="display:none">
                   {{ inline_admin_form.form.id }}
+                  {{ inline_admin_form.form.url.as_hidden }}
                   {{ inline_admin_form.form.order.as_hidden }}
                 </td>
                 <td class="field-photo-preview">
