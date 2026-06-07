@@ -101,6 +101,10 @@
     fill: #353438;
 }
 
+.rental-nav-brand-mark svg path.st1logozandev {
+    fill: #e2cb44 !important;
+}
+
 .rental-nav-collapse {
     display: inline-flex;
     align-items: center;
