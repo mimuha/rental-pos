@@ -552,7 +552,7 @@
         background: #ffffff;
         border: 0;
         border-radius: 1rem;
-        box-shadow: 0 18px 45px rgba(17, 24, 39, .06);
+        box-shadow: var(--rental-box-shadow);
     }
 
     .admin-sidebar-col.rental-nav-collapsed .rental-nav-header {
