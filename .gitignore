@@ -1,4 +1,5 @@
 .env
+.env001
 *.sqlite3
 sqlite_dump.json
 __pycache__/
