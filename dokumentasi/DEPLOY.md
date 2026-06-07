@@ -1,17 +1,15 @@
-# Deployment (Render.com)
+# Deployment
 
-Aplikasi di-deploy di [Render.com](https://render.com) sebagai **Web Service**.
+Aplikasi dapat di-deploy di platform manapun yang support WSGI/Gunicorn (Render.com, Railway, dsb).
 
 ## Ringkasan
 
 | Item | Nilai |
 |------|-------|
-| URL | [https://rental-pos.onrender.com](https://rental-pos.onrender.com) |
-| Branch | `dev` (auto-deploy on push) |
-| Region | Singapore |
 | WSGI Server | Gunicorn |
-| Database | Supabase PostgreSQL (Singapore) |
+| Database | Supabase PostgreSQL |
 | Foto Storage | Supabase Storage |
+| Static Files | Whitenoise |
 
 ## Build & Start Command
 
@@ -33,10 +31,19 @@ Semua environment variable wajib diset di Render dashboard → Environment → E
 
 ### Django
 
-| Variable | Keterangan |
-|----------|------------|
-| `DJANGO_SECRET_KEY` | Secret key Django (wajib 50+ karakter random) |
-| `DJANGO_SESSION_TIMEOUT` | Auto logout idle (detik), default `3600` (1 jam) |
+| Variable | Wajib? | Keterangan |
+|----------|--------|------------|
+| `DJANGO_SECRET_KEY` | ✅ | Secret key Django (wajib 50+ karakter random) |
+| `DJANGO_ALLOWED_HOSTS` | ✅ Production | Domain aplikasi (comma-separated). Contoh: `rental-pos.onrender.com,rental-pos-production.up.railway.app`. Tanpa ini hanya localhost yang diizinkan. |
+| `DJANGO_SESSION_TIMEOUT` | ❌ | Auto logout idle (detik), default `3600` (1 jam) |
+
+### Static Files
+
+| Item | Keterangan |
+|------|------------|
+| Storage | `CompressedStaticFilesStorage` (non-manifest) |
+| Finder | `WHITENOISE_USE_FINDERS = True` — Whitenoise langsung serve dari app directory, tidak butuh `collectstatic` |
+| Command | `collectstatic --noinput` di build command (opsional tapi disarankan) |
 
 ### Database (Supabase)
 
@@ -71,7 +78,7 @@ Semua environment variable wajib diset di Render dashboard → Environment → E
 |----------|---------|------------|
 | `DJANGO_SECURE_SSL_REDIRECT` | `True` | Redirect HTTP→HTTPS |
 
-> **Catatan:** `RENDER_EXTERNAL_HOSTNAME` diset otomatis oleh Render, tidak perlu ditambah manual. Dipakai untuk `ALLOWED_HOSTS` dan `CSRF_TRUSTED_ORIGINS`.
+> **Catatan:** `DJANGO_ALLOWED_HOSTS` wajib diset di production. Format: domain1,domain2 tanpa spasi setelah koma. Jika tidak diset, hanya `localhost`/`127.0.0.1` yang diizinkan (untuk development).
 
 ## Deploy Pertama Kali
 

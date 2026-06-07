@@ -11,6 +11,7 @@
     background: rgba(226, 203, 68, 0.08);
     border: 1px solid rgba(226, 203, 68, 0.25);
   border-radius: 12px;
+  max-width: 53rem;
 }
 
 .photo-upload-label {
@@ -86,8 +87,9 @@
 }
 
 /* Table */
-.vehicle-photos-table {
-  width: 100%;
+.inline-related.tabular fieldset.module table.vehicle-photos-table {
+  width: 100% !important;
+  max-width: 53rem;
   border-collapse: collapse;
   background: #fff;
   border-radius: 12px;
@@ -121,7 +123,7 @@
 }
 
 /* Column widths */
-.col-photo-preview { width: 100px; text-align: center; }
+.col-photo-preview { width: auto; text-align: center; }
 .col-photo-order  { width: 90px; text-align: center; }
 .col-photo-delete { width: 60px; text-align: center; }
 
