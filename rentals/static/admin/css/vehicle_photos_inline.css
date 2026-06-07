@@ -86,8 +86,8 @@
 }
 
 /* Table */
-.vehicle-photos-table {
-  width: 100%;
+.inline-related.tabular fieldset.module table.vehicle-photos-table {
+  width: 100% !important;
   border-collapse: collapse;
   background: #fff;
   border-radius: 12px;
