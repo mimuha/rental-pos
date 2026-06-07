@@ -993,6 +993,10 @@ a:focus {
     color:#fff !important;
 }
 
+#changelist .actions {
+    padding: 10px !important;
+}
+
 #changelist .actions .button svg {
     height: 1rem;
 }
