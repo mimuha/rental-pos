@@ -45,9 +45,15 @@ class RentalInvoiceNumberTests(TestCase):
             daily_rate=Decimal('150000.00'),
             odometer=1000,
         )
+        self.user = get_user_model().objects.create_superuser(
+            username='testadmin',
+            email='test@example.com',
+            password='password123',
+        )
 
-    def create_rental(self, invoice_number=''):
-        start_at = timezone.datetime(2026, 5, 24, 7, 13, tzinfo=timezone.get_current_timezone())
+    def create_rental(self, invoice_number='', start_at=None):
+        if start_at is None:
+            start_at = timezone.datetime(2026, 5, 24, 7, 13, tzinfo=timezone.get_current_timezone())
         return Rental.objects.create(
             customer=self.customer,
             vehicle=self.vehicle,
@@ -59,18 +65,18 @@ class RentalInvoiceNumberTests(TestCase):
         )
 
     def test_auto_invoice_number_continues_existing_sequence(self):
-        self.create_rental(invoice_number='rental-2026-001')
+        self.create_rental(invoice_number='Order rental-2026-001')
 
-        rental = self.create_rental()
+        rental = self.create_rental(start_at=timezone.datetime(2026, 5, 26, 7, 13, tzinfo=timezone.get_current_timezone()))
 
-        self.assertEqual(rental.invoice_number, 'rental-2026-002')
+        self.assertEqual(rental.invoice_number, 'Order rental-2026-002')
 
     def test_auto_invoice_number_can_exceed_three_digits(self):
-        self.create_rental(invoice_number='rental-2026-999')
+        self.create_rental(invoice_number='Order rental-2026-999')
 
-        rental = self.create_rental()
+        rental = self.create_rental(start_at=timezone.datetime(2026, 5, 26, 7, 13, tzinfo=timezone.get_current_timezone()))
 
-        self.assertEqual(rental.invoice_number, 'rental-2026-1000')
+        self.assertEqual(rental.invoice_number, 'Order rental-2026-1000')
 
     def test_rental_status_defaults_to_draft(self):
         rental = self.create_rental()
@@ -99,6 +105,7 @@ class RentalInvoiceNumberTests(TestCase):
 
     def build_admin_post_request(self, data):
         request = RequestFactory().post('/admin/rentals/rental/1/change/', data)
+        request.user = self.user
         request.session = {}
         request._messages = FallbackStorage(request)
         return request

@@ -402,6 +402,7 @@ class RentalAdmin(BaseModelAdmin):
             if obj.status == Rental.Status.DRAFT:
                 obj.status = Rental.Status.ACTIVE
                 obj.save(update_fields=['status', 'updated_at'])
+                self.log_change(request, obj, [{"changed": {"fields": ["status"]}}])
                 self.message_user(request, f'Transaksi {obj.invoice_number} berhasil diaktifkan.')
             else:
                 self.message_user(request, 'Hanya transaksi berstatus draf yang dapat diaktifkan.', level='warning')
@@ -411,6 +412,7 @@ class RentalAdmin(BaseModelAdmin):
             if obj.status == Rental.Status.ACTIVE:
                 obj.status = Rental.Status.COMPLETED
                 obj.save(update_fields=['status', 'updated_at'])
+                self.log_change(request, obj, [{"changed": {"fields": ["status"]}}])
                 self.message_user(request, f'Transaksi {obj.invoice_number} berhasil diselesaikan.')
             else:
                 self.message_user(request, 'Hanya transaksi berstatus aktif yang dapat diselesaikan.', level='warning')
