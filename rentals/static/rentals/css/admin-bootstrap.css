@@ -1052,6 +1052,7 @@ a:focus {
     width: 160px !important;
     position: relative !important;
     overflow: unset !important;
+    height: auto !important;
 }
 .inline-related.tabular fieldset.module table {
     width: 81rem !important;
@@ -1101,6 +1102,9 @@ p.datetime input {
 }
 p.datetime  span {
     width: 30%;
+}
+.form-row.dynamic-other_expenses{
+    height: auto !important;
 }
 /* end forms python */
 /* css button python */
