@@ -39,6 +39,30 @@ python -m venv .venv
 source .venv/bin/activate   # Mac/Linux
 
 pip install -r requirements.txt
+```
+
+### Setup Environment
+
+Buat file `.env` di root project (copy dari `.env.example`):
+
+```bash
+copy .env.example .env      # Windows
+cp .env.example .env        # Mac/Linux
+```
+
+Lalu edit file `.env`, **ubah / hapus** baris berikut agar cocok untuk development lokal:
+
+```ini
+# Ubah jadi False supaya tidak redirect ke HTTPS
+DJANGO_SECURE_SSL_REDIRECT=False
+
+# Hapus atau comment DB_ENGINE supaya pakai SQLite (tidak perlu Postgres)
+# DB_ENGINE=postgres
+```
+
+Jalankan migrasi dan server:
+
+```bash
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
