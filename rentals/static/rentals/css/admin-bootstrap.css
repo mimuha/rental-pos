@@ -38,14 +38,14 @@
 
 body {
     background: var(--body-bg) !important;
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 button,
 input,
 select,
 textarea {
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 #container {
@@ -118,7 +118,7 @@ textarea {
 }
 
 #user-tools a{
-    color: var(--primary) !important;
+    color: var(--rental-pos-title) !important;
 }
 
 #logout-form button {

@@ -14,7 +14,7 @@ body {
     margin: 0;
     background: #ffffff;
     color: #353438;
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 1rem;
     line-height: 1.5;
     min-height: 70vh;
@@ -39,7 +39,7 @@ input,
 optgroup,
 select,
 textarea {
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Inter', sans-serif;
     min-height: 2rem;
     transition: .3s ease !important;
 }

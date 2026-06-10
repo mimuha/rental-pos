@@ -141,7 +141,8 @@ html[data-theme="light"] .theme-toggle .theme-label-when-light {
 .theme-toggle svg.theme-icon-when-dark,
 .theme-toggle svg.theme-icon-when-light {
     fill: var(--header-link-color);
-    color: var(--header-bg);
+    color: var(--white2);
+    border-radius: 5px;
 }
 
 html[data-theme="auto"] .theme-toggle svg.theme-icon-when-auto {
