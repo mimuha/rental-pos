@@ -28,12 +28,12 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 
 - **Invoice otomatis** format: `Order rental-{tahun}-{nomor_urut}` (contoh: Order rental-2026-001)
 - Input: pelanggan, kendaraan, tanggal mulai, tanggal kembali, odometer awal
-- Finansial: tarif harian, diskon, biaya tambahan, uang jaminan
-- Perhitungan otomatis: subtotal, total, sudah dibayar, sisa
+- Finansial: tarif harian, diskon, biaya tambahan, uraian biaya tambahan, uang jaminan
+- **Kalkulasi real-time** — subtotal dan total terupdate otomatis saat input diubah (client-side JS)
 - **Status workflow:** DRAFT → AKTIF (tombol "Aktifkan") → SELESAI (tombol "Selesaikan")
 - Validasi tumpang tindih tanggal rental
 - Inline pembayaran multi-metode
-- **Biaya tambahan otomatis** — field `additional_fee` otomatis membuat record `OtherExpense` (jenis "Biaya Operasional Perjalanan") dengan status: Direncanakan → Dikerjakan → Selesai, mengikuti status order rental
+- **Biaya tambahan otomatis** — field `additional_fee` + `additional_fee_description` otomatis membuat record `OtherExpense` (jenis "Biaya Operasional Perjalanan") dengan status: Direncanakan → Dikerjakan → Selesai, mengikuti status order rental
 
 ## Pembayaran
 

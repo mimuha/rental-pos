@@ -319,6 +319,7 @@ class Rental(TimeStampedModel):
         validators=[MinValueValidator(0)],
         default=0,
     )
+    additional_fee_description = models.CharField('Uraian biaya tambahan', max_length=255, blank=True)
     deposit_amount = models.DecimalField(
         'Uang jaminan (Rp)',
         max_digits=12,
@@ -333,6 +334,7 @@ class Rental(TimeStampedModel):
         super().__init__(*args, **kwargs)
         self._previous_status = self.status
         self._previous_additional_fee = self.additional_fee
+        self._previous_additional_fee_description = self.additional_fee_description
 
     class Meta:
         ordering = ['-start_at']

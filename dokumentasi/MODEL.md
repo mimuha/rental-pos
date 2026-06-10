@@ -141,14 +141,15 @@ Rental ── OtherExpense (1:N, SET_NULL)
 | daily_rate | DecimalField(12,2) | Tarif harian |
 | discount_amount | DecimalField(12,2) | Diskon |
 | additional_fee | DecimalField(12,2) | Biaya tambahan |
+| additional_fee_description | CharField(255) | Uraian biaya tambahan (opsional) |
 | deposit_amount | DecimalField(12,2) | Uang jaminan |
 | status | CharField(20) | Draf/Aktif/Selesai/Dibatalkan |
 | notes | TextField | Catatan |
 
 **Computed properties:**
 - `rental_days` — selisih hari sewa
-- `subtotal` — daily_rate × hari - diskon
-- `total_amount` — subtotal + biaya tambahan
+- `subtotal` — daily_rate × hari
+- `total_amount` — subtotal + biaya tambahan - diskon
 - `paid_amount` — total pembayaran
 - `remaining_amount` — total - sudah dibayar
 
@@ -174,6 +175,7 @@ Saat field `additional_fee` diisi pada form **Order Rental**, sistem otomatis me
    - `expense_type` = "Biaya Operasional Perjalanan"
    - `status` = **Direncanakan**
    - `total_cost` = nilai `additional_fee`
+   - `description` = isian `additional_fee_description` (jika diisi), atau auto `"Biaya tambahan order {invoice}"`
 
 2. **Order diaktifkan** (Draf → Aktif) → status `OtherExpense` berubah ke **Dikerjakan**
 
@@ -181,7 +183,9 @@ Saat field `additional_fee` diisi pada form **Order Rental**, sistem otomatis me
 
 4. **`additional_fee` diedit** → `total_cost` di `OtherExpense` ikut disync
 
-5. **`additional_fee` jadi 0** → `OtherExpense` terkait otomatis dihapus
+5. **`additional_fee_description` diedit** → `description` di `OtherExpense` ikut disync
+
+6. **`additional_fee` jadi 0** → `OtherExpense` terkait otomatis dihapus
 
 > ExpenseType "Biaya Operasional Perjalanan" dibuat otomatis jika belum ada di database.
 

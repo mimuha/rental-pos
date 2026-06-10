@@ -19,6 +19,10 @@ def _get_linked_expense(instance, expense_type):
     return instance.other_expenses.filter(expense_type=expense_type).first()
 
 
+def _build_description(instance):
+    return instance.additional_fee_description or f'Biaya tambahan order {instance.invoice_number}'
+
+
 @receiver(post_save, sender=Rental)
 def handle_rental_other_expenses(sender, instance, created, **kwargs):
     expense_type = _get_expense_type()
@@ -26,7 +30,10 @@ def handle_rental_other_expenses(sender, instance, created, **kwargs):
     status_changed = previous_status is not None and previous_status != instance.status
     previous_fee = getattr(instance, '_previous_additional_fee', None)
     fee_changed = previous_fee is not None and previous_fee != instance.additional_fee
+    previous_desc = getattr(instance, '_previous_additional_fee_description', None)
+    desc_changed = previous_desc is not None and previous_desc != instance.additional_fee_description
     linked_expense = _get_linked_expense(instance, expense_type)
+    description = _build_description(instance)
 
     if created:
         if instance.additional_fee > 0:
@@ -34,22 +41,30 @@ def handle_rental_other_expenses(sender, instance, created, **kwargs):
                 rental=instance,
                 expense_type=expense_type,
                 expense_date=instance.start_at or timezone.now(),
-                description=f'Biaya tambahan order {instance.invoice_number}',
+                description=description,
                 total_cost=instance.additional_fee,
                 status=OtherExpense.Status.PLANNED,
             )
     else:
-        if fee_changed:
+        if fee_changed or desc_changed:
             if instance.additional_fee > 0:
+                update_fields = []
                 if linked_expense:
-                    linked_expense.total_cost = instance.additional_fee
-                    linked_expense.save(update_fields=['total_cost', 'updated_at'])
+                    if fee_changed:
+                        linked_expense.total_cost = instance.additional_fee
+                        update_fields.append('total_cost')
+                    if desc_changed:
+                        linked_expense.description = description
+                        update_fields.append('description')
+                    if update_fields:
+                        update_fields.append('updated_at')
+                        linked_expense.save(update_fields=update_fields)
                 else:
                     OtherExpense.objects.create(
                         rental=instance,
                         expense_type=expense_type,
                         expense_date=instance.start_at or timezone.now(),
-                        description=f'Biaya tambahan order {instance.invoice_number}',
+                        description=description,
                         total_cost=instance.additional_fee,
                         status=OtherExpense.Status.PLANNED,
                     )
@@ -68,3 +83,4 @@ def handle_rental_other_expenses(sender, instance, created, **kwargs):
 
     instance._previous_status = instance.status
     instance._previous_additional_fee = instance.additional_fee
+    instance._previous_additional_fee_description = instance.additional_fee_description

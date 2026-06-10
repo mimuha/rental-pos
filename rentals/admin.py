@@ -366,6 +366,7 @@ class RentalAdmin(BaseModelAdmin):
                 'daily_rate',
                 'discount_amount',
                 'additional_fee',
+                'additional_fee_description',
                 'deposit_amount',
                 'subtotal_rupiah',
                 'total_amount_rupiah',
@@ -374,6 +375,9 @@ class RentalAdmin(BaseModelAdmin):
             ),
         }),
     )
+
+    class Media:
+        js = ('admin/js/rental_calculator.js',)
 
     @admin.display(description='Status')
     def status_badge(self, obj):
