@@ -26,8 +26,8 @@ from .models import (
     VehicleMaintenance,
     VehiclePhoto,
 )
+from .forms import RentalForm, VehiclePhotoForm, upload_to_supabase, MAX_FILE_SIZE
 from .views import booking_calendar, booking_calendar_events, booking_calendar_reschedule
-from .forms import VehiclePhotoForm, upload_to_supabase, MAX_FILE_SIZE
 
 
 admin.site.site_header = 'Admin POS Rental Mobil'
@@ -350,6 +350,7 @@ class RentalAdmin(BaseModelAdmin):
         'paid_amount_rupiah',
         'remaining_amount_rupiah',
     ]
+    form = RentalForm
     inlines = [PaymentInline, OtherExpenseInline]
     date_hierarchy = 'start_at'
     list_per_page = 25

@@ -4,7 +4,7 @@ import requests
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from .models import VehiclePhoto, MAX_PHOTOS_PER_VEHICLE, MAX_FILE_SIZE
+from .models import VehiclePhoto, Rental, MAX_PHOTOS_PER_VEHICLE, MAX_FILE_SIZE
 
 
 def upload_to_supabase(file_obj, vehicle_id):
@@ -66,3 +66,15 @@ class VehiclePhotoForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+class RentalForm(forms.ModelForm):
+    class Meta:
+        model = Rental
+        fields = '__all__'
+        widgets = {
+            'additional_fee_description': forms.Textarea(attrs={
+                'rows': 3,
+                'style': 'min-height: 100px;',
+            }),
+        }

@@ -141,7 +141,7 @@ Rental ── OtherExpense (1:N, SET_NULL)
 | daily_rate | DecimalField(12,2) | Tarif harian |
 | discount_amount | DecimalField(12,2) | Diskon |
 | additional_fee | DecimalField(12,2) | Biaya tambahan |
-| additional_fee_description | CharField(255) | Uraian biaya tambahan (opsional) |
+| additional_fee_description | CharField(255) | Uraian biaya tambahan, widget Textarea di admin (opsional) |
 | deposit_amount | DecimalField(12,2) | Uang jaminan |
 | status | CharField(20) | Draf/Aktif/Selesai/Dibatalkan |
 | notes | TextField | Catatan |
