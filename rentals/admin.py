@@ -312,6 +312,22 @@ class PaymentInline(admin.TabularInline):
     verbose_name_plural = 'Pembayaran'
 
 
+class OtherExpenseInline(admin.TabularInline):
+    model = OtherExpense
+    extra = 0
+    can_delete = False
+    fields = ['expense_type', 'expense_date', 'status', 'total_cost', 'description']
+    readonly_fields = ['expense_type', 'expense_date', 'status', 'total_cost', 'description']
+    verbose_name = 'Biaya tambahan otomatis'
+    verbose_name_plural = 'Biaya tambahan otomatis'
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
 @admin.register(Rental)
 class RentalAdmin(BaseModelAdmin):
     list_display = [
@@ -334,7 +350,7 @@ class RentalAdmin(BaseModelAdmin):
         'paid_amount_rupiah',
         'remaining_amount_rupiah',
     ]
-    inlines = [PaymentInline]
+    inlines = [PaymentInline, OtherExpenseInline]
     date_hierarchy = 'start_at'
     list_per_page = 25
 

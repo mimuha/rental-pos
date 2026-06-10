@@ -254,6 +254,14 @@ class OtherExpense(TimeStampedModel):
     status = models.CharField('Status', max_length=20, choices=Status.choices, default=Status.COMPLETED)
     reference_number = models.CharField('Nomor referensi', max_length=100, blank=True)
     notes = models.TextField('Catatan', blank=True)
+    rental = models.ForeignKey(
+        'Rental',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='other_expenses',
+        verbose_name='Terkait order rental',
+    )
 
     class Meta:
         ordering = ['-expense_date']
@@ -320,6 +328,11 @@ class Rental(TimeStampedModel):
     )
     status = models.CharField('Status', max_length=20, choices=Status.choices, default=Status.DRAFT)
     notes = models.TextField('Catatan', blank=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._previous_status = self.status
+        self._previous_additional_fee = self.additional_fee
 
     class Meta:
         ordering = ['-start_at']

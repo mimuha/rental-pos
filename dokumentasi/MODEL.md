@@ -19,6 +19,9 @@ Vehicle ───┘
 VehicleCategory ── Vehicle (1:N)
 
 ExpenseType ── OtherExpense (1:N)
+  └── Rental (optional FK)
+
+Rental ── OtherExpense (1:N, SET_NULL)
 ```
 
 ## Daftar Model
@@ -121,6 +124,7 @@ ExpenseType ── OtherExpense (1:N)
 | status | CharField(20) | Rencana/Dikerjakan/Selesai/Dibatalkan |
 | reference_number | CharField(100) | Nomor referensi |
 | notes | TextField | Catatan |
+| rental | FK → Rental, SET_NULL | Terkait order rental (auto dari biaya tambahan) |
 
 ### Rental (Order Rental)
 
@@ -160,6 +164,26 @@ ExpenseType ── OtherExpense (1:N)
 | amount | DecimalField(12,2) | Jumlah |
 | reference_number | CharField(100) | Nomor referensi |
 | notes | TextField | Catatan |
+
+## Otomatisasi Biaya Tambahan → OtherExpense
+
+Saat field `additional_fee` diisi pada form **Order Rental**, sistem otomatis membuat record
+`OtherExpense` dengan alur:
+
+1. **Order dibuat** (`additional_fee > 0`) → `OtherExpense` dibuat dengan:
+   - `expense_type` = "Biaya Operasional Perjalanan"
+   - `status` = **Direncanakan**
+   - `total_cost` = nilai `additional_fee`
+
+2. **Order diaktifkan** (Draf → Aktif) → status `OtherExpense` berubah ke **Dikerjakan**
+
+3. **Order selesai** (Aktif → Selesai) → status `OtherExpense` berubah ke **Selesai**
+
+4. **`additional_fee` diedit** → `total_cost` di `OtherExpense` ikut disync
+
+5. **`additional_fee` jadi 0** → `OtherExpense` terkait otomatis dihapus
+
+> ExpenseType "Biaya Operasional Perjalanan" dibuat otomatis jika belum ada di database.
 
 ## Field Timestamp (Base)
 

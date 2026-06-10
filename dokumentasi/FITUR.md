@@ -33,6 +33,7 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - **Status workflow:** DRAFT → AKTIF (tombol "Aktifkan") → SELESAI (tombol "Selesaikan")
 - Validasi tumpang tindih tanggal rental
 - Inline pembayaran multi-metode
+- **Biaya tambahan otomatis** — field `additional_fee` otomatis membuat record `OtherExpense` (jenis "Biaya Operasional Perjalanan") dengan status: Direncanakan → Dikerjakan → Selesai, mengikuti status order rental
 
 ## Pembayaran
 
