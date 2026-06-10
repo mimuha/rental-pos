@@ -1233,6 +1233,9 @@ input[value="Simpan dan terus mengedit"], input[value="Simpan dan tambahkan lagi
 /* end css kalender booking */
 
 /* css responsive python */
+.aligned .form-row textarea {
+    min-height: 100px !important;
+}
 @media (max-width: 767px) {
     .booking-calendar-toolbar {
         grid-template-columns: 1fr;
@@ -1259,7 +1262,6 @@ input[value="Simpan dan terus mengedit"], input[value="Simpan dan tambahkan lagi
     }
     .aligned .form-row textarea {
         max-width: 68% !important;
-        min-height: 100px !important;
     }
     .aligned legend, .aligned label,.aligned label + p, .aligned label + div.help, .aligned label + div.readonly,.aligned .form-row textarea,.aligned .form-row input, .aligned .form-row select {
         margin-left: .5rem !important;
