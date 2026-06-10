@@ -38,14 +38,14 @@
 
 body {
     background: var(--body-bg) !important;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Barlow', sans-serif;
 }
 
 button,
 input,
 select,
 textarea {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Barlow', sans-serif;
 }
 
 #container {
