@@ -9,7 +9,7 @@
     --header-bg: #ffffff;
     --header-color: #353438;
     --breadcrumbs-bg: #f8f9fa;
-    --body-bg: #ffffff;
+    --body-bg: #d2dde757;
     --body-fg: #353438;
     --rental-pos-title: #353438;
     --rental-pos-subtitle: #5a595d;
@@ -23,7 +23,7 @@
     --rental-gold-soft: rgba(226, 203, 68, 0.10);
     --rental-gold-border: rgba(226, 203, 68, 0.35);
     --rental-danger: #e84a4a;
-    --rental-box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    --rental-box-shadow: rgb(47 77 81 / 10%) 0px 11px 16px -13px;
     --bs-primary: #353438;
     --bs-primary-rgb: 53, 52, 56;
     --bs-link-color: #353438;
