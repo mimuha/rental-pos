@@ -634,7 +634,7 @@ a.button:hover {
 }
 
 .rental-menu-button:hover {
-    color: #929292 !important;
+    color: #d6d6d6 !important;
     border-color: rgba(53, 52, 56, .25);
     box-shadow: 0 15px 15px -10px rgba(53, 52, 56, 0.15);
     text-decoration: none;
