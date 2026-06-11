@@ -1,4 +1,6 @@
 :root {
+    --body-bg: #ebebeb57;
+    --body-fg: #353438;
     --white: #ffffff;
     --white2: #ffffffe5;
     --white3: #ffffffd5;
@@ -9,8 +11,6 @@
     --header-bg: #ffffff;
     --header-color: #353438;
     --breadcrumbs-bg: #f8f9fa;
-    --body-bg: #d2dde757;
-    --body-fg: #353438;
     --rental-pos-title: #353438;
     --rental-pos-subtitle: #5a595d;
     --border-color: #d1d1d3;
