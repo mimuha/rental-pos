@@ -629,13 +629,13 @@ a.button:hover {
     background: var(--white2) !important;
     border-radius: 1.25rem;
     box-shadow: var(--rental-box-shadow);
-    border: .1px solid #9292921f;
+    border: .1px solid #cecece;
     text-align: center;
 }
 
 .rental-menu-button:hover {
-    color: #d6d6d6 !important;
-    border-color: rgba(53, 52, 56, .25);
+    color: #1f1e21 !important;
+    border-color: #b1b1b1;
     box-shadow: 0 15px 15px -10px rgba(53, 52, 56, 0.15);
     text-decoration: none;
 }
