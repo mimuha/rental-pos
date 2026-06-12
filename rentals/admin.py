@@ -30,9 +30,9 @@ from .forms import RentalForm, VehiclePhotoForm, upload_to_supabase, MAX_FILE_SI
 from .views import booking_calendar, booking_calendar_events, booking_calendar_reschedule
 
 
-admin.site.site_header = 'Admin POS Rental Mobil'
-admin.site.site_title = 'POS Rental Mobil'
-admin.site.index_title = 'Manajemen Rental Mobil'
+admin.site.site_header = 'Zandev POS'
+admin.site.site_title = 'Zandev POS'
+admin.site.index_title = 'Zandev POS Admin'
 
 
 def format_rupiah(value):
