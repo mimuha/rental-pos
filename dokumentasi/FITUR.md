@@ -74,6 +74,14 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - Tabel interaktif: sorting, pencarian
 - **Export CSV** untuk pemrosesan eksternal
 
+## Navigasi Sidebar
+
+- Sidebar admin **collapsed secara default** untuk memaksimalkan area konten
+- Tombol ikon pencarian (search) tampil saat sidebar collapsed; klik untuk expand dan langsung fokus ke input pencarian
+- Saat sidebar expanded, ikon pencarian di tombol tersembunyi (sudah ada ikon di dalam input form)
+- **Shortcut Ctrl+K** — expand sidebar dan fokus ke input pencarian dari mana saja
+- Preferensi collapsed/expanded tersimpan di `localStorage` dan diingat antar sesi
+
 ## Keamanan
 
 - **Rate limiting login admin** — maks 5 percobaan gagal per 15 menit, block 30 menit

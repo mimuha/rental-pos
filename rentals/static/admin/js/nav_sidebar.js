@@ -33,8 +33,16 @@
             });
         }
 
-        if (localStorage.getItem('rental.admin.navCollapsed') === 'true') {
+        if (localStorage.getItem('rental.admin.navCollapsed') !== 'false') {
             setCollapsed(true);
+        }
+
+        var searchBtn = sidebar.querySelector('.rental-nav-search-btn');
+        if (searchBtn && searchInput) {
+            searchBtn.addEventListener('click', function () {
+                setCollapsed(false);
+                searchInput.focus();
+            });
         }
 
         if (searchInput) {

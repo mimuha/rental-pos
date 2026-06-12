@@ -205,6 +205,28 @@
     font-weight: 800;
 }
 
+.rental-nav-search-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1.35rem;
+    padding: 0;
+    color: #9aa4b2;
+    background: #ffffff;
+    border: 1px solid #dde4ec;
+    border-radius: .65rem;
+    cursor: pointer;
+    transition: color .15s, background .15s, border-color .15s;
+}
+
+.rental-nav-search-btn:hover {
+    color: #353438;
+    background: rgba(226, 203, 68, 0.12);
+    border-color: rgba(226, 203, 68, 0.35);
+}
+
 .rental-nav-sections {
     display: grid;
     gap: 1.15rem;
@@ -470,6 +492,10 @@
     display: none;
 }
 
+.admin-sidebar-col.rental-nav-collapsed .rental-nav-search-btn {
+    display: flex;
+}
+
 @media (max-width: 576px) {
     .admin-sidebar-col.rental-nav-collapsed .rental-nav-brand span:last-child {
         display: block !important;
@@ -627,6 +653,13 @@
     .admin-sidebar-col.rental-nav-collapsed .rental-nav-item[open] summary,
     .admin-sidebar-col.rental-nav-collapsed .rental-nav-item.current-model summary {
         background: transparent;
+    }
+
+    .admin-sidebar-col.rental-nav-collapsed .rental-nav-search-btn {
+        width: 2.75rem;
+        height: 2.75rem;
+        margin-bottom: 0;
+        border-radius: .85rem;
     }
 
     .admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite {
