@@ -113,8 +113,8 @@
             <div class="col-12 {% if not is_popup and is_nav_sidebar_enabled %}col-xxl-9 col-xl-8{% endif %} admin-main-col">
               <div id="content" class="{% block coltype %}colM{% endblock %}">
                 {% block pretitle %}{% endblock %}
-                {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
-                {% block content_subtitle %}{% if subtitle %}<h2>{{ subtitle }}</h2>{% endif %}{% endblock %}
+                {% block content_title %}{% endblock %}
+                {% block content_subtitle %}{% endblock %}
                 {% block content %}
                   {% block object-tools %}{% endblock %}
                   {{ content }}
@@ -138,7 +138,7 @@
 {% block extrabody %}{% endblock extrabody %}
 <script>
 (function() {
-  var timeoutSec = {{ SESSION_TIMEOUT }};
+  var timeoutSec = {{ SESSION_TIMEOUT|default:0 }};
   if (!timeoutSec || timeoutSec <= 0) return;
 
   var logoutForm = document.getElementById('logout-form');
