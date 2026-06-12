@@ -1,5 +1,6 @@
 import re
 
+from django.conf import settings
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
@@ -461,3 +462,23 @@ class Payment(TimeStampedModel):
 
     def __str__(self):
         return f'{self.rental.invoice_number} - {self.amount}'
+
+
+class MenuFavorite(TimeStampedModel):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='menu_favorites',
+    )
+    menu_key = models.CharField('Menu key', max_length=100)
+    order = models.PositiveIntegerField('Urutan', default=0)
+
+    class Meta:
+        db_table = 'menu_favorites'
+        ordering = ['order', 'created_at']
+        unique_together = [('user', 'menu_key')]
+        verbose_name = 'Menu favorit'
+        verbose_name_plural = 'Menu favorit'
+
+    def __str__(self):
+        return f'{self.user} - {self.menu_key}'

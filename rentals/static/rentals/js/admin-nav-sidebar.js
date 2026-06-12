@@ -265,6 +265,215 @@
                 showPopupForItem(item, summary);
             });
         });
+
+        var favoriteBtn = document.getElementById('rental-nav-favorite-btn');
+        if (favoriteBtn) {
+            function getCsrfToken() {
+                var m = document.cookie.match(/csrftoken=([^;]+)/);
+                return m ? m[1] : '';
+            }
+
+            function getMenuItems() {
+                var menus = [];
+                items.forEach(function (item) {
+                    var cl = item.className.split(/\s+/);
+                    var key = '';
+                    for (var i = 0; i < cl.length; i++) {
+                        if (cl[i].indexOf('model-') === 0) { key = cl[i].substring(6); break; }
+                    }
+                    if (!key) return;
+                    var titleEl = item.querySelector('.rental-nav-label');
+                    var iconEl = item.querySelector('.rental-nav-icon');
+                    var linkEl = item.querySelector('.rental-nav-submenu a');
+                    menus.push({
+                        key: key,
+                        title: titleEl ? titleEl.textContent.trim() : '',
+                        iconHtml: iconEl ? iconEl.innerHTML : '',
+                        url: linkEl ? linkEl.href : '#'
+                    });
+                });
+                return menus;
+            }
+
+            function fetchFavorites(cb) {
+                fetch('/admin/rentals/favorites/').then(function (r) { return r.json(); }).then(function (d) {
+                    cb(d.favorites || []);
+                }).catch(function () { cb([]); });
+            }
+
+            function positionFavPopup(popup, anchor) {
+                var ar = anchor.getBoundingClientRect();
+                var sr = sidebarColumn ? sidebarColumn.getBoundingClientRect() : sidebar.getBoundingClientRect();
+                var pr = popup.getBoundingClientRect();
+                var m = 8;
+                if (isDesktopCollapsedMode()) {
+                    var left = sr.right + m + window.scrollX - 20;
+                    var top = ar.top + (ar.height / 2) - (pr.height / 2) + window.scrollY;
+                    if (top + pr.height > window.innerHeight - m) top = window.innerHeight - pr.height - m;
+                    if (top < m) top = m;
+                    if (left + pr.width > window.innerWidth - m) left = window.innerWidth - pr.width - m;
+                    popup.style.transformOrigin = 'left center';
+                    popup.style.position = 'absolute';
+                    popup.style.left = left + 'px';
+                    popup.style.top = top + 'px';
+                } else {
+                    var top2 = ar.bottom + m + window.scrollY;
+                    if (top2 + pr.height > window.innerHeight - m) {
+                        top2 = Math.max(m, ar.top - pr.height - m + window.scrollY);
+                    }
+                    if (top2 < m) top2 = m;
+                    popup.style.transformOrigin = 'top center';
+                    popup.style.position = 'absolute';
+                    popup.style.left = ar.left + window.scrollX + 'px';
+                    popup.style.top = top2 + 'px';
+                }
+            }
+
+            function showFavPopup(mode, favorites) {
+                closePopup();
+                var allMenus = getMenuItems();
+                var popup = document.createElement('div');
+                popup.className = 'rental-nav-popup rental-nav-fav-popup';
+                popup.setAttribute('role', 'menu');
+
+                var inner = document.createElement('div');
+                inner.className = 'rental-nav-popup-inner';
+
+                var header = document.createElement('div');
+                header.className = 'rental-nav-fav-header';
+                var title = document.createElement('span');
+                title.className = 'rental-nav-fav-title';
+                title.textContent = mode === 'edit' ? 'Edit Favorit' : 'Menu Favorit';
+                header.appendChild(title);
+
+                var actionBtn = document.createElement('button');
+                actionBtn.type = 'button';
+                actionBtn.className = 'rental-nav-fav-action';
+                actionBtn.textContent = mode === 'edit' ? 'Selesai' : 'Edit';
+                actionBtn.addEventListener('click', function () {
+                    if (mode === 'edit') {
+                        fetchFavorites(function (f) { showFavPopup('view', f); });
+                    } else {
+                        showFavPopup('edit', favorites);
+                    }
+                });
+                header.appendChild(actionBtn);
+                inner.appendChild(header);
+
+                if (mode === 'edit') {
+                    var list = document.createElement('div');
+                    list.className = 'rental-nav-fav-list';
+                    allMenus.forEach(function (menu) {
+                        var favObj = null;
+                        favorites.forEach(function (f) { if (f.menu_key === menu.key) favObj = f; });
+                        var isFav = Boolean(favObj);
+
+                        var row = document.createElement('label');
+                        row.className = 'rental-nav-fav-edit-item' + (isFav ? ' is-active' : '');
+
+                        var icon = document.createElement('span');
+                        icon.className = 'rental-nav-fav-item-icon';
+                        icon.innerHTML = menu.iconHtml;
+                        row.appendChild(icon);
+
+                        var name = document.createElement('span');
+                        name.className = 'rental-nav-fav-item-name';
+                        name.textContent = menu.title;
+                        row.appendChild(name);
+
+                        var toggle = document.createElement('input');
+                        toggle.type = 'checkbox';
+                        toggle.className = 'rental-nav-fav-toggle';
+                        toggle.checked = isFav;
+                        (function (menuKey, toggleEl, rowEl) {
+                            var localFavId = favObj ? favObj.id : null;
+                            toggleEl.addEventListener('change', function () {
+                                if (toggleEl.checked) {
+                                    fetch('/admin/rentals/favorites/', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCsrfToken() },
+                                        body: JSON.stringify({ menu_key: menuKey })
+                                    }).then(function (r) { return r.json(); }).then(function (d) {
+                                        if (d.ok) {
+                                            localFavId = d.favorite.id;
+                                            favorites.push({ id: d.favorite.id, menu_key: menuKey });
+                                            rowEl.classList.add('is-active');
+                                        }
+                                    });
+                                } else if (localFavId) {
+                                    fetch('/admin/rentals/favorites/' + localFavId + '/delete/', {
+                                        method: 'POST',
+                                        headers: { 'X-CSRFToken': getCsrfToken() }
+                                    }).then(function (r) { return r.json(); }).then(function (d) {
+                                        if (d.ok) {
+                                            favorites = favorites.filter(function (f) { return f.id !== localFavId; });
+                                            localFavId = null;
+                                            rowEl.classList.remove('is-active');
+                                        }
+                                    });
+                                }
+                            });
+                        })(menu.key, toggle, row);
+                        row.appendChild(toggle);
+                        list.appendChild(row);
+                    });
+                    inner.appendChild(list);
+                } else {
+                    if (favorites.length === 0) {
+                        var empty = document.createElement('div');
+                        empty.className = 'rental-nav-fav-empty';
+                        empty.textContent = 'Belum ada menu favorit. Klik Edit untuk menambahkan.';
+                        inner.appendChild(empty);
+                    } else {
+                        var vlist = document.createElement('div');
+                        vlist.className = 'rental-nav-fav-list';
+                        favorites.forEach(function (fav) {
+                            var menu = null;
+                            allMenus.forEach(function (m) { if (m.key === fav.menu_key) menu = m; });
+                            if (!menu) return;
+                            var link = document.createElement('a');
+                            link.className = 'rental-nav-fav-item';
+                            link.href = menu.url;
+                            var icon = document.createElement('span');
+                            icon.className = 'rental-nav-fav-item-icon';
+                            icon.innerHTML = menu.iconHtml;
+                            link.appendChild(icon);
+                            var name = document.createElement('span');
+                            name.className = 'rental-nav-fav-item-name';
+                            name.textContent = menu.title;
+                            link.appendChild(name);
+                            link.addEventListener('click', function () { closePopup(); });
+                            vlist.appendChild(link);
+                        });
+                        inner.appendChild(vlist);
+                    }
+                }
+
+                popup.appendChild(inner);
+                document.body.appendChild(popup);
+                positionFavPopup(popup, favoriteBtn);
+                window.requestAnimationFrame(function () { popup.classList.add('is-visible'); });
+
+                docMousedownHandler = function (e) {
+                    if (popup.contains(e.target) || favoriteBtn.contains(e.target)) return;
+                    closePopup();
+                };
+                docKeydownHandler = function (e) { if (e.key === 'Escape') closePopup(); };
+                document.addEventListener('mousedown', docMousedownHandler, true);
+                document.addEventListener('keydown', docKeydownHandler, true);
+                window.addEventListener('resize', closePopup);
+                window.addEventListener('scroll', closePopup, true);
+
+                currentPopup = popup;
+                currentAnchor = favoriteBtn;
+            }
+
+            favoriteBtn.addEventListener('click', function () {
+                if (currentAnchor === favoriteBtn) { closePopup(); return; }
+                fetchFavorites(function (favs) { showFavPopup('view', favs); });
+            });
+        }
+
     }
 
     if (document.readyState === 'loading') {

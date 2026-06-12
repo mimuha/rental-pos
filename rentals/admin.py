@@ -1,3 +1,6 @@
+import csv
+import json
+
 from django.contrib import admin
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, get_object_or_404
@@ -8,7 +11,6 @@ from django.db.models import Sum, Q
 from datetime import datetime, timedelta, date
 from django.urls import reverse
 from django.utils.html import format_html
-import csv
 from django.utils import timezone
 from django.utils.encoding import smart_str
 
@@ -18,6 +20,7 @@ from .models import (
     ExpenseType,
     MaintenanceCategory,
     MaintenanceVendor,
+    MenuFavorite,
     OtherExpense,
     Payment,
     Rental,
@@ -748,6 +751,39 @@ def vehicle_photo_update_order(request, vehicle_id, photo_id):
     return JsonResponse({"ok": True})
 
 
+def menu_favorites_view(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+        except (json.JSONDecodeError, ValueError):
+            return JsonResponse({'ok': False, 'error': 'Invalid JSON.'}, status=400)
+        menu_key = (data.get('menu_key') or '').strip()
+        if not menu_key:
+            return JsonResponse({'ok': False, 'error': 'menu_key wajib diisi.'}, status=400)
+        order = MenuFavorite.objects.filter(user=request.user).count()
+        fav, created = MenuFavorite.objects.get_or_create(
+            user=request.user,
+            menu_key=menu_key,
+            defaults={'order': order},
+        )
+        return JsonResponse({
+            'ok': True,
+            'created': created,
+            'favorite': {'id': fav.id, 'menu_key': fav.menu_key, 'order': fav.order},
+        })
+    favorites = list(
+        MenuFavorite.objects.filter(user=request.user).values('id', 'menu_key', 'order')
+    )
+    return JsonResponse({'ok': True, 'favorites': favorites})
+
+
+@require_POST
+def menu_favorite_delete(request, favorite_id):
+    fav = get_object_or_404(MenuFavorite, pk=favorite_id, user=request.user)
+    fav.delete()
+    return JsonResponse({'ok': True})
+
+
 def _get_urls():
     urls = admin.AdminSite.get_urls(admin.site)
     my_urls = [
@@ -759,6 +795,8 @@ def _get_urls():
         path('rentals/vehicle/<int:vehicle_id>/photos/upload/', admin.site.admin_view(vehicle_photo_upload), name='vehicle_photo_upload'),
         path('rentals/vehicle/<int:vehicle_id>/photos/<int:photo_id>/delete/', admin.site.admin_view(vehicle_photo_delete), name='vehicle_photo_delete'),
         path('rentals/vehicle/<int:vehicle_id>/photos/<int:photo_id>/order/', admin.site.admin_view(vehicle_photo_update_order), name='vehicle_photo_update_order'),
+        path('rentals/favorites/', admin.site.admin_view(menu_favorites_view), name='menu_favorites'),
+        path('rentals/favorites/<int:favorite_id>/delete/', admin.site.admin_view(menu_favorite_delete), name='menu_favorite_delete'),
     ]
     return my_urls + urls
 

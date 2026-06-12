@@ -81,6 +81,13 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - Saat sidebar expanded, ikon pencarian di tombol tersembunyi (sudah ada ikon di dalam input form)
 - **Shortcut Ctrl+K** — expand sidebar dan fokus ke input pencarian dari mana saja
 - Preferensi collapsed/expanded tersimpan di `localStorage` dan diingat antar sesi
+- **Menu Favorit** — tombol di bawah search untuk akses cepat ke menu yang sering digunakan
+  - Klik untuk melihat daftar menu favorit dalam popup
+  - Mode **Edit** untuk menambah/mengurangi menu favorit via checkbox
+  - Data favorit tersimpan per-user di database (Supabase PostgreSQL)
+  - Tampil di semua mode: expanded, collapsed desktop, dan collapsed mobile
+  - Model: `MenuFavorite` (tabel `menu_favorites`)
+  - API: `GET/POST /admin/rentals/favorites/`, `POST /admin/rentals/favorites/<id>/delete/`
 
 ## Keamanan
 

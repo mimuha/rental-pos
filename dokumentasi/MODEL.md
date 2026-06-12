@@ -22,6 +22,8 @@ ExpenseType ── OtherExpense (1:N)
   └── Rental (optional FK)
 
 Rental ── OtherExpense (1:N, SET_NULL)
+
+User ── MenuFavorite (1:N)
 ```
 
 ## Daftar Model
@@ -165,6 +167,16 @@ Rental ── OtherExpense (1:N, SET_NULL)
 | amount | DecimalField(12,2) | Jumlah |
 | reference_number | CharField(100) | Nomor referensi |
 | notes | TextField | Catatan |
+
+### MenuFavorite (Menu Favorit)
+
+| Field | Tipe | Keterangan |
+|-------|------|------------|
+| user | FK → User, CASCADE | Pemilik favorit |
+| menu_key | CharField(100) | Model key (e.g. `vehicle`, `rental`) |
+| order | PositiveIntegerField | Urutan tampilan, default 0 |
+| **unique_together** | — | `(user, menu_key)` — mencegah duplikat |
+| **db_table** | — | `menu_favorites` |
 
 ## Otomatisasi Biaya Tambahan → OtherExpense
 

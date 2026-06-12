@@ -26,6 +26,17 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>
 
+    <button type="button" class="rental-nav-favorite" id="rental-nav-favorite-btn">
+      <span class="rental-nav-favorite-icon" aria-hidden="true">
+        {% include "admin/includes/sidebar_icons/favorite.svg" %}
+      </span>
+      <span>
+        <strong>Menu favorit</strong>
+        <small>Kelola menu yang sering digunakan</small>
+      </span>
+      <span class="rental-nav-favorite-arrow" aria-hidden="true">&rsaquo;</span>
+    </button>
+
     {% if available_apps %}
       <div class="rental-nav-sections">
         {% for app in available_apps %}
@@ -172,15 +183,6 @@
       <p class="rental-nav-empty">{% translate 'Anda tidak memiliki izin untuk melihat atau mengubah data.' %}</p>
     {% endif %}
 
-    <a href="{% url 'admin:index' %}" class="rental-nav-favorite">
-      <span class="rental-nav-favorite-icon" aria-hidden="true">
-        {% include "admin/includes/sidebar_icons/favorite.svg" %}
-      </span>
-      <span>
-        <strong>Menu favorit</strong>
-        <small>Kelola menu yang sering digunakan</small>
-      </span>
-      <span class="rental-nav-favorite-arrow" aria-hidden="true">&rsaquo;</span>
-    </a>
+
   </div>
 </nav>
