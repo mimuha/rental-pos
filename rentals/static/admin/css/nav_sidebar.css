@@ -116,9 +116,9 @@
     margin-left: auto;
     padding: 0;
     color: #6b7280;
-    background: #ffffff;
-    border: 1px solid #e0e6ed;
-    border-radius: .65rem;
+    background: var(--white);
+    border: 1px solid var(--abu2header);
+    border-radius: .55rem;
     font-size: 1.1rem;
     font-weight: 800;
     line-height: 1;
@@ -209,14 +209,12 @@
     display: none;
     align-items: center;
     justify-content: center;
-    width: 3rem;
-    height: 3rem;
-    margin-bottom: 1.35rem;
-    padding: 0;
+    width: 2.25rem;
+    height: 2.25rem;
     color: #9aa4b2;
-    background: #ffffff;
-    border: 1px solid #dde4ec;
-    border-radius: .65rem;
+    background: var(--white);
+    border: 1px solid var(--abu2header);
+    border-radius: .55rem;
     cursor: pointer;
     transition: color .15s, background .15s, border-color .15s;
 }
