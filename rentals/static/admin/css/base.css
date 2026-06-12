@@ -80,6 +80,7 @@ tbody, td, tfoot, th, thead, tr {
 
 #branding {
     min-width: 0;
+    display: flex;
 }
 
 #site-name,
