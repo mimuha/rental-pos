@@ -87,6 +87,7 @@
         let currentAnchor = null;
         let docMousedownHandler = null;
         let docKeydownHandler = null;
+        let popupScrollHandler = null;
         let popupCloseTimer = null;
         const desktopCollapsedMedia = window.matchMedia('(min-width: 1200px)');
 
@@ -128,8 +129,9 @@
             currentAnchor = null;
             if (docMousedownHandler) document.removeEventListener('mousedown', docMousedownHandler, true);
             if (docKeydownHandler) document.removeEventListener('keydown', docKeydownHandler, true);
+            if (popupScrollHandler) window.removeEventListener('scroll', popupScrollHandler, true);
+            popupScrollHandler = null;
             window.removeEventListener('resize', closePopup);
-            window.removeEventListener('scroll', closePopup, true);
         }
 
         function showPopupForItem(item, summary) {
@@ -216,7 +218,8 @@
             document.addEventListener('mousedown', docMousedownHandler, true);
             document.addEventListener('keydown', docKeydownHandler, true);
             window.addEventListener('resize', closePopup);
-            window.addEventListener('scroll', closePopup, true);
+            popupScrollHandler = closePopup;
+            window.addEventListener('scroll', popupScrollHandler, true);
 
             popup.querySelectorAll('a').forEach(function (a) {
                 a.addEventListener('click', function () {
@@ -468,7 +471,11 @@
                 document.addEventListener('mousedown', docMousedownHandler, true);
                 document.addEventListener('keydown', docKeydownHandler, true);
                 window.addEventListener('resize', closePopup);
-                window.addEventListener('scroll', closePopup, true);
+                popupScrollHandler = function (e) {
+                    if (popup.contains(e.target)) return;
+                    closePopup();
+                };
+                window.addEventListener('scroll', popupScrollHandler, true);
 
                 currentPopup = popup;
                 currentAnchor = favoriteBtn;
