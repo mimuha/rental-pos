@@ -66,6 +66,12 @@
     border-radius: .55rem;
 }
 
+.rental-nav-favorite-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: .25rem 0;
+}
+
 .rental-nav-icon {
     position: relative;
     display: inline-flex;
@@ -547,6 +553,8 @@
 
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite {
     display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 0;
     border: 0;
     background: transparent;

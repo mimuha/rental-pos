@@ -452,6 +452,12 @@
                 popup.appendChild(inner);
                 document.body.appendChild(popup);
                 positionFavPopup(popup, favoriteBtn);
+
+                popup.addEventListener('mouseenter', clearPopupCloseTimer);
+                popup.addEventListener('mouseleave', function () {
+                    if (favHoverMedia.matches) { scheduleHoverPopupClose(); }
+                });
+
                 window.requestAnimationFrame(function () { popup.classList.add('is-visible'); });
 
                 docMousedownHandler = function (e) {
@@ -467,6 +473,20 @@
                 currentPopup = popup;
                 currentAnchor = favoriteBtn;
             }
+
+            var favHoverMedia = window.matchMedia('(hover: hover)');
+
+            favoriteBtn.addEventListener('mouseenter', function () {
+                if (!favHoverMedia.matches) return;
+                clearPopupCloseTimer();
+                if (currentAnchor !== favoriteBtn) {
+                    fetchFavorites(function (favs) { showFavPopup('view', favs); });
+                }
+            });
+
+            favoriteBtn.addEventListener('mouseleave', function () {
+                if (favHoverMedia.matches) { scheduleHoverPopupClose(); }
+            });
 
             favoriteBtn.addEventListener('click', function () {
                 if (currentAnchor === favoriteBtn) { closePopup(); return; }
