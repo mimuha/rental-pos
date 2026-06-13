@@ -138,20 +138,21 @@
 {% block extrabody %}{% endblock extrabody %}
 <script>
 (function() {
-  var timeoutSec = {{ SESSION_TIMEOUT|default:0 }};
-  if (!timeoutSec || timeoutSec <= 0) return;
+    var timeoutSec = {{ SESSION_TIMEOUT|default:0 }};
 
-  var logoutForm = document.getElementById('logout-form');
+    if (!timeoutSec || timeoutSec <= 0) return;
 
-  function logout() {
-    if (logoutForm) {
-      logoutForm.submit();
-    } else {
-      window.location.href = '{% url "admin:logout" %}';
+    var logoutForm = document.getElementById('logout-form');
+
+    function logout() {
+        if (logoutForm) {
+            logoutForm.submit();
+        } else {
+            window.location.href = '{% url "admin:logout" %}';
+        }
     }
-  }
 
-  setTimeout(logout, timeoutSec * 1000);
+    setTimeout(logout, timeoutSec * 1000);
 })();
 </script>
 </body>
