@@ -44,6 +44,7 @@ def handle_rental_other_expenses(sender, instance, created, **kwargs):
                 description=description,
                 total_cost=instance.additional_fee,
                 status=OtherExpense.Status.PLANNED,
+                reference_number=f'dari {instance.invoice_number}',
             )
     else:
         if fee_changed or desc_changed:
@@ -67,6 +68,7 @@ def handle_rental_other_expenses(sender, instance, created, **kwargs):
                         description=description,
                         total_cost=instance.additional_fee,
                         status=OtherExpense.Status.PLANNED,
+                        reference_number=f'dari {instance.invoice_number}',
                     )
             elif linked_expense:
                 linked_expense.delete()
