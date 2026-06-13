@@ -693,6 +693,14 @@ def financial_report_csv(request):
             '',
         ])
 
+    total_kredit = payments_qs.aggregate(total=Sum('amount'))['total'] or Decimal('0')
+    total_debit = (
+        (other_qs.aggregate(total=Sum('total_cost'))['total'] or Decimal('0'))
+        + (maintenance_qs.aggregate(total=Sum('total_cost'))['total'] or Decimal('0'))
+    )
+    writer.writerow([])
+    writer.writerow(['', '', '', 'TOTAL', total_kredit, total_debit])
+
     return response
 
 

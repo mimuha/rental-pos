@@ -163,6 +163,13 @@
                 <td colspan="6" class="text-center text-secondary py-4">Tidak ada transaksi yang cocok.</td>
               </tr>
           </tbody>
+          <tfoot>
+            <tr class="fw-bold" id="transaction-totals-row">
+              <td colspan="4" class="text-end">Total</td>
+              <td class="text-end text-success" id="total-kredit"></td>
+              <td class="text-end text-danger" id="total-debit"></td>
+            </tr>
+          </tfoot>
           </table>
         </div>
       </div>
@@ -206,6 +213,28 @@
       return value.trim().toLocaleLowerCase('id-ID');
     }
 
+    const totalKreditEl = document.getElementById('total-kredit');
+    const totalDebitEl = document.getElementById('total-debit');
+
+    function formatRupiah(num) {
+      if (!num) return '-';
+      const parts = num.toFixed(2).split('.');
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      return 'Rp' + parts.join(',');
+    }
+
+    function updateTotals() {
+      let kredit = 0;
+      let debit = 0;
+      transactionRows().forEach((row) => {
+        if (row.classList.contains('d-none')) return;
+        kredit += normalizeNumber(row.cells[4] ? row.cells[4].dataset.sortValue : 0);
+        debit += normalizeNumber(row.cells[5] ? row.cells[5].dataset.sortValue : 0);
+      });
+      totalKreditEl.textContent = kredit ? formatRupiah(kredit) : '-';
+      totalDebitEl.textContent = debit ? formatRupiah(debit) : '-';
+    }
+
     function applySearch() {
       const keyword = searchInput.value.trim().toLocaleLowerCase('id-ID');
       let visibleCount = 0;
@@ -219,6 +248,7 @@
       });
 
       emptyRow.classList.toggle('d-none', visibleCount !== 0);
+      updateTotals();
     }
 
     sortButtons.forEach((button) => {
@@ -250,6 +280,7 @@
     });
 
     searchInput.addEventListener('input', applySearch);
+    updateTotals();
   })();
 </script>
 {% endblock %}
