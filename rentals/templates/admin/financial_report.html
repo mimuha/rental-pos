@@ -194,7 +194,11 @@
     }
 
     function normalizeNumber(value) {
-      const parsed = Number(String(value || '').replace(/[^\d.-]/g, ''));
+      let str = String(value || '');
+      if (str.indexOf(',') !== -1) {
+        str = str.replace(/\./g, '').replace(',', '.');
+      }
+      const parsed = Number(str.replace(/[^\d.-]/g, ''));
       return Number.isNaN(parsed) ? 0 : parsed;
     }
 
