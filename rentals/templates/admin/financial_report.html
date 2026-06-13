@@ -128,23 +128,23 @@
 
               {% for o in other_expenses_display %}
               <tr>
-                  <td data-sort-value="Biaya Lain">Biaya Lain</td>
+                  <td data-sort-value="Biaya Lain">Biaya Lain{% if o.is_excluded %} <small class="text-secondary">({{ o.status_label }})</small>{% endif %}</td>
                   <td data-sort-value="{{ o.obj.expense_date|date:"Y-m-d" }}">{{ o.obj.expense_date|date:"Y-m-d" }}</td>
                   <td data-sort-value="{{ o.obj.reference_number|escape }}">{{ o.obj.reference_number }}</td>
                   <td data-sort-value="{{ o.obj.description|escape }}">{{ o.obj.description }}</td>
                   <td class="text-end" data-sort-value="0">-</td>
-                  <td class="text-end text-danger" data-sort-value="{{ o.obj.total_cost }}">{{ o.total_cost_fmt }}</td>
+                  <td class="text-end{% if not o.is_excluded %} text-danger{% endif %}" data-sort-value="{% if o.is_excluded %}0{% else %}{{ o.obj.total_cost }}{% endif %}">{{ o.total_cost_fmt }}</td>
               </tr>
               {% endfor %}
 
               {% for m in maintenances_display %}
               <tr>
-                  <td data-sort-value="Maintenance">Maintenance</td>
+                  <td data-sort-value="Maintenance">Maintenance{% if m.is_excluded %} <small class="text-secondary">({{ m.status_label }})</small>{% endif %}</td>
                   <td data-sort-value="{{ m.obj.maintenance_date|date:"Y-m-d" }}">{{ m.obj.maintenance_date|date:"Y-m-d" }}</td>
                   <td data-sort-value="{{ m.obj.vendor.name|escape }}">{{ m.obj.vendor.name }}</td>
                   <td data-sort-value="{{ m.obj.issue_description|escape }}">{{ m.obj.issue_description }}</td>
                   <td class="text-end" data-sort-value="0">-</td>
-                  <td class="text-end text-danger" data-sort-value="{{ m.obj.total_cost }}">{{ m.total_cost_fmt }}</td>
+                  <td class="text-end{% if not m.is_excluded %} text-danger{% endif %}" data-sort-value="{% if m.is_excluded %}0{% else %}{{ m.obj.total_cost }}{% endif %}">{{ m.total_cost_fmt }}</td>
               </tr>
               {% endfor %}
 
