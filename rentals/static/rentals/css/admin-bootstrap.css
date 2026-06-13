@@ -823,7 +823,7 @@ a.button:hover {
 .recent-actions {
     max-height: 38rem;
 }
-@media (min-width: 1487px) {
+@media (min-width: 1400px) {
     .recent-actions {
         max-height: 26rem;
     }
