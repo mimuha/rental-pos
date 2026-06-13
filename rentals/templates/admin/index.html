@@ -31,8 +31,8 @@
                     </form>
                 </div>
 
-                <div class="row g-4">
-                    <div class="col-12 col-md-6 col-xl">
+                <div class="row g-md-4 g-2 row-cols-2 row-cols-md-3 row-cols-xl-5">
+                    <div class="col">
                         <div class="card admin-card border-0 rental-stat-card h-100">
                             <div class="card-body">
                                 <p class="text-secondary mb-2">Total kendaraan</p>
@@ -41,7 +41,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 col-xl">
+                    <div class="col">
                         <div class="card admin-card border-0 rental-stat-card h-100">
                             <div class="card-body">
                                 <p class="text-secondary mb-2">Kendaraan tersedia</p>
@@ -50,7 +50,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 col-xl">
+                    <div class="col">
                         <div class="card admin-card border-0 rental-stat-card h-100">
                             <div class="card-body">
                                 <p class="text-secondary mb-2">Kendaraan disewa</p>
@@ -59,7 +59,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 col-xl">
+                    <div class="col">
                         <div class="card admin-card border-0 rental-stat-card h-100">
                             <div class="card-body">
                                 <p class="text-secondary mb-2">Pendapatan</p>
@@ -68,7 +68,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 col-xl">
+                    <div class="col">
                         <div class="card admin-card border-0 rental-stat-card h-100">
                             <div class="card-body">
                                 <p class="text-secondary mb-2">Pengeluaran</p>
@@ -97,7 +97,7 @@
                                         {% for group in app.menu_groups %}
                                             <section class="rental-menu-group{% if not forloop.last %} rental-menu-group--spaced{% endif %}">
                                                 <h3 class="rental-menu-group__title">{{ group.title }}</h3>
-                                                <div class="row g-4 row-cols-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
+                                                <div class="row g-md-4 g-2 row-cols-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5">
                                                     {% for model in group.models %}
                                                         <div class="col">
                                                             {% include "admin/includes/rental_menu_button.html" with model=model %}
