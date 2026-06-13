@@ -550,17 +550,14 @@ def parse_date_range(request):
 def financial_report(request):
     start_date, end_date = parse_date_range(request)
 
-    _excluded_statuses_other = [OtherExpense.Status.PLANNED, OtherExpense.Status.CANCELLED]
-    _excluded_statuses_maint = [VehicleMaintenance.Status.PLANNED, VehicleMaintenance.Status.CANCELLED]
-
     payments_qs = Payment.objects.filter(payment_date__date__gte=start_date, payment_date__date__lte=end_date)
     payments_total = payments_qs.aggregate(total=Sum('amount'))['total'] or Decimal('0')
 
-    other_qs = OtherExpense.objects.filter(expense_date__date__gte=start_date, expense_date__date__lte=end_date)
-    other_total = other_qs.exclude(status__in=_excluded_statuses_other).aggregate(total=Sum('total_cost'))['total'] or Decimal('0')
+    other_qs = OtherExpense.objects.filter(expense_date__date__gte=start_date, expense_date__date__lte=end_date).exclude(status=OtherExpense.Status.CANCELLED)
+    other_total = other_qs.exclude(status=OtherExpense.Status.PLANNED).aggregate(total=Sum('total_cost'))['total'] or Decimal('0')
 
-    maintenance_qs = VehicleMaintenance.objects.filter(maintenance_date__date__gte=start_date, maintenance_date__date__lte=end_date)
-    maintenance_total = maintenance_qs.exclude(status__in=_excluded_statuses_maint).aggregate(total=Sum('total_cost'))['total'] or Decimal('0')
+    maintenance_qs = VehicleMaintenance.objects.filter(maintenance_date__date__gte=start_date, maintenance_date__date__lte=end_date).exclude(status=VehicleMaintenance.Status.CANCELLED)
+    maintenance_total = maintenance_qs.exclude(status=VehicleMaintenance.Status.PLANNED).aggregate(total=Sum('total_cost'))['total'] or Decimal('0')
 
     rentals_qs = Rental.objects.filter(start_at__date__gte=start_date, start_at__date__lte=end_date).exclude(status=Rental.Status.CANCELLED)
     rentals_total = sum((r.total_amount or Decimal('0') for r in rentals_qs), Decimal('0'))
@@ -585,8 +582,8 @@ def financial_report(request):
     other_expenses_display = [
         {
             **{'obj': o},
-            'total_cost_fmt': format_rupiah(o.total_cost) if o.status not in _excluded_statuses_other else '-',
-            'is_excluded': o.status in _excluded_statuses_other,
+            'total_cost_fmt': format_rupiah(o.total_cost) if o.status != OtherExpense.Status.PLANNED else '-',
+            'is_excluded': o.status == OtherExpense.Status.PLANNED,
             'status_label': o.get_status_display(),
         }
         for o in other_expenses
@@ -594,8 +591,8 @@ def financial_report(request):
     maintenances_display = [
         {
             **{'obj': m},
-            'total_cost_fmt': format_rupiah(m.total_cost) if m.status not in _excluded_statuses_maint else '-',
-            'is_excluded': m.status in _excluded_statuses_maint,
+            'total_cost_fmt': format_rupiah(m.total_cost) if m.status != VehicleMaintenance.Status.PLANNED else '-',
+            'is_excluded': m.status == VehicleMaintenance.Status.PLANNED,
             'status_label': m.get_status_display(),
         }
         for m in maintenances
@@ -635,12 +632,9 @@ def financial_report(request):
 def financial_report_csv(request):
     start_date, end_date = parse_date_range(request)
 
-    _excluded_other = [OtherExpense.Status.PLANNED, OtherExpense.Status.CANCELLED]
-    _excluded_maint = [VehicleMaintenance.Status.PLANNED, VehicleMaintenance.Status.CANCELLED]
-
     payments_qs = Payment.objects.filter(payment_date__date__gte=start_date, payment_date__date__lte=end_date)
-    other_qs = OtherExpense.objects.filter(expense_date__date__gte=start_date, expense_date__date__lte=end_date)
-    maintenance_qs = VehicleMaintenance.objects.filter(maintenance_date__date__gte=start_date, maintenance_date__date__lte=end_date)
+    other_qs = OtherExpense.objects.filter(expense_date__date__gte=start_date, expense_date__date__lte=end_date).exclude(status=OtherExpense.Status.CANCELLED)
+    maintenance_qs = VehicleMaintenance.objects.filter(maintenance_date__date__gte=start_date, maintenance_date__date__lte=end_date).exclude(status=VehicleMaintenance.Status.CANCELLED)
     rentals_qs = Rental.objects.filter(start_at__date__gte=start_date, start_at__date__lte=end_date).exclude(status=Rental.Status.CANCELLED)
 
     now = timezone.now().strftime("%Y%m%d_%H%M%S")
@@ -672,26 +666,26 @@ def financial_report_csv(request):
 
     # Biaya Lain (Debit)
     for o in other_qs:
-        excluded = o.status in _excluded_other
+        is_planned = o.status == OtherExpense.Status.PLANNED
         writer.writerow([
-            f'Biaya Lain ({o.get_status_display()})' if excluded else 'Biaya Lain',
+            f'Biaya Lain ({o.get_status_display()})' if is_planned else 'Biaya Lain',
             o.expense_date.strftime('%Y-%m-%d'),
             o.reference_number,
             o.description,
             '',
-            '' if excluded else o.total_cost,
+            '' if is_planned else o.total_cost,
         ])
 
     # Maintenance (Debit)
     for m in maintenance_qs:
-        excluded = m.status in _excluded_maint
+        is_planned = m.status == VehicleMaintenance.Status.PLANNED
         writer.writerow([
-            f'Maintenance ({m.get_status_display()})' if excluded else 'Maintenance',
+            f'Maintenance ({m.get_status_display()})' if is_planned else 'Maintenance',
             m.maintenance_date.strftime('%Y-%m-%d'),
             m.vendor.name if m.vendor else '',
             m.issue_description,
             '',
-            '' if excluded else m.total_cost,
+            '' if is_planned else m.total_cost,
         ])
 
     # Order Rental (Informasi saja)
@@ -707,8 +701,8 @@ def financial_report_csv(request):
 
     total_kredit = payments_qs.aggregate(total=Sum('amount'))['total'] or Decimal('0')
     total_debit = (
-        (other_qs.exclude(status__in=_excluded_other).aggregate(total=Sum('total_cost'))['total'] or Decimal('0'))
-        + (maintenance_qs.exclude(status__in=_excluded_maint).aggregate(total=Sum('total_cost'))['total'] or Decimal('0'))
+        (other_qs.exclude(status=OtherExpense.Status.PLANNED).aggregate(total=Sum('total_cost'))['total'] or Decimal('0'))
+        + (maintenance_qs.exclude(status=VehicleMaintenance.Status.PLANNED).aggregate(total=Sum('total_cost'))['total'] or Decimal('0'))
     )
     writer.writerow([])
     writer.writerow(['', '', '', 'TOTAL', total_kredit, total_debit])
