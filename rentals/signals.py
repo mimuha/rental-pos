@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 
-from .models import Rental, OtherExpense, ExpenseType
+from .models import Rental, OtherExpense, ExpenseType, Vehicle
 
 EXPENSE_TYPE_NAME = 'Biaya Operasional Perjalanan'
 
@@ -78,10 +78,16 @@ def handle_rental_other_expenses(sender, instance, created, **kwargs):
                 instance.other_expenses.filter(
                     status=OtherExpense.Status.PLANNED,
                 ).update(status=OtherExpense.Status.IN_PROGRESS)
+                Vehicle.objects.filter(
+                    pk=instance.vehicle_id,
+                ).update(status=Vehicle.Status.RENTED)
             elif instance.status == Rental.Status.COMPLETED:
                 instance.other_expenses.filter(
                     status=OtherExpense.Status.IN_PROGRESS,
                 ).update(status=OtherExpense.Status.COMPLETED)
+                Vehicle.objects.filter(
+                    pk=instance.vehicle_id,
+                ).update(status=Vehicle.Status.AVAILABLE)
 
     instance._previous_status = instance.status
     instance._previous_additional_fee = instance.additional_fee

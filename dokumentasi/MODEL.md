@@ -201,6 +201,15 @@ Saat field `additional_fee` diisi pada form **Order Rental**, sistem otomatis me
 
 > ExpenseType "Biaya Operasional Perjalanan" dibuat otomatis jika belum ada di database.
 
+## Sinkronisasi Status Kendaraan
+
+Saat status **Order Rental** berubah, status **Vehicle** (kendaraan) terkait otomatis diperbarui:
+
+1. **Order diaktifkan** (Draf → Aktif) → status Vehicle berubah dari **Tersedia** → **Disewa**
+2. **Order diselesaikan** (Aktif → Selesai) → status Vehicle kembali ke **Tersedia**
+
+> Mekanisme ini berjalan via signal `post_save` pada model Rental di `rentals/signals.py`.
+
 ## Field Timestamp (Base)
 
 Semua model di atas (kecuali VehiclePhoto) mewarisi dari `TimeStampedModel`:
