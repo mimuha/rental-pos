@@ -70,7 +70,7 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 ## Laporan Keuangan
 
 - Ringkasan periode: total pemasukan, total pengeluaran, laba/rugi
-- Rincian transaksi: pembayaran, biaya lain, maintenance, order rental
+- Rincian transaksi: pembayaran, biaya lain, maintenance
 - Tabel interaktif: sorting, pencarian
 - **Export CSV** untuk pemrosesan eksternal
 

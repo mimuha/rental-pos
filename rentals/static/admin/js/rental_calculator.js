@@ -12,8 +12,8 @@
             if (isoMatch) {
                 return new Date(+isoMatch[1], +isoMatch[2] - 1, +isoMatch[3]);
             }
-            // Locale: DD/MM/YYYY
-            var localeMatch = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+            // Locale: DD/MM/YYYY or DD-MM-YYYY
+            var localeMatch = raw.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
             if (localeMatch) {
                 return new Date(+localeMatch[3], +localeMatch[2] - 1, +localeMatch[1]);
             }
@@ -25,7 +25,7 @@
         function parseTimeValue(raw) {
             if (!raw) return [0, 0];
             raw = raw.trim();
-            var parts = raw.split(':');
+            var parts = raw.split(/[:.]/);
             var h = parseInt(parts[0], 10) || 0;
             var m = parseInt(parts[1], 10) || 0;
             return [h, m];
