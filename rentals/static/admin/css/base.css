@@ -584,6 +584,7 @@ a.button:hover {
 }
 
 .skip-to-content-link {
+    display:none;
     position: absolute;
     left: .75rem;
     top: .75rem;
