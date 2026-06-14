@@ -20,7 +20,7 @@ def _get_linked_expense(instance, expense_type):
 
 
 def _build_description(instance):
-    return instance.additional_fee_description or f'Biaya tambahan order {instance.invoice_number}'
+    return instance.additional_fee_description or f'Biaya tambahan order {instance.invoice_number} ({instance.customer.full_name})'
 
 
 @receiver(post_save, sender=Rental)
@@ -44,7 +44,7 @@ def handle_rental_other_expenses(sender, instance, created, **kwargs):
                 description=description,
                 total_cost=instance.additional_fee,
                 status=OtherExpense.Status.PLANNED,
-                reference_number=f'dari {instance.invoice_number}',
+                reference_number=f'dari {instance.invoice_number} ({instance.customer.full_name})',
             )
     else:
         if fee_changed or desc_changed:
@@ -68,7 +68,7 @@ def handle_rental_other_expenses(sender, instance, created, **kwargs):
                         description=description,
                         total_cost=instance.additional_fee,
                         status=OtherExpense.Status.PLANNED,
-                        reference_number=f'dari {instance.invoice_number}',
+                        reference_number=f'dari {instance.invoice_number} ({instance.customer.full_name})',
                     )
             elif linked_expense:
                 linked_expense.delete()
