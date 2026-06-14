@@ -1061,11 +1061,8 @@ a:focus {
 .inline-group .tabular tr.has_original td {
     padding-top: .75rem !important;
 }
-.field-payment_date {
-    width: 253px !important;
-}
-.field-method, .field-amount {
-    width: 187px !important;
+.field-method, .field-amount,.field-payment_date  {
+    width: 387px !important;
 }
 .field-reference_number{
     width: auto !important;
