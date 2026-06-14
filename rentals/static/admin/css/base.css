@@ -538,6 +538,9 @@ a.button:hover {
 }
 .addlink {
     background: var(--rental-success) !important;
+    color: var(--white2) !important;
+    border-radius: .375rem;
+    padding: 5px;
 }
 .addlink:hover {
     background: var(--primary) !important;
