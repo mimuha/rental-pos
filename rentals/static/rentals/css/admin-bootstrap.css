@@ -24,12 +24,13 @@
     --rental-gold-border: rgba(226, 203, 68, 0.35);
     --rental-danger: #e84a4a;
     --rental-box-shadow: rgb(47 77 81 / 10%) 0px 11px 16px -13px;
+    --rental-success: #10ab6a;
     --bs-primary: #353438;
-    --bs-primary-rgb: 53, 52, 56;
+    --bs-primary-rgb: rgb(53, 52, 56);
     --bs-link-color: #353438;
     --bs-link-hover-color: #1f1e21;
     --bs-success: #353438;
-    --bs-success-rgb: 53, 52, 56;
+    --bs-success-rgb: rgb(53, 52, 56);
     --bs-info: #e2cb44;
     --bs-info-rgb: 226, 203, 68;
     --unguhover: rgba(226, 203, 68, 0.08);

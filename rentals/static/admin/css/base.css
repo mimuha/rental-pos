@@ -536,6 +536,12 @@ a.button:hover {
     background-position: 0 center;
     background-repeat: no-repeat;
 }
+.addlink {
+    background: var(--rental-success) !important;
+}
+.addlink:hover {
+    background: var(--primary) !important;
+}
 
 .quiet,
 .mini {
