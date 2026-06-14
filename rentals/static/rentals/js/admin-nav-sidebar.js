@@ -178,10 +178,10 @@
                 let left = sidebarRect.right + margin + window.scrollX - 20;
                 let top = anchorRect.top + (anchorRect.height / 2) - (popupRect.height / 2) + window.scrollY;
 
-                if (top + popupRect.height > window.innerHeight - margin) {
-                    top = window.innerHeight - popupRect.height - margin;
+                if (top + popupRect.height > window.scrollY + window.innerHeight - margin) {
+                    top = anchorRect.bottom + window.scrollY - popupRect.height;
                 }
-                if (top < margin) top = margin;
+                if (top < window.scrollY + margin) top = window.scrollY + margin;
 
                 if (left + popupRect.width > window.innerWidth - margin) {
                     left = window.innerWidth - popupRect.width - margin;
@@ -312,8 +312,8 @@
                 if (isDesktopCollapsedMode()) {
                     var left = sr.right + m + window.scrollX - 20;
                     var top = ar.top + (ar.height / 2) - (pr.height / 2) + window.scrollY;
-                    if (top + pr.height > window.innerHeight - m) top = window.innerHeight - pr.height - m;
-                    if (top < m) top = m;
+                    if (top + pr.height > window.scrollY + window.innerHeight - m) top = ar.bottom + window.scrollY - pr.height;
+                    if (top < window.scrollY + m) top = window.scrollY + m;
                     if (left + pr.width > window.innerWidth - m) left = window.innerWidth - pr.width - m;
                     popup.style.transformOrigin = 'left center';
                     popup.style.position = 'absolute';
