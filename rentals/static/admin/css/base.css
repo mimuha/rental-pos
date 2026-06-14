@@ -542,8 +542,15 @@ a.button:hover {
     border-radius: .375rem;
     padding: 5px;
 }
-.addlink:hover {
+.addlink:hover,.historylink:hover {
     background: var(--primary) !important;
+}
+
+.historylink {
+    background: var(--rental-warning) !important;
+    color: var(--white2) !important;
+    border-radius: .375rem;
+    padding: 5px;
 }
 
 .quiet,
