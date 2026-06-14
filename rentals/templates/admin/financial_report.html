@@ -148,17 +148,6 @@
               </tr>
               {% endfor %}
 
-              {% for r in rentals %}
-              <tr>
-                  <td data-sort-value="Order Rental">Order Rental</td>
-                  <td data-sort-value="{{ r.start_at|date:"Y-m-d" }}">{{ r.start_at|date:"Y-m-d" }}</td>
-                  <td data-sort-value="{{ r.invoice_number|escape }}">{{ r.invoice_number }}</td>
-                  <td data-sort-value="Customer: {{ r.customer.full_name|escape }}">Customer: {{ r.customer.full_name }}</td>
-                  <td class="text-end" data-sort-value="0">-</td>
-                  <td class="text-end" data-sort-value="0">-</td>
-              </tr>
-              {% endfor %}
-
               <tr id="transaction-empty-row" class="d-none">
                 <td colspan="6" class="text-center text-secondary py-4">Tidak ada transaksi yang cocok.</td>
               </tr>

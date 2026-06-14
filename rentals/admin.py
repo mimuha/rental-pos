@@ -559,9 +559,6 @@ def financial_report(request):
     maintenance_qs = VehicleMaintenance.objects.filter(maintenance_date__date__gte=start_date, maintenance_date__date__lte=end_date).exclude(status=VehicleMaintenance.Status.CANCELLED)
     maintenance_total = maintenance_qs.exclude(status=VehicleMaintenance.Status.PLANNED).aggregate(total=Sum('total_cost'))['total'] or Decimal('0')
 
-    rentals_qs = Rental.objects.filter(start_at__date__gte=start_date, start_at__date__lte=end_date).exclude(status=Rental.Status.CANCELLED)
-    rentals_total = sum((r.total_amount or Decimal('0') for r in rentals_qs), Decimal('0'))
-
     income_total = payments_total
     expenses_total = other_total + maintenance_total
     profit = income_total - expenses_total
@@ -569,7 +566,6 @@ def financial_report(request):
     payments = list(payments_qs.order_by('payment_date'))
     other_expenses = list(other_qs.order_by('expense_date'))
     maintenances = list(maintenance_qs.order_by('maintenance_date'))
-    rentals = list(rentals_qs.order_by('start_at'))
 
     # Create lightweight display objects with rupiah-formatted fields for template.
     payments_display = [
@@ -606,14 +602,12 @@ def financial_report(request):
         'payments_total': payments_total,
         'other_total': other_total,
         'maintenance_total': maintenance_total,
-        'rentals_total': rentals_total,
         'income_total': income_total,
         'expenses_total': expenses_total,
         'profit': profit,
         'payments_total_fmt': format_rupiah(payments_total),
         'other_total_fmt': format_rupiah(other_total),
         'maintenance_total_fmt': format_rupiah(maintenance_total),
-        'rentals_total_fmt': format_rupiah(rentals_total),
         'income_total_fmt': format_rupiah(income_total),
         'expenses_total_fmt': format_rupiah(expenses_total),
         'profit_fmt': format_rupiah(profit),
@@ -624,7 +618,6 @@ def financial_report(request):
         'payments': payments,
         'other_expenses': other_expenses,
         'maintenances': maintenances,
-        'rentals': rentals,
     })
     return TemplateResponse(request, 'admin/financial_report.html', context)
 
@@ -635,8 +628,6 @@ def financial_report_csv(request):
     payments_qs = Payment.objects.filter(payment_date__date__gte=start_date, payment_date__date__lte=end_date)
     other_qs = OtherExpense.objects.filter(expense_date__date__gte=start_date, expense_date__date__lte=end_date).exclude(status=OtherExpense.Status.CANCELLED)
     maintenance_qs = VehicleMaintenance.objects.filter(maintenance_date__date__gte=start_date, maintenance_date__date__lte=end_date).exclude(status=VehicleMaintenance.Status.CANCELLED)
-    rentals_qs = Rental.objects.filter(start_at__date__gte=start_date, start_at__date__lte=end_date).exclude(status=Rental.Status.CANCELLED)
-
     now = timezone.now().strftime("%Y%m%d_%H%M%S")
     filename = f"financial_report_{start_date}_{end_date}_{now}.csv"
 
@@ -686,17 +677,6 @@ def financial_report_csv(request):
             m.issue_description,
             '',
             '' if is_planned else m.total_cost,
-        ])
-
-    # Order Rental (Informasi saja)
-    for r in rentals_qs:
-        writer.writerow([
-            'Order Rental',
-            r.start_at.strftime('%Y-%m-%d'),
-            r.invoice_number,
-            r.customer.full_name if r.customer else '',
-            '',
-            '',
         ])
 
     total_kredit = payments_qs.aggregate(total=Sum('amount'))['total'] or Decimal('0')
