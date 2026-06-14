@@ -25,6 +25,7 @@
     --rental-danger: #e84a4a;
     --rental-box-shadow: rgb(47 77 81 / 10%) 0px 11px 16px -13px;
     --rental-success: #10ab6a;
+    --rental-warning: #a3990c;
     --bs-primary: #353438;
     --bs-primary-rgb: rgb(53, 52, 56);
     --bs-link-color: #353438;
@@ -1095,7 +1096,7 @@ p.datetime label {
     width: 151px;
 }
 p.datetime input {
-    width: 30%;
+    width: 50%;
     max-width: 200px;
 }
 p.datetime  span {
