@@ -90,7 +90,7 @@
                 {% if app_list %}
                     {% for app in app_list %}
                         {% if app.app_label == 'rentals' %}
-                            <div class="col-12">
+                            <div class="col-12 px-3">
                                 <div class="card admin-card border-0">
                                     <div class="card-header border-bottom">
                                         <h2 class="h6 fw-bold text-uppercase mb-0">{{ app.name }}</h2>
@@ -114,7 +114,7 @@
                         {% endif %}
                     {% endfor %}
                 {% else %}
-                    <div class="col-12">
+                    <div class="col-12 px-3">
                         <div class="card admin-card border-0">
                             <div class="card-body">
                                 <p class="mb-0">{% translate 'Anda tidak memiliki izin untuk melihat atau mengubah data.' %}</p>
