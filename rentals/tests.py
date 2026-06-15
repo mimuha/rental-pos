@@ -268,8 +268,8 @@ class DashboardContextTests(TestCase):
 
         self.assertEqual(context['selected_period'], '2026-04')
         self.assertEqual(context['selected_period_label'], 'April 2026')
-        self.assertEqual(context['monthly_income'], 'Rp300.000,00')
-        self.assertEqual(context['monthly_expenses'], 'Rp450.000,00')
+        self.assertEqual(context['monthly_income'], 'Rp 300rb')
+        self.assertEqual(context['monthly_expenses'], 'Rp 450rb')
 
     def test_dashboard_includes_other_expenses_in_monthly_total(self):
         VehicleMaintenance.objects.create(
@@ -291,7 +291,7 @@ class DashboardContextTests(TestCase):
         request = RequestFactory().get('/admin/', {'period': '2026-04'})
         context = get_dashboard_context(request)
 
-        self.assertEqual(context['monthly_expenses'], 'Rp700.000,00')
+        self.assertEqual(context['monthly_expenses'], 'Rp 700rb')
 
     def test_rentals_app_index_redirects_to_admin_home(self):
         request = RequestFactory().get('/admin/rentals/', {'period': '2026-05'})

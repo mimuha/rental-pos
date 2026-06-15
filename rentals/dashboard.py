@@ -1,4 +1,4 @@
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 
 from django.db.models import Sum
 from django.urls import reverse
@@ -75,6 +75,31 @@ def format_rupiah(value):
 
     amount = f'{value:,.2f}'.replace(',', '_').replace('.', ',').replace('_', '.')
     return f'Rp{amount}'
+
+
+def format_rupiah_short(value):
+    if value is None:
+        value = Decimal('0')
+    value = Decimal(str(value))
+
+    thresholds = [
+        (Decimal('1000000000000'), 'T'),
+        (Decimal('1000000000'), 'M'),
+        (Decimal('1000000'), 'jt'),
+        (Decimal('1000'), 'rb'),
+    ]
+
+    for threshold, suffix in thresholds:
+        if value >= threshold:
+            divided = value / threshold
+            rounded = divided.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+            text = str(rounded)
+            if '.' in text:
+                text = text.rstrip('0').rstrip('.')
+            text = text.replace('.', ',')
+            return f'Rp {text}{suffix}'
+
+    return f'Rp {int(value)}'
 
 
 def parse_dashboard_period(request):
@@ -165,8 +190,8 @@ def get_dashboard_context(request):
         'total_vehicles': Vehicle.objects.count(),
         'available_vehicles': Vehicle.objects.filter(status=Vehicle.Status.AVAILABLE).count(),
         'rented_vehicles': Vehicle.objects.filter(status=Vehicle.Status.RENTED).count(),
-        'monthly_income': format_rupiah(monthly_income),
-        'monthly_expenses': format_rupiah(monthly_expenses),
+        'monthly_income': format_rupiah_short(monthly_income),
+        'monthly_expenses': format_rupiah_short(monthly_expenses),
         'selected_period': f'{year:04d}-{month:02d}',
         'selected_period_label': format_period_label(year, month),
     }
