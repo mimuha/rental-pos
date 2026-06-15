@@ -34,12 +34,12 @@
       <header id="header">
         <div class="container-full">
           <div class="row align-items-center g-3">
-            <div id="branding" class="col-12 col-lg">
+            <div id="branding" class="col">
             {% block branding %}{% endblock %}
             </div>
             {% block usertools %}
             {% if has_permission %}
-            <div id="user-tools" class="col-12 col-lg-auto">
+            <div id="user-tools" class="col-auto">
                 {% include "admin/color_theme_toggle.html" %}
                 <div class="rental-user-menu">
                     <button type="button" class="rental-user-menu-btn" id="rental-user-menu-btn" aria-label="Menu pengguna">
