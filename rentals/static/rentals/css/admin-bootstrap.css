@@ -113,6 +113,10 @@ textarea {
     align-items: center;
     gap: .5rem;
 }
+#user-tools a, #logout-form button
+{
+    color: var(--rental-pos-title) !important;
+}
 @media (max-width: 1024px) {
     #user-tools {
         margin: 1rem 0 0 !important;
