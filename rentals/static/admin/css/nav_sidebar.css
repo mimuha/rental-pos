@@ -231,6 +231,10 @@
     border-color: rgba(226, 203, 68, 0.35);
 }
 
+.rental-nav-actions {
+    display: contents;
+}
+
 .rental-nav-sections {
     display: grid;
 }
@@ -664,6 +668,13 @@
         background: transparent;
     }
 
+    .admin-sidebar-col.rental-nav-collapsed .rental-nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.15rem;
+        margin-bottom: 1rem;
+    }
+
     .admin-sidebar-col.rental-nav-collapsed .rental-nav-search-btn {
         width: 2.75rem;
         height: 2.75rem;
@@ -675,7 +686,7 @@
         display: flex;
         width: 2.75rem;
         height: 2.75rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0;
         border-radius: .85rem;
     }
 
