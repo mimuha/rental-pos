@@ -113,6 +113,11 @@ textarea {
     align-items: center;
     gap: .5rem;
 }
+@media (max-width: 1024px) {
+    #user-tools {
+        margin: 1rem 0 0 !important;
+    }
+}
 
 .rental-user-menu {
     position: relative;
