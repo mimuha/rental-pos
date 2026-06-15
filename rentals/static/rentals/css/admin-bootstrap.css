@@ -364,7 +364,7 @@ a.button:hover {
     padding: .45rem .8rem;
     color: #ffffff;
     background: var(--rental-primary);
-    border: 1px solid var(--rental-primary);
+    border: none;
     border-radius: .375rem;
     font-size: inherit;
     font-weight: 600;
