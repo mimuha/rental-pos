@@ -108,28 +108,93 @@ textarea {
     color: var(--rental-primary);
 }
 
-#user-tools
-{
-    color: var(--rental-pos-title) !important;
-    font-size: .875rem !important;
-}
-#user-tools a,
-#logout-form button {
-    font-size: .875rem !important;
-    transition: .5s ease;
+#user-tools {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
 }
 
-#user-tools a{
-    color: var(--rental-pos-title) !important;
+.rental-user-menu {
+    position: relative;
 }
 
-#logout-form button {
-    color: var(--rental-danger) !important;
+.rental-user-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    color: var(--rental-pos-subtitle, #6c757d);
+    background: transparent;
+    border: 1px solid var(--border-color, #dee2e6);
+    border-radius: .5rem;
+    cursor: pointer;
+    transition: color .15s, background .15s, border-color .15s;
 }
 
-#user-tools a:hover,
-#logout-form button:hover {
-    color: var(--rental-primary) !important;
+.rental-user-menu-btn:hover {
+    color: var(--rental-primary);
+    background: var(--rental-primary-soft, rgba(226, 203, 68, .1));
+    border-color: var(--rental-primary);
+}
+
+.rental-user-menu-popup {
+    display: none;
+    position: absolute;
+    top: calc(100% + .5rem);
+    right: 0;
+    z-index: 3200;
+    min-width: 12rem;
+    padding: .5rem;
+    background: var(--white2, #fff);
+    border: 1px solid var(--border-color, #dee2e6);
+    border-radius: .5rem;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .1);
+}
+
+.rental-user-menu-popup.is-open {
+    display: block;
+}
+
+.rental-user-menu-welcome {
+    padding: .5rem .65rem;
+    margin-bottom: .25rem;
+    font-size: .8rem;
+    color: var(--rental-pos-subtitle, #6c757d);
+    border-bottom: 1px solid var(--border-color, #eee);
+}
+
+.rental-user-menu-item {
+    display: block;
+    width: 100%;
+    padding: .5rem .65rem;
+    margin: 0;
+    color: var(--rental-pos-title, #111827);
+    background: transparent;
+    border: 0;
+    border-radius: .35rem;
+    font-size: .82rem;
+    font-weight: 600;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .15s;
+}
+
+.rental-user-menu-item:hover {
+    background: var(--rental-primary-soft, rgba(226, 203, 68, .1));
+    color: var(--rental-pos-title, #111827);
+}
+
+.rental-user-menu-logout {
+    color: var(--rental-danger, #dc2626);
+}
+
+.rental-user-menu-logout:hover {
+    color: var(--rental-danger, #dc2626);
+    background: rgba(220, 38, 38, .06);
 }
 
 div.breadcrumbs {

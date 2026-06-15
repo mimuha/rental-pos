@@ -40,26 +40,22 @@
             {% block usertools %}
             {% if has_permission %}
             <div id="user-tools" class="col-12 col-lg-auto">
-                {% block welcome-msg %}
-                    {% translate 'Welcome,' %}
-                    <strong>{% firstof user.get_short_name user.get_username %}</strong>.
-                {% endblock %}
-                {% block userlinks %}
-                    {% if user.is_active and user.is_staff %}
-                        {% url 'django-admindocs-docroot' as docsroot %}
-                        {% if docsroot %}
-                            <a href="{{ docsroot }}">{% translate 'Documentation' %}</a> /
+                {% include "admin/color_theme_toggle.html" %}
+                <div class="rental-user-menu">
+                    <button type="button" class="rental-user-menu-btn" id="rental-user-menu-btn" aria-label="Menu pengguna">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                    <div class="rental-user-menu-popup" id="rental-user-menu-popup">
+                        <div class="rental-user-menu-welcome">Selamat datang, <strong>{% firstof user.get_short_name user.get_username %}</strong></div>
+                        {% if user.has_usable_password %}
+                        <a href="{% url 'admin:password_change' %}" class="rental-user-menu-item">Ganti sandi</a>
                         {% endif %}
-                    {% endif %}
-                    {% if user.has_usable_password %}
-                    <a href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a> /
-                    {% endif %}
-                    <form id="logout-form" method="post" action="{% url 'admin:logout' %}">
-                        {% csrf_token %}
-                        <button type="submit">{% translate 'Log out' %}</button>
-                    </form>
-                    {% include "admin/color_theme_toggle.html" %}
-                {% endblock %}
+                        <form method="post" action="{% url 'admin:logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="rental-user-menu-item rental-user-menu-logout">Keluar</button>
+                        </form>
+                    </div>
+                </div>
             </div>
             {% endif %}
             {% endblock %}
