@@ -156,7 +156,7 @@ textarea {
     z-index: 3200;
     min-width: 12rem;
     padding: .5rem;
-    background: var(--white2, #fff);
+    background: var(--white, #fff);
     border: 1px solid var(--border-color, #dee2e6);
     border-radius: .5rem;
     box-shadow: 0 10px 24px rgba(0, 0, 0, .1);
