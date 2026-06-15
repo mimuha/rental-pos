@@ -391,6 +391,8 @@ a.button:hover {
 
 #changelist .changelist-form-container {
     gap: 1rem !important;
+    font-size: .8rem;
+    color: slategray;
 }
 
 #changelist .changelist-form-container:has(#changelist-filter) > div {
