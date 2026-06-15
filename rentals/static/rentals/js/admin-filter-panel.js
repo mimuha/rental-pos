@@ -45,11 +45,27 @@
         }
 
         panel.dataset.enhanced = 'true';
-        const openButton = createElement('button', 'rental-filter-open', 'Tampilkan Filter');
+
+        changeList.classList.add('rental-filter-collapsed');
+
+        const openButton = createElement('button', 'rental-filter-open is-visible', 'Tampilkan Filter');
         openButton.type = 'button';
         openButton.setAttribute('aria-label', 'Tampilkan filter');
         openButton.insertAdjacentHTML('afterbegin', '<span class="rental-filter-title-icon" aria-hidden="true"></span>');
-        document.body.appendChild(openButton);
+
+        var objectTools = document.querySelector('#content-main .object-tools');
+        if (!objectTools) {
+            objectTools = document.createElement('ul');
+            objectTools.className = 'object-tools';
+            var contentMain = document.getElementById('content-main');
+            if (contentMain) {
+                contentMain.insertBefore(objectTools, changeList);
+            }
+        }
+        var li = document.createElement('li');
+        li.appendChild(openButton);
+        objectTools.appendChild(li);
+
         openButton.addEventListener('click', function () {
             changeList.classList.remove('rental-filter-collapsed');
             openButton.classList.remove('is-visible');

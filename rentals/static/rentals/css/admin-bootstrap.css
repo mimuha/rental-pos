@@ -357,23 +357,17 @@ a.button:hover {
 
 .rental-filter-open {
     display: none;
-    position: fixed;
-    right: 1.25rem;
-    bottom: 1.25rem;
-    z-index: 3000;
     align-items: center;
     gap: .45rem;
     width: fit-content;
-    min-height: 2.75rem;
     margin: 0;
-    padding: .65rem .9rem;
+    padding: .45rem .8rem;
     color: #ffffff;
     background: var(--rental-primary);
     border: 1px solid var(--rental-primary);
-    border-radius: .5rem;
-    font-size: .875rem;
-    font-weight: 700;
-    box-shadow: 0 14px 32px var(--rental-primary-shadow);
+    border-radius: .375rem;
+    font-size: inherit;
+    font-weight: 600;
     cursor: pointer;
 }
 
