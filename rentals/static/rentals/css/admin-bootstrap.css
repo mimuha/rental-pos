@@ -819,7 +819,7 @@ a.button:hover {
     padding-top: 0;
 }
 .recent-actions {
-    max-height: 38rem;
+    max-height: 37rem;
 }
 @media (min-width: 1400px) {
     .recent-actions {
