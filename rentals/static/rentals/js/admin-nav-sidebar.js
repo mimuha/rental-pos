@@ -320,7 +320,7 @@
                     popup.style.left = left + 'px';
                     popup.style.top = top + 'px';
                 } else {
-                    var top2 = ar.bottom + m + window.scrollY;
+                    var top2 = ar.bottom + m - 10 + window.scrollY;
                     if (top2 + pr.height > window.innerHeight - m) {
                         top2 = Math.max(m, ar.top - pr.height - m + window.scrollY);
                     }
