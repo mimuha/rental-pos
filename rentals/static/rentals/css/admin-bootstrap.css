@@ -383,9 +383,9 @@ a.button:hover {
     max-width: 100% !important;
 }
 
-#changelist .changelist-form-container {
+#changelist .changelist-form-container, #transaction-table {
     gap: 1rem !important;
-    font-size: .8rem;
+    font-size: .875rem;
     color: slategray;
 }
 
