@@ -254,6 +254,11 @@
     background: var(--white2);
 }
 
+.current-model {
+    background: moccasin;
+    border-radius: .5rem;
+}
+
 .rental-nav-section .rental-nav-items {
     margin: 1rem 0;
     border: 0.1px solid var(--abu2header);
