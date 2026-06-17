@@ -1,5 +1,5 @@
 :root {
-    --body-bg: #eef1f4;
+    --body-bg: #f7f1ea;
     --body-fg: #353438;
     --white: #ffffff;
     --white2: #ffffffe5;
@@ -893,11 +893,11 @@ a.button:hover {
     padding-top: 0;
 }
 .recent-actions {
-    max-height: 37rem;
+    max-height: 36.9rem;
 }
 @media (min-width: 1400px) {
     .recent-actions {
-        max-height: 26rem;
+        max-height: 25.95rem;
     }
 }
 
