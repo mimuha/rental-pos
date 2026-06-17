@@ -63,7 +63,7 @@
     height: 2rem;
     color: #353438;
     background: rgba(226, 203, 68, 0.08);
-    border-radius: .55rem;
+    border-radius: .75rem;
 }
 
 .rental-nav-favorite-icon {
@@ -82,7 +82,7 @@
     height: 2rem;
     color: #353438;
     background: rgb(195 195 195 / 10%);
-    border-radius: .55rem;
+    border-radius: .75rem;
 }
 
 .rental-nav-brand-mark {
@@ -124,7 +124,7 @@
     color: #6b7280;
     background: var(--white);
     border: 1px solid var(--abu2header);
-    border-radius: .55rem;
+    border-radius: .75rem;
     font-size: 1.1rem;
     font-weight: 800;
     line-height: 1;
@@ -220,7 +220,7 @@
     color: #9aa4b2;
     background: var(--white);
     border: 1px solid var(--abu2header);
-    border-radius: .55rem;
+    border-radius: .75rem;
     cursor: pointer;
     transition: color .15s, background .15s, border-color .15s;
 }
