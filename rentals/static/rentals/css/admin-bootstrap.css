@@ -36,6 +36,7 @@
     --bs-info-rgb: 226, 203, 68;
     --unguhover: #f7f1ea;
     --abu2header: #f8f9fa;
+    --border-radius-md: .75rem;
 }
 
 body {
