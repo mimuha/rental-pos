@@ -16,7 +16,7 @@
     --border-color: #d1d1d3;
     --rental-primary: #353438;
     --rental-primary-dark: #1f1e21;
-    --rental-primary-soft: #f7f1ea;
+    --rental-primary-soft: rgba(226, 203, 68, 0.12);
     --rental-primary-border: rgba(226, 203, 68, 0.30);
     --rental-primary-shadow: rgba(53, 52, 56, .15);
     --rental-gold: #e2cb44;
@@ -34,9 +34,8 @@
     --bs-success-rgb: rgb(53, 52, 56);
     --bs-info: #e2cb44;
     --bs-info-rgb: 226, 203, 68;
-    --unguhover: #f7f1ea;
+    --unguhover: rgba(226, 203, 68, 0.08);
     --abu2header: #f8f9fa;
-    --border-radius-md: .75rem;
 }
 
 body {
@@ -1068,7 +1067,6 @@ a:focus {
 
 #changelist .actions {
     padding: 10px !important;
-    background: var(--abu2header) !important;
 }
 
 #changelist .actions .button svg {
