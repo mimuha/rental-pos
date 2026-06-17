@@ -63,7 +63,7 @@
     height: 2rem;
     color: #353438;
     background: var(--rental-primary-soft);
-    border-radius: var(--border-radius-md);
+    border-radius: .75rem;
 }
 
 .rental-nav-favorite-icon {
@@ -82,7 +82,7 @@
     height: 2rem;
     color: #353438;
     background: rgb(195 195 195 / 10%);
-    border-radius: var(--border-radius-md);
+    border-radius: .75rem;
 }
 
 .rental-nav-brand-mark {
@@ -124,7 +124,7 @@
     color: #6b7280;
     background: var(--white);
     border: 1px solid var(--abu2header);
-    border-radius: var(--border-radius-md);
+    border-radius: .75rem;
     font-size: 1.1rem;
     font-weight: 800;
     line-height: 1;
@@ -220,7 +220,7 @@
     color: #9aa4b2;
     background: var(--white);
     border: 1px solid var(--abu2header);
-    border-radius: var(--border-radius-md);
+    border-radius: .75rem;
     cursor: pointer;
     transition: color .15s, background .15s, border-color .15s;
 }
@@ -262,7 +262,7 @@
 .rental-nav-section .rental-nav-items {
     margin: 1rem 0;
     border: 0.1px solid var(--abu2header);
-    border-radius: var(--border-radius-md);
+    border-radius: .75rem;
     box-shadow: var(--rental-box-shadow);
 }
 
@@ -444,7 +444,7 @@
     color: #353438;
     background: rgba(226, 203, 68, 0.08);
     border: 1px solid rgba(226, 203, 68, 0.25);
-    border-radius: var(--border-radius-md);
+    border-radius: .75rem;
     box-shadow: 0 10px 22px rgba(53, 52, 56, .06);
     cursor: pointer;
     font-family: inherit;
