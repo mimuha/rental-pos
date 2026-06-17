@@ -62,7 +62,7 @@
     width: 2rem;
     height: 2rem;
     color: #353438;
-    background: rgba(226, 203, 68, 0.08);
+    background: var(--rental-primary-soft);
     border-radius: .75rem;
 }
 
