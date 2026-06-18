@@ -99,7 +99,7 @@
                                         {% for group in app.menu_groups %}
                                             <section class="rental-menu-group{% if not forloop.last %} rental-menu-group--spaced{% endif %}">
                                                 <h3 class="rental-menu-group__title">{{ group.title }}</h3>
-                                                <div class="row g-xl-2 g-sm-3 g-2 row-cols-2 row-cols-md-3 row-cols-xxl-5">
+                                                <div class="row g-xl-2 g-sm-3 g-2">
                                                     {% for model in group.models %}
                                                         <div class="col">
                                                             {% include "admin/includes/rental_menu_button.html" with model=model %}
