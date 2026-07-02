@@ -1177,10 +1177,13 @@ p.datetime  span {
 @media (min-width: 576px) {
     p.datetime label {
         display: inline-block !important;
-        min-width: 252px 
+        min-width: 204px !important;
     }
     .aligned legend, .aligned label{
-        min-width: 250px !important;
+        min-width: 212px !important;
+    }
+    .field-method, .field-amount, .field-payment_date {
+        width: auto !important;
     }
 }
 /* end forms python */
