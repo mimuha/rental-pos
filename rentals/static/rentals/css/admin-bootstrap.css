@@ -1164,11 +1164,6 @@ a:focus {
 p.datetime {
     width: 100%;
 }
-p.datetime label {
-    display: inline-block !important;
-    min-width: 127px;
-    width: 151px;
-}
 p.datetime input {
     width: 50%;
     max-width: 200px;
@@ -1178,6 +1173,15 @@ p.datetime  span {
 }
 .form-row.dynamic-other_expenses{
     height: auto !important;
+}
+@media (min-width: 576px) {
+    p.datetime label {
+        display: inline-block !important;
+        min-width: 252px 
+    }
+    .aligned legend, .aligned label{
+        min-width: 250px !important;
+    }
 }
 /* end forms python */
 /* css button python */
