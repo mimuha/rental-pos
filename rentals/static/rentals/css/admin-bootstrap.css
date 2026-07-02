@@ -1114,6 +1114,10 @@ a:focus {
 :enabled.selector-remove:focus, :enabled.selector-remove:hover {
     background-position: 0 -120px !important;
 }
+.datetimeshortcuts .clock-icon, .datetimeshortcuts .date-icon {
+    height: 16px !important;
+    width: 16px !important;
+}
 /* end untuk widgets python */
 /* css untuk forms python */
 .inline-group .tabular td.original p {
