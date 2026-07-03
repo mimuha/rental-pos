@@ -326,7 +326,7 @@ class Rental(TimeStampedModel):
         related_name='rentals',
         verbose_name='Daftar kendaraan',
     )
-    invoice_number = models.CharField('Nomor invoice', max_length=30, unique=True, null=True, blank=True)
+    invoice_number = models.CharField('Nomor order', max_length=30, unique=True, null=True, blank=True)
     start_at = models.DateTimeField('Mulai sewa')
     expected_return_at = models.DateTimeField('Rencana kembali')
     returned_at = models.DateTimeField('Waktu kembali', null=True, blank=True)
