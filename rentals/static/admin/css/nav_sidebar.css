@@ -62,7 +62,7 @@
     width: 2rem;
     height: 2rem;
     color: #353438;
-    background: rgba(226, 203, 68, 0.08);
+    background: #f6f6f6;
     border-radius: .75rem;
 }
 
@@ -442,7 +442,7 @@
     margin-bottom: 1.15rem;
     padding: .9rem;
     color: #353438;
-    background: rgba(226, 203, 68, 0.08);
+    background: #f6f6f6;
     border: 1px solid rgba(226, 203, 68, 0.25);
     border-radius: .75rem;
     box-shadow: 0 10px 22px rgba(53, 52, 56, .06);
@@ -761,7 +761,7 @@
 }
 
 .rental-nav-popup .rental-nav-submenu a:hover {
-    background: rgba(226, 203, 68, 0.08);
+    background: #f6f6f6;
     color: #353438 !important;
 }
 
@@ -822,7 +822,7 @@
 }
 
 .rental-nav-fav-item:hover {
-    background: rgba(226, 203, 68, 0.08);
+    background: #f6f6f6;
     color: #353438 !important;
 }
 

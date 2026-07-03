@@ -8,7 +8,7 @@
   gap: 12px;
   padding: 16px 20px;
   margin: 0 0 16px;
-    background: rgba(226, 203, 68, 0.08);
+    background: #f6f6f6;
     border: 1px solid rgba(226, 203, 68, 0.25);
   border-radius: 12px;
   max-width: 53rem;
@@ -103,7 +103,7 @@
   font-size: 13px;
   font-weight: 600;
   color: #6c757d;
-  background: rgba(226, 203, 68, 0.08);
+  background: #f6f6f6;
   border-bottom: 2px solid rgba(226, 203, 68, 0.30);
   white-space: nowrap;
 }
