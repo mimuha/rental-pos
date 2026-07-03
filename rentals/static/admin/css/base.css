@@ -26,7 +26,8 @@ a {
     transition: .3s ease;
 }
 a:hover {
-    color: #1f1e21;
+    /* color: #1f1e21; */
+    color: tomato;
     text-decoration: underline;
 }
 
@@ -653,7 +654,7 @@ a.button:hover {
 }
 
 .rental-menu-button:hover {
-    color: #1f1e21 !important;
+    color: tomato !important;
     border-color: #fbfbfb;
     box-shadow: 0 15px 15px -10px rgba(53, 52, 56, 0.15);
     text-decoration: none;
