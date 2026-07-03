@@ -133,7 +133,7 @@
 
 .rental-nav-collapse:hover {
     color: #353438;
-    background: rgba(226, 203, 68, 0.12);
+    background: #f7f7f7;
 }
 
 .rental-nav-search {
@@ -227,7 +227,7 @@
 
 .rental-nav-search-btn:hover {
     color: #353438;
-    background: rgba(226, 203, 68, 0.12);
+    background: #f7f7f7;
     border-color: rgba(226, 203, 68, 0.35);
 }
 
@@ -792,7 +792,7 @@
 .rental-nav-fav-action {
     padding: .2rem .55rem;
     color: #353438;
-    background: rgba(226, 203, 68, 0.12);
+    background: #f7f7f7;
     border: 0;
     border-radius: .35rem;
     font-size: .72rem;
