@@ -330,7 +330,7 @@ tbody tr{
     transition: .5s ease;
 }
 tbody tr:hover {
-    background: rgba(226, 203, 68, 0.06);
+    background: #efefef;
 }
 
 tbody tr th a{

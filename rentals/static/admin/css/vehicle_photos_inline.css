@@ -119,7 +119,7 @@
 }
 
 .vehicle-photos-table tbody tr:hover {
-  background: rgba(226, 203, 68, 0.06);
+  background: #efefef;
 }
 
 /* Column widths */
