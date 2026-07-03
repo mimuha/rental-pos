@@ -65,18 +65,18 @@ class RentalInvoiceNumberTests(TestCase):
         )
 
     def test_auto_invoice_number_continues_existing_sequence(self):
-        self.create_rental(invoice_number='Order rental-2026-001')
+        self.create_rental(invoice_number='order-rental-2026-001')
 
         rental = self.create_rental(start_at=timezone.datetime(2026, 5, 26, 7, 13, tzinfo=timezone.get_current_timezone()))
 
-        self.assertEqual(rental.invoice_number, 'Order rental-2026-002')
+        self.assertEqual(rental.invoice_number, 'order-rental-2026-002')
 
     def test_auto_invoice_number_can_exceed_three_digits(self):
-        self.create_rental(invoice_number='Order rental-2026-999')
+        self.create_rental(invoice_number='order-rental-2026-999')
 
         rental = self.create_rental(start_at=timezone.datetime(2026, 5, 26, 7, 13, tzinfo=timezone.get_current_timezone()))
 
-        self.assertEqual(rental.invoice_number, 'Order rental-2026-1000')
+        self.assertEqual(rental.invoice_number, 'order-rental-2026-1000')
 
     def test_rental_status_defaults_to_draft(self):
         rental = self.create_rental()

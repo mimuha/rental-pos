@@ -119,7 +119,7 @@
               <tr>
                   <td data-sort-value="Pembayaran">Pembayaran</td>
                   <td data-sort-value="{{ p.obj.payment_date|date:"Y-m-d" }}">{{ p.obj.payment_date|date:"Y-m-d" }}</td>
-                  <td data-sort-value="{{ p.obj.rental.invoice_number|escape }}">{{ p.obj.rental.invoice_number }}</td>
+                  <td data-sort-value="{{ p.obj.invoice_number|escape }}">{{ p.obj.invoice_number }}</td>
                   <td data-sort-value="{{ p.obj.method|escape }}">{{ p.obj.method }}</td>
                   <td class="text-end text-success" data-sort-value="{{ p.obj.amount }}">{{ p.amount_fmt }}</td>
                   <td class="text-end" data-sort-value="0">-</td>
@@ -130,7 +130,7 @@
               <tr>
                   <td data-sort-value="Biaya Lain">Biaya Lain{% if o.is_excluded %} <small class="text-secondary">({{ o.status_label }})</small>{% endif %}</td>
                   <td data-sort-value="{{ o.obj.expense_date|date:"Y-m-d" }}">{{ o.obj.expense_date|date:"Y-m-d" }}</td>
-                  <td data-sort-value="{{ o.obj.reference_number|escape }}">{{ o.obj.reference_number }}</td>
+                  <td data-sort-value="{{ o.obj.invoice_number|escape }}">{{ o.obj.invoice_number }}</td>
                   <td data-sort-value="{{ o.obj.description|escape }}">{{ o.obj.description }}</td>
                   <td class="text-end" data-sort-value="0">-</td>
                   <td class="text-end{% if not o.is_excluded %} text-danger{% endif %}" data-sort-value="{% if o.is_excluded %}0{% else %}{{ o.obj.total_cost }}{% endif %}">{{ o.total_cost_fmt }}</td>

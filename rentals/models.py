@@ -231,6 +231,8 @@ class ExpenseType(TimeStampedModel):
 
 
 class OtherExpense(TimeStampedModel):
+    INVOICE_PREFIX = 'expense'
+
     class Status(models.TextChoices):
         PLANNED = 'planned', 'Direncanakan'
         IN_PROGRESS = 'in_progress', 'Dikerjakan'
@@ -253,6 +255,7 @@ class OtherExpense(TimeStampedModel):
         validators=[MinValueValidator(0)],
     )
     status = models.CharField('Status', max_length=20, choices=Status.choices, default=Status.COMPLETED)
+    invoice_number = models.CharField('Nomor invoice', max_length=30, unique=True, null=True, blank=True)
     reference_number = models.CharField('Nomor referensi', max_length=100, blank=True)
     notes = models.TextField('Catatan', blank=True)
     rental = models.ForeignKey(
@@ -270,11 +273,40 @@ class OtherExpense(TimeStampedModel):
         verbose_name_plural = 'Biaya lain-lain'
 
     def __str__(self):
-        return f'{self.expense_type} - {self.expense_date:%d/%m/%Y}'
+        return f'{self.invoice_number or self.expense_type} - {self.expense_date:%d/%m/%Y}'
+
+    @classmethod
+    def generate_invoice_number(cls, year):
+        prefix = f'{cls.INVOICE_PREFIX}-{year}-'
+        pattern = re.compile(rf'^{re.escape(prefix)}(\d+)$')
+        max_sequence = 0
+
+        invoice_numbers = cls.objects.filter(
+            invoice_number__startswith=prefix,
+        ).values_list('invoice_number', flat=True)
+        for invoice_number in invoice_numbers:
+            match = pattern.match(invoice_number)
+            if match:
+                max_sequence = max(max_sequence, int(match.group(1)))
+
+        return f'{prefix}{max_sequence + 1:05d}'
+
+    def get_invoice_year(self):
+        if self.expense_date:
+            expense_date = self.expense_date
+            if timezone.is_aware(expense_date):
+                expense_date = timezone.localtime(expense_date)
+            return expense_date.year
+        return timezone.localdate().year
+
+    def save(self, *args, **kwargs):
+        if not self.invoice_number:
+            self.invoice_number = self.generate_invoice_number(self.get_invoice_year())
+        super().save(*args, **kwargs)
 
 
 class Rental(TimeStampedModel):
-    INVOICE_PREFIX = 'Order rental'
+    INVOICE_PREFIX = 'order-rental'
 
     class Status(models.TextChoices):
         DRAFT = 'draft', 'Draf'
@@ -294,7 +326,7 @@ class Rental(TimeStampedModel):
         related_name='rentals',
         verbose_name='Daftar kendaraan',
     )
-    invoice_number = models.CharField('Nomor invoice', max_length=30, unique=True, blank=True)
+    invoice_number = models.CharField('Nomor invoice', max_length=30, unique=True, null=True, blank=True)
     start_at = models.DateTimeField('Mulai sewa')
     expected_return_at = models.DateTimeField('Rencana kembali')
     returned_at = models.DateTimeField('Waktu kembali', null=True, blank=True)
@@ -431,6 +463,8 @@ class Rental(TimeStampedModel):
 
 
 class Payment(TimeStampedModel):
+    INVOICE_PREFIX = 'pay'
+
     class Method(models.TextChoices):
         CASH = 'cash', 'Tunai'
         BANK_TRANSFER = 'bank_transfer', 'Transfer bank'
@@ -452,6 +486,7 @@ class Payment(TimeStampedModel):
         decimal_places=2,
         validators=[MinValueValidator(0)],
     )
+    invoice_number = models.CharField('Nomor invoice', max_length=30, unique=True, null=True, blank=True)
     reference_number = models.CharField('Nomor referensi', max_length=100, blank=True)
     notes = models.TextField('Catatan', blank=True)
 
@@ -461,7 +496,36 @@ class Payment(TimeStampedModel):
         verbose_name_plural = 'Order payment'
 
     def __str__(self):
-        return f'{self.rental.invoice_number} - {self.amount}'
+        return f'{self.invoice_number or self.rental.invoice_number} - {self.amount}'
+
+    @classmethod
+    def generate_invoice_number(cls, year):
+        prefix = f'{cls.INVOICE_PREFIX}-{year}-'
+        pattern = re.compile(rf'^{re.escape(prefix)}(\d+)$')
+        max_sequence = 0
+
+        invoice_numbers = cls.objects.filter(
+            invoice_number__startswith=prefix,
+        ).values_list('invoice_number', flat=True)
+        for invoice_number in invoice_numbers:
+            match = pattern.match(invoice_number)
+            if match:
+                max_sequence = max(max_sequence, int(match.group(1)))
+
+        return f'{prefix}{max_sequence + 1:05d}'
+
+    def get_invoice_year(self):
+        if self.payment_date:
+            payment_date = self.payment_date
+            if timezone.is_aware(payment_date):
+                payment_date = timezone.localtime(payment_date)
+            return payment_date.year
+        return timezone.localdate().year
+
+    def save(self, *args, **kwargs):
+        if not self.invoice_number:
+            self.invoice_number = self.generate_invoice_number(self.get_invoice_year())
+        super().save(*args, **kwargs)
 
 
 class MenuFavorite(TimeStampedModel):

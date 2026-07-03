@@ -264,19 +264,20 @@ class OtherExpenseAdmin(BaseModelAdmin):
     ]
     list_filter = ['status', 'expense_type', 'expense_date']
     search_fields = [
+        'invoice_number',
         'expense_type__name',
         'payee',
         'description',
         'reference_number',
         'notes',
     ]
-    readonly_fields = ['total_cost_rupiah']
+    readonly_fields = ['invoice_number', 'total_cost_rupiah']
     date_hierarchy = 'expense_date'
     list_per_page = 25
 
     fieldsets = (
         ('Informasi biaya', {
-            'fields': ('expense_type', 'expense_date', 'status', 'payee', 'reference_number'),
+            'fields': ('invoice_number', 'expense_type', 'expense_date', 'status', 'payee', 'reference_number'),
         }),
         ('Detail', {
             'fields': ('description', 'notes'),
@@ -310,7 +311,8 @@ class OtherExpenseAdmin(BaseModelAdmin):
 class PaymentInline(admin.TabularInline):
     model = Payment
     extra = 0
-    fields = ['payment_date', 'method', 'amount', 'reference_number', 'notes']
+    fields = ['payment_date', 'method', 'amount', 'invoice_number', 'reference_number', 'notes']
+    readonly_fields = ['invoice_number']
     verbose_name = 'Pembayaran'
     verbose_name_plural = 'Pembayaran'
 
@@ -319,8 +321,8 @@ class OtherExpenseInline(admin.TabularInline):
     model = OtherExpense
     extra = 0
     can_delete = False
-    fields = ['expense_type', 'expense_date', 'status', 'total_cost', 'description']
-    readonly_fields = ['expense_type', 'expense_date', 'status', 'total_cost', 'description']
+    fields = ['invoice_number', 'expense_type', 'expense_date', 'status', 'total_cost', 'description']
+    readonly_fields = ['invoice_number', 'expense_type', 'expense_date', 'status', 'total_cost', 'description']
     verbose_name = 'Biaya tambahan otomatis'
     verbose_name_plural = 'Biaya tambahan otomatis'
 
@@ -471,9 +473,9 @@ class RentalAdmin(BaseModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(BaseModelAdmin):
-    list_display = ['rental', 'payment_date', 'method', 'amount_rupiah', 'reference_number']
+    list_display = ['invoice_number', 'rental', 'payment_date', 'method', 'amount_rupiah', 'reference_number']
     list_filter = ['method', 'payment_date']
-    search_fields = ['rental__invoice_number', 'reference_number']
+    search_fields = ['invoice_number', 'rental__invoice_number', 'reference_number']
     date_hierarchy = 'payment_date'
 
     @admin.display(description='Jumlah pembayaran')
@@ -649,7 +651,7 @@ def financial_report_csv(request):
         writer.writerow([
             'Pembayaran',
             p.payment_date.strftime('%Y-%m-%d'),
-            getattr(p.rental, 'invoice_number', ''),
+            getattr(p, 'invoice_number', getattr(p.rental, 'invoice_number', '')),
             p.method,
             p.amount,
             '',
@@ -661,7 +663,7 @@ def financial_report_csv(request):
         writer.writerow([
             f'Biaya Lain ({o.get_status_display()})' if is_planned else 'Biaya Lain',
             o.expense_date.strftime('%Y-%m-%d'),
-            o.reference_number,
+            getattr(o, 'invoice_number', getattr(o, 'reference_number', '')),
             o.description,
             '',
             '' if is_planned else o.total_cost,
