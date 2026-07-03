@@ -124,6 +124,7 @@ User ── MenuFavorite (1:N)
 | description | TextField | Deskripsi |
 | total_cost | DecimalField(12,2) | Total biaya |
 | status | CharField(20) | Rencana/Dikerjakan/Selesai/Dibatalkan |
+| invoice_number | CharField(30), **unique** | Auto-generated (expense-YYYY-XXXXX) |
 | reference_number | CharField(100) | Nomor referensi |
 | notes | TextField | Catatan |
 | rental | FK → Rental, SET_NULL | Terkait order rental (auto dari biaya tambahan) |
@@ -155,7 +156,7 @@ User ── MenuFavorite (1:N)
 - `paid_amount` — total pembayaran
 - `remaining_amount` — total - sudah dibayar
 
-**Invoice format:** `Order rental-{tahun}-{3 digit urutan}`
+**Invoice format:** `order-rental-{tahun}-{3 digit urutan}`
 
 ### Payment (Pembayaran)
 
@@ -165,6 +166,7 @@ User ── MenuFavorite (1:N)
 | payment_date | DateTimeField | Tanggal bayar |
 | method | CharField(20) | Tunai/Transfer/Debit/Kredit/QRIS |
 | amount | DecimalField(12,2) | Jumlah |
+| invoice_number | CharField(30), **unique** | Auto-generated (pay-YYYY-XXXXX) |
 | reference_number | CharField(100) | Nomor referensi |
 | notes | TextField | Catatan |
 

@@ -26,7 +26,7 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 
 ## Order Rental
 
-- **Invoice otomatis** format: `Order rental-{tahun}-{nomor_urut}` (contoh: Order rental-2026-001)
+- **Invoice otomatis** format: `order-rental-{tahun}-{nomor_urut}` (contoh: order-rental-2026-001)
 - Input: pelanggan, kendaraan, tanggal mulai, tanggal kembali, odometer awal
 - Finansial: tarif harian, diskon, biaya tambahan, uraian biaya tambahan (textarea), uang jaminan
 - **Kalkulasi real-time** — subtotal dan total terupdate otomatis saat input diubah (client-side JS)
@@ -40,6 +40,7 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 
 - Metode: Tunai, Transfer Bank, Kartu Debit, Kartu Kredit, QRIS
 - Per transaksi bisa banyak pembayaran (angsuran)
+- **Invoice otomatis** format: `pay-{tahun}-{5 digit urutan}` (contoh: pay-2026-00001)
 - Nomor referensi dan catatan opsional
 
 ## Kalender Booking
@@ -67,6 +68,7 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - Jenis biaya: pajak kendaraan, alat kantor, biaya tak terduga, dll
 - Pencatatan: tanggal, penerima, deskripsi, total biaya, nomor referensi
 - Status workflow seperti maintenance
+- **Invoice otomatis** format: `expense-{tahun}-{5 digit urutan}` (contoh: expense-2026-00001)
 
 ## Laporan Keuangan
 
