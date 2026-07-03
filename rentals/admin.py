@@ -256,6 +256,7 @@ class ExpenseTypeAdmin(BaseModelAdmin):
 @admin.register(OtherExpense)
 class OtherExpenseAdmin(BaseModelAdmin):
     list_display = [
+        'invoice_number',
         'expense_date',
         'expense_type',
         'payee',
