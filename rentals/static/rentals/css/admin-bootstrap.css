@@ -1151,7 +1151,7 @@ a:focus {
 }
 .vLargeTextField, .vXMLLargeTextField {
     width:13rem !important;
-    height: 1rem !important;
+    height: 1rem;
 }
 .submit-row a.deletelink {
     background: tomato !important;
@@ -1318,7 +1318,8 @@ input[value="Simpan dan terus mengedit"], input[value="Simpan dan tambahkan lagi
 
 /* css responsive python */
 .aligned .form-row textarea {
-    min-height: 100px !important;
+    min-height: 100px;
+    resize: vertical;
 }
 @media (max-width: 767px) {
     .booking-calendar-toolbar {
