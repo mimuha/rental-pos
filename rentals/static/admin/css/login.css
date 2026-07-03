@@ -74,7 +74,7 @@ body.login #content {
     height: 6.25rem;
     margin: 0 auto 1rem;
     color: #353438;
-    background: rgba(226, 203, 68, 0.12);
+    background: #f8f8f8;
     border-radius: 1rem;
 }
 
