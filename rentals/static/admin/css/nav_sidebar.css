@@ -256,9 +256,11 @@
 
 .current-model {
     background: #f6f6f6;
-    border-radius: .75rem;
 }
 
+.rental-nav-collapsed .rental-nav-section .rental-nav-items {
+    border-radius: 0;
+} 
 .rental-nav-section .rental-nav-items {
     margin: 1rem 0;
     border: 0.1px solid var(--abu2header);
@@ -302,6 +304,12 @@
 .rental-nav-item[open] summary,
 .rental-nav-item.current-model summary {
     background: var(--unguhover);
+}
+
+.rental-nav-collapsed .rental-nav-item summary:hover,
+.rental-nav-collapsed .rental-nav-item[open] summary,
+.rental-nav-collapsed .rental-nav-item.current-model summary {
+    border-radius: .75rem;
 }
 
 .rental-nav-label {
