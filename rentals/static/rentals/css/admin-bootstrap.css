@@ -549,6 +549,7 @@ a.button:hover {
     line-height: 1.25 !important;
     list-style: none !important;
     cursor: pointer !important;
+    border-radius: .75rem;
 }
 
 #changelist-filter .rental-filter-group summary::before,
