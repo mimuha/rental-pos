@@ -41,6 +41,7 @@ RENTAL_MENU_GROUPS = (
             'vehiclemaintenance',
             'rental',
             'payment',
+            'bookingcalendar',
         ),
     ),
     (
@@ -138,6 +139,15 @@ def financial_report_menu_model():
     }
 
 
+def booking_calendar_menu_model():
+    return {
+        'object_name': 'bookingcalendar',
+        'name': 'Kalender Booking',
+        'admin_url': reverse('admin:rental_booking_calendar'),
+        'add_url': None,
+    }
+
+
 def group_rental_menu(models):
     models_by_name = {
         model['object_name'].lower(): model
@@ -145,6 +155,8 @@ def group_rental_menu(models):
     }
     if 'financialreport' not in models_by_name:
         models_by_name['financialreport'] = financial_report_menu_model()
+    if 'bookingcalendar' not in models_by_name:
+        models_by_name['bookingcalendar'] = booking_calendar_menu_model()
 
     groups = []
 
