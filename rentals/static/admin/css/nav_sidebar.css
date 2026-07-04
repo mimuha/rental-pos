@@ -255,7 +255,7 @@
 }
 
 .current-model {
-    background: moccasin;
+    background: #f6f6f6;
     border-radius: .75rem;
 }
 
@@ -619,7 +619,7 @@
         width: 2.75rem;
         height: 2.75rem;
         color: #353438;
-        background: rgba(226, 203, 68, 0.10);
+        background: #f6f6f6;
         border-radius: .85rem;
     }
 
