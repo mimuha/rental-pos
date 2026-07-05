@@ -91,33 +91,39 @@
                 var isOpen = details.open;
 
                 if (isOpen) {
-                    // Closing: animate to 0, then close
+                    // Closing: animate height + fade out, then close
                     var start = inner.scrollHeight;
                     inner.style.maxHeight = start + 'px';
+                    inner.style.opacity = '1';
                     inner.offsetHeight;
-                    inner.style.transition = 'max-height .3s ease';
+                    inner.style.transition = 'max-height .3s ease, opacity .2s ease';
                     inner.style.maxHeight = '0px';
+                    inner.style.opacity = '0';
 
                     function onCloseEnd() {
                         inner.removeEventListener('transitionend', onCloseEnd);
                         details.open = false;
                         inner.style.maxHeight = '';
                         inner.style.transition = '';
+                        inner.style.opacity = '';
                     }
                     inner.addEventListener('transitionend', onCloseEnd);
                 } else {
-                    // Opening: open first, then animate from 0 to full
+                    // Opening: open first, then animate height + fade in
                     details.open = true;
                     var target = inner.scrollHeight;
                     inner.style.maxHeight = '0px';
+                    inner.style.opacity = '0';
                     inner.offsetHeight;
-                    inner.style.transition = 'max-height .3s ease';
+                    inner.style.transition = 'max-height .3s ease, opacity .2s ease';
                     inner.style.maxHeight = target + 'px';
+                    inner.style.opacity = '1';
 
                     function onOpenEnd() {
                         inner.removeEventListener('transitionend', onOpenEnd);
                         inner.style.maxHeight = '';
                         inner.style.transition = '';
+                        inner.style.opacity = '';
                     }
                     inner.addEventListener('transitionend', onOpenEnd);
                 }
