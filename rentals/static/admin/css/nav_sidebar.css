@@ -348,7 +348,7 @@
 .rental-nav-submenu {
     display: grid;
     gap: .05rem;
-    padding: 0 .9rem .85rem 3.65rem;
+    padding: .2rem 0 .2rem 2.66rem;
 }
 
 .rental-nav-submenu a {
