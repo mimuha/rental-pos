@@ -130,6 +130,11 @@
     line-height: 1;
     cursor: pointer;
 }
+@media (max-width: 1201px) {
+    .rental-nav-collapse {
+        display: none;
+    }
+}
 
 .rental-nav-collapse:hover {
     color: #353438;
