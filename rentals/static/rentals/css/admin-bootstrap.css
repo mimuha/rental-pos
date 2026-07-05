@@ -461,6 +461,18 @@ a.button:hover {
     border-left: 1px solid var(--border-color);
 }
 
+#changelist table thead th {
+    padding: 0 .75rem;
+}
+
+#changelist table input {
+    margin: 3px 0 0 0;
+}
+
+.results th, .results td {
+    padding: .25rem .75rem;
+}
+
 .rental-filter-open {
     display: none;
     align-items: center;
@@ -787,7 +799,7 @@ a.button:hover {
 }
 
 .messagelist li {
-    border-radius: .575rem;
+    border-radius: .575rem; 
 }
 
 .bootstrap-admin-dashboard #content {
