@@ -256,7 +256,6 @@
 
 .current-model {
     background: #f6f6f6;
-    border-radius: .75rem;
 }
 
 .rental-nav-collapsed .rental-nav-section .rental-nav-items {
@@ -295,6 +294,7 @@
     cursor: pointer;
     list-style: none;
     transition: background .5s ease;
+    border-radius: .75rem;
 }
 
 .rental-nav-item summary::-webkit-details-marker {
