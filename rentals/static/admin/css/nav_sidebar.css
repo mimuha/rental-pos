@@ -146,7 +146,6 @@
     align-items: center;
     gap: .6rem;
     min-height: 2.75rem;
-    margin-bottom: 1.35rem;
     padding: .45rem .55rem .45rem .8rem;
     background: #ffffff;
     border: 1px solid #dde4ec;
@@ -346,6 +345,7 @@
     overflow: hidden;
     border-left: 1px solid #eef1f5;
     margin: 0 0 .25rem 1.1rem;
+    padding: 0 0 3px 0;
 }
 
 .rental-nav-group-details[open] .rental-nav-group-items-inner {

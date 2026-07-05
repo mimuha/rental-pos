@@ -5,23 +5,22 @@
 <nav class="sticky rental-nav" id="nav-sidebar" aria-label="{% translate 'Sidebar' %}">
   <div class="rental-nav-shell">
     <div class="rental-nav-header">
-      <a href="{% url 'admin:index' %}" class="rental-nav-brand" aria-label="POS Rental">
+      {% comment %} <a href="{% url 'admin:index' %}" class="rental-nav-brand" aria-label="POS Rental">
         <span class="rental-nav-brand-mark" aria-hidden="true">
           {% include "admin/includes/sidebar_icons/pos_rental.svg" %}
         </span>
         <span>POS Rental</span>
-      </a>
+      </a> {% endcomment %}
+      <div class="rental-nav-search">
+        <span class="rental-nav-search-icon" aria-hidden="true"></span>
+        <input type="search" id="nav-filter"
+              placeholder="{% translate 'Cari menu...' %}"
+              aria-label="{% translate 'Navigasi pencarian menu' %}">
+        <span class="rental-nav-shortcut" aria-hidden="true">Ctrl K</span>
+      </div>
       <button type="button" class="rental-nav-collapse" aria-label="Sembunyikan menu">
         <span aria-hidden="true">&laquo;</span>
       </button>
-    </div>
-
-    <div class="rental-nav-search">
-      <span class="rental-nav-search-icon" aria-hidden="true"></span>
-      <input type="search" id="nav-filter"
-             placeholder="{% translate 'Cari menu...' %}"
-             aria-label="{% translate 'Navigasi pencarian menu' %}">
-      <span class="rental-nav-shortcut" aria-hidden="true">Ctrl K</span>
     </div>
     <div class="rental-nav-actions">
       <button type="button" class="rental-nav-search-btn" aria-label="{% translate 'Cari menu' %}">
