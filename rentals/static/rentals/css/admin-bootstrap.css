@@ -227,7 +227,7 @@ div.breadcrumbs a {
     max-width: none !important;
     width: 100% !important;
     margin: 0 auto 2.5rem !important;
-    padding: 1.5rem !important;
+    padding: 1.5rem .75rem;
     background: var(--white2) !important;
     border: 1px solid var(--white2) !important;
     border-radius: 1rem !important;
