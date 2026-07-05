@@ -286,7 +286,7 @@
     display: grid;
     grid-template-columns: 2rem minmax(0, 1fr) auto;
     align-items: center;
-    gap: .75rem;
+    gap: 5px;
     min-height: 2.6rem;
     padding: 0 .25rem;
     color: #1f2937;
@@ -373,7 +373,7 @@
     display: grid;
     grid-template-columns: 2rem minmax(0, 1fr);
     align-items: center;
-    gap: .75rem;
+    gap: 5px;
     min-height: 2.3rem;
     padding: 0 .25rem;
     padding-left: .25rem;
