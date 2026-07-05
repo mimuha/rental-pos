@@ -64,6 +64,7 @@
                       </span>
                     </summary>
                     <div class="rental-nav-group-items">
+                      <div class="rental-nav-group-items-inner">
                       {% for model in group.models %}
                         {% with model_name=model.object_name|lower %}
                           <div class="rental-nav-link-wrapper{% if model.admin_url and model.admin_url in request.path|urlencode %} current{% elif model_name == 'rental' and booking_calendar_url in request.path|urlencode %} current{% endif %}" data-menu-title="{{ model.name }}">
@@ -113,9 +114,51 @@
                           </div>
                         {% endwith %}
                       {% endfor %}
+                      </div>
                     </div>
                   </details>
                 {% endfor %}
+              {% elif app.app_label == 'auth' %}
+                <details class="rental-nav-group-details">
+                  <summary class="rental-nav-group-summary">
+                    <span class="rental-nav-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g><path d="M12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22Z" stroke="#353438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path opacity="0.4" d="M12 8V13" stroke="#353438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path opacity="0.4" d="M11.9946 16H12.0036" stroke="#353438" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>
+                    </span>
+                    <span class="rental-nav-label">Autentikasi</span>
+                    <span class="rental-nav-group-chevron" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </summary>
+                  <div class="rental-nav-group-items">
+                    <div class="rental-nav-group-items-inner">
+                    {% for model in app.models %}
+                      {% with model_name=model.object_name|lower %}
+                        <div class="rental-nav-link-wrapper{% if model.admin_url and model.admin_url in request.path|urlencode %} current{% endif %}" data-menu-title="{{ model.name }}">
+                          {% if model.admin_url %}
+                            <a href="{{ model.admin_url }}" class="rental-nav-link"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>
+                              <span class="rental-nav-icon" aria-hidden="true">
+                                {% if model_name == 'group' %}
+                                  {% include "admin/includes/sidebar_icons/group.svg" %}
+                                {% elif model_name == 'user' %}
+                                  {% include "admin/includes/sidebar_icons/user.svg" %}
+                                {% else %}
+                                  {% include "admin/includes/sidebar_icons/rental.svg" %}
+                                {% endif %}
+                              </span>
+                              <span class="rental-nav-label">{{ model.name }}</span>
+                            </a>
+                          {% endif %}
+                          {% if model.add_url %}
+                            <a href="{{ model.add_url }}" class="rental-nav-add-btn" title="Tambah {{ model.name|lower }}">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            </a>
+                          {% endif %}
+                        </div>
+                      {% endwith %}
+                    {% endfor %}
+                    </div>
+                  </div>
+                </details>
               {% else %}
                 {% for model in app.models %}
                   {% with model_name=model.object_name|lower %}
