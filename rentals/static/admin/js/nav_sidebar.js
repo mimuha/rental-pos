@@ -49,49 +49,7 @@
             const filterMenu = function () {
                 const query = searchInput.value.trim().toLowerCase();
 
-        // Accordion animation for group details
-        sidebar.querySelectorAll('.rental-nav-group-details').forEach(function(details) {
-            var summary = details.querySelector('.rental-nav-group-summary');
-            var inner = details.querySelector('.rental-nav-group-items-inner');
-            if (!summary || !inner) return;
-
-            summary.addEventListener('click', function(e) {
-                if (!details.open) return;
-                e.preventDefault();
-
-                var target = inner.scrollHeight;
-                inner.style.maxHeight = target + 'px';
-                inner.offsetHeight;
-                inner.style.transition = 'max-height .3s ease';
-                inner.style.maxHeight = '0px';
-
-                function onTransitionEnd() {
-                    inner.removeEventListener('transitionend', onTransitionEnd);
-                    details.open = false;
-                    inner.style.maxHeight = '';
-                    inner.style.transition = '';
-                }
-                inner.addEventListener('transitionend', onTransitionEnd);
-            });
-
-            details.addEventListener('toggle', function() {
-                if (!details.open) return;
-                var target = inner.scrollHeight;
-                inner.style.maxHeight = '0px';
-                inner.offsetHeight;
-                inner.style.transition = 'max-height .3s ease';
-                inner.style.maxHeight = target + 'px';
-
-                function onTransitionEnd() {
-                    inner.removeEventListener('transitionend', onTransitionEnd);
-                    inner.style.maxHeight = '';
-                    inner.style.transition = '';
-                }
-                inner.addEventListener('transitionend', onTransitionEnd);
-            });
-        });
-
-        items.forEach(function (item) {
+                items.forEach(function (item) {
                     const title = (item.dataset.menuTitle || item.textContent).toLowerCase();
                     const isMatch = title.indexOf(query) !== -1;
                     item.style.display = (query && !isMatch) ? 'none' : '';
@@ -121,6 +79,50 @@
                 }
             });
         }
+
+        // Accordion animation for group details
+        sidebar.querySelectorAll('.rental-nav-group-details').forEach(function(details) {
+            var summary = details.querySelector('.rental-nav-group-summary');
+            var inner = details.querySelector('.rental-nav-group-items-inner');
+            if (!summary || !inner) return;
+
+            summary.addEventListener('click', function(e) {
+                e.preventDefault();
+                var isOpen = details.open;
+
+                if (isOpen) {
+                    // Closing: animate to 0, then close
+                    var start = inner.scrollHeight;
+                    inner.style.maxHeight = start + 'px';
+                    inner.offsetHeight;
+                    inner.style.transition = 'max-height .3s ease';
+                    inner.style.maxHeight = '0px';
+
+                    function onCloseEnd() {
+                        inner.removeEventListener('transitionend', onCloseEnd);
+                        details.open = false;
+                        inner.style.maxHeight = '';
+                        inner.style.transition = '';
+                    }
+                    inner.addEventListener('transitionend', onCloseEnd);
+                } else {
+                    // Opening: open first, then animate from 0 to full
+                    details.open = true;
+                    var target = inner.scrollHeight;
+                    inner.style.maxHeight = '0px';
+                    inner.offsetHeight;
+                    inner.style.transition = 'max-height .3s ease';
+                    inner.style.maxHeight = target + 'px';
+
+                    function onOpenEnd() {
+                        inner.removeEventListener('transitionend', onOpenEnd);
+                        inner.style.maxHeight = '';
+                        inner.style.transition = '';
+                    }
+                    inner.addEventListener('transitionend', onOpenEnd);
+                }
+            });
+        });
 
         // Popup handling for collapsed menu
         let currentPopup = null;
