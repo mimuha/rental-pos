@@ -630,12 +630,6 @@ a.button:hover {
         font-size: 1.25rem !important;
         font-weight: 600 !important;
     }
-    .container-full{
-        width: 90%;
-    }
-    .login .container-full {
-        width: 100%;
-    }
 }
 .card {
     border-radius: 1rem !important;
