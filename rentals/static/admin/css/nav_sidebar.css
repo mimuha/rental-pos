@@ -447,7 +447,7 @@
     background: var(--white2);
     border: 1px solid #ececec;
     border-radius: .75rem;
-    box-shadow: 0 10px 22px rgba(53, 52, 56, .06);
+    box-shadow: var(--rental-box-shadow);
     cursor: pointer;
     font-family: inherit;
     text-align: left;
