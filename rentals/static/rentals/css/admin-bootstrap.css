@@ -63,8 +63,8 @@ textarea {
     box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .04) !important;
 }
 
-#header > .container,
-#header > .container-full {
+#header>.container,
+#header>.container-full {
     min-height: 64px;
     display: flex;
     flex-direction: column;
@@ -104,6 +104,7 @@ textarea {
     width: 1.45rem;
     height: 1.45rem;
 }
+
 .rental-admin-brand-icon svg {
     color: var(--rental-primary);
 }
@@ -113,10 +114,12 @@ textarea {
     align-items: center;
     gap: .5rem;
 }
-#user-tools a, #logout-form button
-{
+
+#user-tools a,
+#logout-form button {
     color: var(--rental-pos-title) !important;
 }
+
 @media (max-width: 1024px) {
     #user-tools {
         margin: 1rem 0 0 !important;
@@ -234,16 +237,16 @@ div.breadcrumbs a {
     box-shadow: var(--rental-box-shadow);
 }
 
-.admin-content-container .admin-card{
+.admin-content-container .admin-card {
     border: .1px solid var(--abu2header) !important;
     padding: .7rem;
 }
 
-.admin-content-container form{
+.admin-content-container form {
     height: auto;
 }
 
-.admin-content-container form input[type="date"]{
+.admin-content-container form input[type="date"] {
     width: 11rem;
 }
 
@@ -253,6 +256,30 @@ div.breadcrumbs a {
     margin-left: auto;
     padding-right: 1rem;
     padding-left: 1rem;
+}
+
+@media (min-width: 1200px) {
+    .admin-sidebar-col.rental-nav-collapsed {
+        flex: 0 0 auto;
+        transition: width .5s ease;
+        width: 4% !important;
+    }
+
+    .admin-sidebar-col {
+        flex: 0 0 auto;
+        width: 15% !important;
+        transition: width .5s ease;
+    }
+
+    .admin-sidebar-col.rental-nav-collapsed+.admin-main-col {
+        flex: 1 1 0;
+        width: 96% !important;
+    }
+
+    .admin-main-col {
+        transition: width .5s ease;
+        width: 85% !important;
+    }
 }
 
 .admin-sidebar-col {
@@ -279,9 +306,11 @@ div.breadcrumbs a {
     font-weight: 600;
     margin: 0 0 1.25rem;
 }
+
 .rental-dashboard-summary h2 {
     color: var(--rental-pos-title);
 }
+
 .rental-dashboard-summary p.text-secondary {
     color: var(--rental-pos-subtitle) !important;
 }
@@ -314,8 +343,7 @@ table {
     border-color: var(--border-color);
 }
 
-thead th
-a,
+thead th a,
 thead th a:link,
 thead th a:visited {
     color: #111;
@@ -326,18 +354,20 @@ tfoot td {
     background: var(--abu2header) !important;
     color: #212529;
 }
-tbody tr{
+
+tbody tr {
     transition: .5s ease;
 }
+
 tbody tr:hover {
     background: #efefef;
 }
 
-tbody tr th a{
+tbody tr th a {
     font-weight: 600;
 }
 
-tbody tr th a:hover{
+tbody tr th a:hover {
     color: #c54444 !important;
 }
 
@@ -453,17 +483,22 @@ a.button:hover {
     display: none !important;
 }
 
-#changelist.rental-filter-collapsed .changelist-form-container:has(#changelist-filter) > div {
+#changelist.rental-filter-collapsed .changelist-form-container:has(#changelist-filter)>div {
     max-width: 100% !important;
 }
 
-#changelist .changelist-form-container, #transaction-table,.colM, .colMS, .colSM, .colS {
+#changelist .changelist-form-container,
+#transaction-table,
+.colM,
+.colMS,
+.colSM,
+.colS {
     gap: 1rem !important;
     font-size: .875rem;
     color: slategray;
 }
 
-#changelist .changelist-form-container:has(#changelist-filter) > div {
+#changelist .changelist-form-container:has(#changelist-filter)>div {
     max-width: calc(100% - 290px) !important;
 }
 
@@ -553,7 +588,7 @@ a.button:hover {
 }
 
 #changelist-filter .rental-filter-group summary::before,
-#changelist-filter .rental-filter-group[open] > summary::before {
+#changelist-filter .rental-filter-group[open]>summary::before {
     content: none !important;
 }
 
@@ -761,7 +796,7 @@ a.button:hover {
 }
 
 .bootstrap-admin-dashboard #content h1 {
-    margin: 2rem 0 ;
+    margin: 2rem 0;
     text-align: center;
     font-size: 2.5rem;
 }
@@ -893,9 +928,11 @@ a.button:hover {
 .recent-actions .list-group-item:first-child {
     padding-top: 0;
 }
+
 .recent-actions {
     max-height: 36.9rem;
 }
+
 @media (min-width: 1400px) {
     .recent-actions {
         max-height: 25.95rem;
@@ -922,7 +959,7 @@ a.button:hover {
         flex-direction: column !important;
     }
 
-    #changelist .changelist-form-container:has(#changelist-filter) > div {
+    #changelist .changelist-form-container:has(#changelist-filter)>div {
         max-width: 100% !important;
         width: 100% !important;
     }
@@ -980,6 +1017,7 @@ a:focus {
     background-color: #28a745 !important;
     color: #ffffff !important;
 }
+
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active,
@@ -1011,11 +1049,11 @@ a:focus {
     border-color: var(--rental-primary) !important;
 }
 
-.btn-check:checked + .btn,
+.btn-check:checked+.btn,
 .btn.active,
 .btn.show,
 .btn:first-child:active,
-:not(.btn-check) + .btn:active {
+:not(.btn-check)+.btn:active {
     color: #ffffff !important;
     background-color: var(--rental-primary-dark) !important;
     border-color: var(--rental-primary-dark) !important;
@@ -1034,7 +1072,7 @@ a:focus {
     color: var(--rental-primary) !important;
 }
 
-.active > .page-link,
+.active>.page-link,
 .page-link.active {
     color: #ffffff !important;
     background-color: var(--rental-primary) !important;
@@ -1054,16 +1092,17 @@ a:focus {
 }
 
 /* css untuk button dari changelist */
-#toolbar form input[type="submit"],#changelist .actions .button{
-    color:var(--primary) !important;
+#toolbar form input[type="submit"],
+#changelist .actions .button {
+    color: var(--primary) !important;
 }
 
-#changelist .actions .button{
-    border:0px solid var(--primary) !important;
-    box-shadow:none !important;
-    padding: 0 10px  !important;
+#changelist .actions .button {
+    border: 0px solid var(--primary) !important;
+    box-shadow: none !important;
+    padding: 0 10px !important;
     border-radius: .575rem !important;
-    color:#fff !important;
+    color: #fff !important;
 }
 
 #changelist .actions {
@@ -1081,44 +1120,59 @@ a:focus {
 #changelist .toplinks {
     padding-left: .6rem;
 }
+
 @media (max-width: 1024px) {
     #toolbar form #searchbar {
         width: 10rem !important;
     }
 }
+
 /* end untuk button dari changelist */
 /* css untuk widgets pyhon */
 .datetimeshortcuts .date-icon {
     background: url("custom_icons/calendar.svg") 0 0 no-repeat !important;
 }
+
 .datetimeshortcuts .clock-icon {
     background: url(custom_icons/clock.svg) 0 0 no-repeat !important;
 }
+
 .selector-chosen-title {
     background: #3534382e !important;
 }
-.selector-add, .selector-remove {
+
+.selector-add,
+.selector-remove {
     min-height: 1rem;
     transition: 0s ease !important;
 }
+
 .selector-remove {
     background: url("custom_icons/selector-icons2.svg") 0 -96px no-repeat !important;
     background-size: 24px !important;
 }
+
 .selector-add {
     background: url("custom_icons/selector-icons2.svg") 0 -144px no-repeat !important;
     background-size: 24px !important;
 }
-:enabled.selector-add:focus, :enabled.selector-add:hover {
+
+:enabled.selector-add:focus,
+:enabled.selector-add:hover {
     background-position: 0 -168px !important;
 }
-:enabled.selector-remove:focus, :enabled.selector-remove:hover {
+
+:enabled.selector-remove:focus,
+:enabled.selector-remove:hover {
     background-position: 0 -120px !important;
 }
-.datetimeshortcuts .clock-icon, .datetimeshortcuts .date-icon {
+
+.datetimeshortcuts .clock-icon,
+.datetimeshortcuts .date-icon {
     height: 16px !important;
     width: 16px !important;
 }
+
 /* end untuk widgets python */
 /* css untuk forms python */
 .inline-group .tabular td.original p {
@@ -1131,29 +1185,40 @@ a:focus {
     overflow: unset !important;
     height: auto !important;
 }
+
 .inline-related.tabular fieldset.module table {
     width: 81rem !important;
 }
+
 .inline-group .tabular tr.has_original td {
     padding-top: .75rem !important;
 }
-.field-method, .field-amount,.field-payment_date  {
+
+.field-method,
+.field-amount,
+.field-payment_date {
     width: 387px !important;
 }
-.field-reference_number{
+
+.field-reference_number {
     width: auto !important;
- }
+}
+
 .form-row img {
     width: 17px;
     margin-top: 5px;
 }
+
 .colM .aligned .vXMLLargeTextField {
     width: 100% !important;
 }
-.vLargeTextField, .vXMLLargeTextField {
-    width:13rem !important;
+
+.vLargeTextField,
+.vXMLLargeTextField {
+    width: 13rem !important;
     height: 1rem;
 }
+
 .submit-row a.deletelink {
     background: tomato !important;
     border-radius: .575rem !important;
@@ -1162,36 +1227,49 @@ a:focus {
     line-height: 0 !important;
     color: #fff !important;
 }
+
 p.datetime {
     width: 100%;
 }
+
 p.datetime input {
     width: 50%;
     max-width: 200px;
 }
-p.datetime  span {
+
+p.datetime span {
     width: 30%;
 }
-.form-row.dynamic-other_expenses{
+
+.form-row.dynamic-other_expenses {
     height: auto !important;
 }
+
 @media (min-width: 576px) {
     p.datetime label {
         display: inline-block !important;
         min-width: 204px !important;
     }
-    .aligned legend, .aligned label{
+
+    .aligned legend,
+    .aligned label {
         min-width: 212px !important;
     }
-    .field-method, .field-amount, .field-payment_date {
+
+    .field-method,
+    .field-amount,
+    .field-payment_date {
         width: auto !important;
     }
 }
+
 /* end forms python */
 /* css button python */
-input[value="Simpan dan terus mengedit"], input[value="Simpan dan tambahkan lagi"] {
+input[value="Simpan dan terus mengedit"],
+input[value="Simpan dan tambahkan lagi"] {
     background: #35343882 !important;
 }
+
 /* end css button python */
 
 /* css kalender booking */
@@ -1315,6 +1393,7 @@ input[value="Simpan dan terus mengedit"], input[value="Simpan dan tambahkan lagi
 #booking-calendar .fc-button-group {
     gap: .75rem;
 }
+
 /* end css kalender booking */
 
 /* css responsive python */
@@ -1322,6 +1401,7 @@ input[value="Simpan dan terus mengedit"], input[value="Simpan dan tambahkan lagi
     min-height: 100px;
     resize: vertical;
 }
+
 @media (max-width: 767px) {
     .booking-calendar-toolbar {
         grid-template-columns: 1fr;
@@ -1343,14 +1423,25 @@ input[value="Simpan dan terus mengedit"], input[value="Simpan dan tambahkan lagi
         justify-content: center;
     }
 
-    .aligned .form-row input, .aligned .form-row select {
+    .aligned .form-row input,
+    .aligned .form-row select {
         max-width: 48% !important;
     }
+
     .aligned .form-row textarea {
         max-width: 68% !important;
     }
-    .aligned legend, .aligned label,.aligned label + p, .aligned label + div.help, .aligned label + div.readonly,.aligned .form-row textarea,.aligned .form-row input, .aligned .form-row select {
+
+    .aligned legend,
+    .aligned label,
+    .aligned label+p,
+    .aligned label+div.help,
+    .aligned label+div.readonly,
+    .aligned .form-row textarea,
+    .aligned .form-row input,
+    .aligned .form-row select {
         margin-left: .5rem !important;
     }
 }
+
 /* end responsive python */
