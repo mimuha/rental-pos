@@ -67,7 +67,7 @@
                       <div class="rental-nav-group-items-inner">
                       {% for model in group.models %}
                         {% with model_name=model.object_name|lower %}
-                          <div class="rental-nav-link-wrapper{% if model.admin_url and model.admin_url in request.path|urlencode %} current{% elif model_name == 'rental' and booking_calendar_url in request.path|urlencode %} current{% endif %}" data-menu-title="{{ model.name }}">
+                          <div class="rental-nav-link-wrapper{% if model.admin_url and model.admin_url in request.path|urlencode %} current{% endif %}" data-menu-title="{{ model.name }}">
                             {% if model.admin_url %}
                               <a href="{{ model.admin_url }}" class="rental-nav-link"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>
                                 <span class="rental-nav-icon" aria-hidden="true">

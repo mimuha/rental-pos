@@ -332,22 +332,22 @@
 
 /* Group items */
 .rental-nav-group-items {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows .3s ease;
-}
-
-.rental-nav-group-details[open] .rental-nav-group-items {
-    grid-template-rows: 1fr;
+    padding-bottom: 0;
 }
 
 .rental-nav-group-items-inner {
+    max-height: 0;
     overflow: hidden;
+    transition: max-height .35s ease;
+}
+
+.rental-nav-group-details[open] .rental-nav-group-items-inner {
+    max-height: 600px;
 }
 
 .rental-nav-group-items .rental-nav-link-wrapper {
     margin-left: 2.5rem;
-    margin-bottom: 1px;
+    margin-top: 1px;
 }
 
 .rental-nav-link-wrapper {
@@ -549,11 +549,11 @@
 
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-group-items {
     display: block;
-    grid-template-rows: unset;
 }
 
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-group-items-inner {
     overflow: visible;
+    max-height: none;
 }
 
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-link {
