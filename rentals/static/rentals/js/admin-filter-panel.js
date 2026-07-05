@@ -53,18 +53,22 @@
         openButton.setAttribute('aria-label', 'Tampilkan filter');
         openButton.insertAdjacentHTML('afterbegin', '<span class="rental-filter-title-icon" aria-hidden="true"></span>');
 
-        var objectTools = document.querySelector('#content-main .object-tools');
+        var objectTools = document.querySelector('#toolbar .object-tools');
         if (!objectTools) {
             objectTools = document.createElement('ul');
             objectTools.className = 'object-tools';
-            var contentMain = document.getElementById('content-main');
-            if (contentMain) {
-                contentMain.insertBefore(objectTools, changeList);
+            var toolbar = document.getElementById('toolbar');
+            if (toolbar) {
+                toolbar.appendChild(objectTools);
             }
         }
         var li = document.createElement('li');
         li.appendChild(openButton);
-        objectTools.appendChild(li);
+        if (objectTools.firstChild) {
+            objectTools.insertBefore(li, objectTools.firstChild);
+        } else {
+            objectTools.appendChild(li);
+        }
 
         openButton.addEventListener('click', function () {
             changeList.classList.remove('rental-filter-collapsed');
