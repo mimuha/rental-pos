@@ -258,26 +258,27 @@ div.breadcrumbs a {
     padding-left: 1rem;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1279px) {
     .admin-sidebar-col.rental-nav-collapsed {
         flex: 0 0 auto;
-        transition: width .5s ease;
-        width: 4% !important;
+        transition: width .25s ease;
+        width: 3.8% !important;
     }
 
     .admin-sidebar-col {
         flex: 0 0 auto;
         width: 15% !important;
-        transition: width .5s ease;
+        max-width: 15% !important;
+        transition: width .25s ease;
     }
 
     .admin-sidebar-col.rental-nav-collapsed+.admin-main-col {
         flex: 1 1 0;
-        width: 96% !important;
+        width: 96.2% !important;
     }
 
     .admin-main-col {
-        transition: width .5s ease;
+        transition: width .25s ease;
         width: 85% !important;
     }
 }
