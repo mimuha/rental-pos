@@ -49,7 +49,49 @@
             const filterMenu = function () {
                 const query = searchInput.value.trim().toLowerCase();
 
-                items.forEach(function (item) {
+        // Accordion animation for group details
+        sidebar.querySelectorAll('.rental-nav-group-details').forEach(function(details) {
+            var summary = details.querySelector('.rental-nav-group-summary');
+            var inner = details.querySelector('.rental-nav-group-items-inner');
+            if (!summary || !inner) return;
+
+            summary.addEventListener('click', function(e) {
+                if (!details.open) return;
+                e.preventDefault();
+
+                var target = inner.scrollHeight;
+                inner.style.maxHeight = target + 'px';
+                inner.offsetHeight;
+                inner.style.transition = 'max-height .3s ease';
+                inner.style.maxHeight = '0px';
+
+                function onTransitionEnd() {
+                    inner.removeEventListener('transitionend', onTransitionEnd);
+                    details.open = false;
+                    inner.style.maxHeight = '';
+                    inner.style.transition = '';
+                }
+                inner.addEventListener('transitionend', onTransitionEnd);
+            });
+
+            details.addEventListener('toggle', function() {
+                if (!details.open) return;
+                var target = inner.scrollHeight;
+                inner.style.maxHeight = '0px';
+                inner.offsetHeight;
+                inner.style.transition = 'max-height .3s ease';
+                inner.style.maxHeight = target + 'px';
+
+                function onTransitionEnd() {
+                    inner.removeEventListener('transitionend', onTransitionEnd);
+                    inner.style.maxHeight = '';
+                    inner.style.transition = '';
+                }
+                inner.addEventListener('transitionend', onTransitionEnd);
+            });
+        });
+
+        items.forEach(function (item) {
                     const title = (item.dataset.menuTitle || item.textContent).toLowerCase();
                     const isMatch = title.indexOf(query) !== -1;
                     item.style.display = (query && !isMatch) ? 'none' : '';
