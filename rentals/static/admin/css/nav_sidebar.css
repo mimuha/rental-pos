@@ -251,7 +251,7 @@
 
 .rental-nav-items {
     overflow: hidden;
-    background: var(--white2);
+    background: white;
 }
 
 .current-model {
@@ -269,6 +269,9 @@
 /* Group accordion */
 .rental-nav-group-details {
     border-bottom: 1px solid #eef1f5;
+    background: #ffffff;
+    position: relative;
+    z-index: 2;
 }
 
 .rental-nav-group-details:last-child {
