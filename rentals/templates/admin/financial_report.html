@@ -120,7 +120,7 @@
                   <td data-sort-value="Pembayaran">Pembayaran</td>
                   <td data-sort-value="{{ p.obj.payment_date|date:"Y-m-d" }}">{{ p.obj.payment_date|date:"Y-m-d" }}</td>
                   <td data-sort-value="{{ p.obj.invoice_number|escape }}">{{ p.obj.invoice_number }}</td>
-                  <td data-sort-value="{{ p.obj.method|escape }}">{{ p.obj.method }}</td>
+                  <td data-sort-value="{{ p.obj.notes|escape }}">{{ p.obj.notes }}</td>
                   <td class="text-end text-success" data-sort-value="{{ p.obj.amount }}">{{ p.amount_fmt }}</td>
                   <td class="text-end" data-sort-value="0">-</td>
               </tr>

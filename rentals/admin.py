@@ -653,7 +653,7 @@ def financial_report_csv(request):
             'Pembayaran',
             p.payment_date.strftime('%Y-%m-%d'),
             getattr(p, 'invoice_number', getattr(p.rental, 'invoice_number', '')),
-            p.method,
+            p.notes,
             p.amount,
             '',
         ])
