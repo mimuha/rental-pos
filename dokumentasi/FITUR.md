@@ -79,11 +79,10 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 
 ## Navigasi Sidebar
 
-- Sidebar admin **collapsed secara default** untuk memaksimalkan area konten
+- Sidebar admin **expanded secara default**; preferensi collapsed/expanded tersimpan di `localStorage` dan diingat antar sesi
 - Tombol ikon pencarian (search) tampil saat sidebar collapsed; klik untuk expand dan langsung fokus ke input pencarian
 - Saat sidebar expanded, ikon pencarian di tombol tersembunyi (sudah ada ikon di dalam input form)
 - **Shortcut Ctrl+K** — expand sidebar dan fokus ke input pencarian dari mana saja
-- Preferensi collapsed/expanded tersimpan di `localStorage` dan diingat antar sesi
 - **Menu Favorit** — tombol di bawah search untuk akses cepat ke menu yang sering digunakan
   - Klik untuk melihat daftar menu favorit dalam popup
   - Mode **Edit** untuk menambah/mengurangi menu favorit via checkbox

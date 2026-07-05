@@ -33,7 +33,7 @@
             });
         }
 
-        if (localStorage.getItem('rental.admin.navCollapsed') !== 'false') {
+        if (localStorage.getItem('rental.admin.navCollapsed') === 'true') {
             setCollapsed(true);
         }
 
