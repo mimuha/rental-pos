@@ -130,7 +130,7 @@
     line-height: 1;
     cursor: pointer;
 }
-@media (max-width: 1201px) {
+@media (max-width: 1999px) {
     .rental-nav-collapse {
         display: none;
     }
@@ -352,7 +352,7 @@
 }
 
 .rental-nav-group-items .rental-nav-link-wrapper {
-    margin-left: 2.5rem;
+    margin-left: 2.2rem;
     margin-top: 1px;
 }
 

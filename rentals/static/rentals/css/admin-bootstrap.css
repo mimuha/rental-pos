@@ -262,7 +262,7 @@ div.breadcrumbs a {
     .admin-sidebar-col.rental-nav-collapsed {
         flex: 0 0 auto;
         transition: width .25s ease;
-        width: 3.8% !important;
+        width: 3.7% !important;
     }
 
     .admin-sidebar-col {
@@ -274,7 +274,7 @@ div.breadcrumbs a {
 
     .admin-sidebar-col.rental-nav-collapsed+.admin-main-col {
         flex: 1 1 0;
-        width: 96.2% !important;
+        width: 96.3% !important;
     }
 
     .admin-main-col {
