@@ -256,6 +256,7 @@
 
 .current-model {
     background: #f6f6f6;
+    border-radius: .75rem;
 }
 
 .rental-nav-collapsed .rental-nav-section .rental-nav-items {
