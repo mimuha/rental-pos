@@ -344,6 +344,8 @@
 .rental-nav-group-items-inner {
     max-height: 0;
     overflow: hidden;
+    border-left: 1px solid #eef1f5;
+    margin: 0 0 .25rem 1.1rem;
 }
 
 .rental-nav-group-details[open] .rental-nav-group-items-inner {
@@ -352,7 +354,6 @@
 }
 
 .rental-nav-group-items .rental-nav-link-wrapper {
-    margin-left: 2.2rem;
     margin-top: 1px;
 }
 
