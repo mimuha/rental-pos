@@ -1062,7 +1062,7 @@ a:focus {
     border:0px solid var(--primary) !important;
     box-shadow:none !important;
     padding: 0 10px  !important;
-    border-radius: 5px;
+    border-radius: .575rem !important;
     color:#fff !important;
 }
 
