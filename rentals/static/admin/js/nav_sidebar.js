@@ -10,7 +10,7 @@
         const sidebarColumn = sidebar.closest('.admin-sidebar-col');
         const collapseButton = sidebar.querySelector('.rental-nav-collapse');
         const searchInput = sidebar.querySelector('#nav-filter');
-        const items = Array.from(sidebar.querySelectorAll('.rental-nav-item'));
+        const items = Array.from(sidebar.querySelectorAll('.rental-nav-link-wrapper'));
 
         function setCollapsed(isCollapsed) {
             if (!sidebarColumn) {
@@ -52,15 +52,12 @@
                 items.forEach(function (item) {
                     const title = (item.dataset.menuTitle || item.textContent).toLowerCase();
                     const isMatch = title.indexOf(query) !== -1;
-                    item.hidden = Boolean(query && !isMatch);
-                    if (query && isMatch) {
-                        item.open = true;
-                    }
+                    item.style.display = (query && !isMatch) ? 'none' : '';
                 });
 
                 sidebar.querySelectorAll('.rental-nav-section').forEach(function (section) {
-                    const hasVisibleItem = Array.from(section.querySelectorAll('.rental-nav-item')).some(function (item) {
-                        return !item.hidden;
+                    const hasVisibleItem = Array.from(section.querySelectorAll('.rental-nav-link-wrapper')).some(function (item) {
+                        return item.style.display !== 'none';
                     });
                     section.hidden = Boolean(query && !hasVisibleItem);
                 });
@@ -137,8 +134,9 @@
 
         function showPopupForItem(item, summary) {
             closePopup();
-            const submenu = item.querySelector('.rental-nav-submenu');
-            if (!submenu) return;
+            const link = item.querySelector('.rental-nav-link');
+            const addBtn = item.querySelector('.rental-nav-add-btn');
+            if (!link) return;
 
             const labelEl = item.querySelector('.rental-nav-label');
             const label = labelEl ? labelEl.textContent.trim() : '';
@@ -157,9 +155,22 @@
                 inner.appendChild(title);
             }
 
-            const submenuClone = submenu.cloneNode(true);
-            submenuClone.style.display = 'block';
-            inner.appendChild(submenuClone);
+            const listLink = document.createElement('a');
+            listLink.className = 'rental-nav-popup-link';
+            listLink.href = link.href;
+            listLink.textContent = 'Daftar ' + label;
+            listLink.addEventListener('click', function () { closePopup(); });
+            inner.appendChild(listLink);
+
+            if (addBtn) {
+                const addLink = document.createElement('a');
+                addLink.className = 'rental-nav-popup-link';
+                addLink.href = addBtn.href;
+                addLink.textContent = 'Tambah ' + label;
+                addLink.addEventListener('click', function () { closePopup(); });
+                inner.appendChild(addLink);
+            }
+
             popup.appendChild(inner);
             document.body.appendChild(popup);
             popup.addEventListener('mouseenter', clearPopupCloseTimer);
@@ -220,18 +231,14 @@
             currentAnchor = item;
         }
 
-        // Attach click handlers to summary elements to show popup when collapsed
         items.forEach(function (item) {
-            const summary = item.querySelector('summary');
-            if (!summary) return;
-
             item.addEventListener('mouseenter', function () {
                 if (!isDesktopCollapsedMode()) {
                     return;
                 }
                 clearPopupCloseTimer();
                 if (currentAnchor !== item) {
-                    showPopupForItem(item, summary);
+                    showPopupForItem(item, item);
                 }
             });
 
@@ -241,22 +248,20 @@
                 }
             });
 
-            summary.addEventListener('click', function (event) {
+            item.addEventListener('click', function (event) {
                 if (!isCollapsedMode()) {
-                    // allow normal expand/collapse when nav is expanded
+                    return;
+                }
+                if (!isDesktopCollapsedMode()) {
                     return;
                 }
                 event.preventDefault();
                 event.stopPropagation();
-                if (isDesktopCollapsedMode()) {
-                    showPopupForItem(item, summary);
-                    return;
-                }
                 if (currentAnchor === item) {
                     closePopup();
                     return;
                 }
-                showPopupForItem(item, summary);
+                showPopupForItem(item, item);
             });
         });
 
@@ -269,16 +274,21 @@
 
             function getMenuItems() {
                 var menus = [];
-                items.forEach(function (item) {
+                // Also look inside group-details for items
+                var allWrappers = Array.from(sidebar.querySelectorAll('.rental-nav-link-wrapper'));
+                allWrappers.forEach(function (item) {
                     var cl = item.className.split(/\s+/);
                     var key = '';
                     for (var i = 0; i < cl.length; i++) {
                         if (cl[i].indexOf('model-') === 0) { key = cl[i].substring(6); break; }
                     }
-                    if (!key) return;
+                    if (!key) {
+                        key = (item.dataset.menuTitle || '').replace(/\s+/g, '-').toLowerCase();
+                        if (!key) return;
+                    }
                     var titleEl = item.querySelector('.rental-nav-label');
                     var iconEl = item.querySelector('.rental-nav-icon');
-                    var linkEl = item.querySelector('.rental-nav-submenu a');
+                    var linkEl = item.querySelector('.rental-nav-link');
                     menus.push({
                         key: key,
                         title: titleEl ? titleEl.textContent.trim() : '',

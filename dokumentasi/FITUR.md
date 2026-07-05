@@ -79,10 +79,15 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 
 ## Navigasi Sidebar
 
-- Sidebar admin **expanded secara default**; preferensi collapsed/expanded tersimpan di `localStorage` dan diingat antar sesi
+- 3 accordion utama: **Master Data**, **Transaksi**, **Keuangan** — satu level accordion untuk setiap kategori
+- Setiap item menu berupa link langsung ke halaman daftar (list page)
+- **Tombol "+" (add)** muncul saat hover di samping kanan item — klik untuk langsung ke halaman tambah (create)
+- Tombol "+" tidak tampil untuk menu yang tidak memiliki halaman tambah (contoh: Kalender Booking, Laporan Keuangan)
+- **Active state** (highlight) pada menu yang sedang dibuka
+- **Search filter** (`Ctrl+K`) — mencari menu di sidebar secara real-time
+- Preferensi collapsed/expanded tersimpan di `localStorage` dan diingat antar sesi
 - Tombol ikon pencarian (search) tampil saat sidebar collapsed; klik untuk expand dan langsung fokus ke input pencarian
-- Saat sidebar expanded, ikon pencarian di tombol tersembunyi (sudah ada ikon di dalam input form)
-- **Shortcut Ctrl+K** — expand sidebar dan fokus ke input pencarian dari mana saja
+- Saat sidebar expanded, ikon pencarian di tombol tersembunyi
 - **Menu Favorit** — tombol di bawah search untuk akses cepat ke menu yang sering digunakan
   - Klik untuk melihat daftar menu favorit dalam popup
   - Mode **Edit** untuk menambah/mengurangi menu favorit via checkbox

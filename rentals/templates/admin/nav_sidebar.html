@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load sidebar_helpers %}
 {% url 'admin:rental_booking_calendar' as booking_calendar_url %}
 <button class="sticky toggle-nav-sidebar" id="toggle-nav-sidebar" aria-label="{% translate 'Alihkan navigasi' %}"></button>
 <nav class="sticky rental-nav" id="nav-sidebar" aria-label="{% translate 'Sidebar' %}">
@@ -46,133 +47,99 @@
             <div class="rental-nav-items">
               {% if app.app_label == 'rentals' and app.menu_groups %}
                 {% for group in app.menu_groups %}
-                  <div class="rental-nav-group">
-                    <h3 class="rental-nav-group-title">{{ group.title }}</h3>
-                    {% for model in group.models %}
-                      {% with model_name=model.object_name|lower %}
-                        <details class="rental-nav-item model-{{ model_name }}{% if model.admin_url in request.path|urlencode or model_name == 'rental' and booking_calendar_url in request.path|urlencode %} current-model{% endif %}" data-menu-title="{{ model.name }}" {% if model.admin_url in request.path|urlencode or model_name == 'rental' and booking_calendar_url in request.path|urlencode %}open{% endif %}>
-                          <summary>
-                            <span class="rental-nav-icon" aria-hidden="true">
-                              {% if model_name == 'group' %}
-                                {% include "admin/includes/sidebar_icons/group.svg" %}
-                              {% elif model_name == 'user' %}
-                                {% include "admin/includes/sidebar_icons/user.svg" %}
-                              {% elif model_name == 'vehiclecategory' %}
-                                {% include "admin/includes/sidebar_icons/vehicle.svg" %}
-                              {% elif model_name == 'vehicle' %}
-                                {% include "admin/includes/sidebar_icons/vehicle_list.svg" %}
-                              {% elif model_name == 'customer' %}
-                                {% include "admin/includes/sidebar_icons/customer.svg" %}
-                              {% elif model_name == 'payment' %}
-                                {% include "admin/includes/sidebar_icons/payment.svg" %}
-                              {% elif model_name == 'rental' %}
-                                {% include "admin/includes/sidebar_icons/rental.svg" %}
-                              {% elif model_name == 'maintenancecategory' %}
-                                {% include "admin/includes/sidebar_icons/maintenance_category.svg" %}
-                              {% elif model_name == 'maintenancevendor' %}
-                                {% include "admin/includes/sidebar_icons/maintenance_vendor.svg" %}
-                              {% elif model_name == 'vehiclemaintenance' %}
-                                {% include "admin/includes/sidebar_icons/maintenance.svg" %}
-                              {% elif model_name == 'expensetype' %}
-                                {% include "admin/includes/sidebar_icons/expense_type.svg" %}
-                              {% elif model_name == 'otherexpense' %}
-                                {% include "admin/includes/sidebar_icons/other_expenses.svg" %}
-                              {% elif model_name == 'financialreport' %}
-                                {% include "admin/includes/sidebar_icons/financialreport.svg" %}
-                              {% else %}
-                                {% include "admin/includes/sidebar_icons/rental.svg" %}
-                              {% endif %}
-                            </span>
-                            <span class="rental-nav-label">{{ model.name }}</span>
-                            <span class="rental-nav-plus" aria-hidden="true">
-                              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.20696 20.7071C6.81643 20.3166 6.81643 19.6834 7.20696 19.2929L14.4998 12L7.20696 4.70712C6.81643 4.3166 6.81643 3.68343 7.20696 3.29291L7.91406 2.5858C8.30459 2.19528 8.93775 2.19528 9.32827 2.5858L17.6818 10.9394C18.2676 11.5251 18.2676 12.4749 17.6818 13.0607L9.32828 21.4142C8.93775 21.8048 8.30459 21.8048 7.91406 21.4142L7.20696 20.7071Z" fill="#353438"></path>
-                              </svg>
-                            </span>
-                          </summary>
-                          <div class="rental-nav-submenu">
+                  <details class="rental-nav-group-details{% if group.models|any_url_contains:request.path %} open{% endif %}" {% if group.models|any_url_contains:request.path %}open{% endif %}>
+                    <summary class="rental-nav-group-summary">
+                      <span class="rental-nav-icon" aria-hidden="true">
+                        {% if group.title == 'Master Data' %}
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path opacity="0.4" d="M18.32 12.0002C20.92 12.0002 22 11.0002 21.04 7.72018C20.39 5.51018 18.49 3.61018 16.28 2.96018C13 2.00018 12 3.08018 12 5.68018V8.56018C12 11.0002 13 12.0002 15 12.0002H18.32Z" stroke="#353438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M20.0004 14.6998C19.0704 19.3298 14.6304 22.6898 9.58042 21.8698C5.79042 21.2598 2.74042 18.2098 2.12042 14.4198C1.31042 9.38977 4.65042 4.94977 9.26042 4.00977" stroke="#353438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                        {% elif group.title == 'Transaksi' %}
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M6.73022 19.7C7.55022 18.82 8.80023 18.89 9.52023 19.85L10.5302 21.2C11.3402 22.27 12.6502 22.27 13.4602 21.2L14.4702 19.85C15.1902 18.89 16.4402 18.82 17.2602 19.7C19.0402 21.6 20.4902 20.97 20.4902 18.31V7.04C20.4902 3.01 19.5502 2 15.7702 2H8.21024C4.43024 2 3.49023 3.01 3.49023 7.04V18.3C3.50023 20.97 4.96022 21.59 6.73022 19.7Z" stroke="#353438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path opacity="0.4" d="M9.25 10H14.75" stroke="#353438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                        {% elif group.title == 'Keuangan' %}
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M18.04 13.55C17.62 13.96 17.38 14.55 17.44 15.18C17.53 16.26 18.52 17.05 19.6 17.05H21.5V18.24C21.5 20.31 19.81 22 17.74 22H7.63C7.94 21.74 8.21 21.42 8.42 21.06C8.79 20.46 9 19.75 9 19C9 16.79 7.21 15 5 15C4.06 15 3.19 15.33 2.5 15.88V11.51C2.5 9.44001 4.18999 7.75 6.25999 7.75H17.74C19.81 7.75 21.5 9.44001 21.5 11.51V12.95H19.48C18.92 12.95 18.41 13.17 18.04 13.55Z" stroke="#353438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path opacity="0.4" d="M2.5 12.4098V7.83986C2.5 6.64986 3.23 5.58982 4.34 5.16982L12.28 2.16982C13.52 1.69982 14.85 2.61985 14.85 3.94985V7.74983" stroke="#353438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M22.5608 13.9702V16.0302C22.5608 16.5802 22.1208 17.0302 21.5608 17.0502H19.6008C18.5208 17.0502 17.5308 16.2602 17.4408 15.1802C17.3808 14.5502 17.6208 13.9602 18.0408 13.5502C18.4108 13.1702 18.9208 12.9502 19.4808 12.9502H21.5608C22.1208 12.9702 22.5608 13.4202 22.5608 13.9702Z" stroke="#353438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path opacity="0.4" d="M7 12H14" stroke="#353438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M9 19C9 19.75 8.79 20.46 8.42 21.06C8.21 21.42 7.94 21.74 7.63 22C6.93 22.63 6.01 23 5 23C3.54 23 2.27 22.22 1.58 21.06C1.21 20.46 1 19.75 1 19C1 17.74 1.58 16.61 2.5 15.88C3.19 15.33 4.06 15 5 15C7.21 15 9 16.79 9 19Z" stroke="#353438" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M3.43945 19L4.42944 19.99L6.55945 18.02" stroke="#353438" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+                        {% endif %}
+                      </span>
+                      <span class="rental-nav-label">{{ group.title }}</span>
+                      <span class="rental-nav-group-chevron" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      </span>
+                    </summary>
+                    <div class="rental-nav-group-items">
+                      {% for model in group.models %}
+                        {% with model_name=model.object_name|lower %}
+                          <div class="rental-nav-link-wrapper{% if model.admin_url and model.admin_url in request.path|urlencode %} current{% elif model_name == 'rental' and booking_calendar_url in request.path|urlencode %} current{% endif %}" data-menu-title="{{ model.name }}">
                             {% if model.admin_url %}
-                              <a href="{{ model.admin_url }}"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>
-                                <span class="rental-nav-subicon list" aria-hidden="true"></span>
-                                <span>Daftar {{ model.name|lower }}</span>
+                              <a href="{{ model.admin_url }}" class="rental-nav-link"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>
+                                <span class="rental-nav-icon" aria-hidden="true">
+                                  {% if model_name == 'group' %}
+                                    {% include "admin/includes/sidebar_icons/group.svg" %}
+                                  {% elif model_name == 'user' %}
+                                    {% include "admin/includes/sidebar_icons/user.svg" %}
+                                  {% elif model_name == 'vehiclecategory' %}
+                                    {% include "admin/includes/sidebar_icons/vehicle.svg" %}
+                                  {% elif model_name == 'vehicle' %}
+                                    {% include "admin/includes/sidebar_icons/vehicle_list.svg" %}
+                                  {% elif model_name == 'customer' %}
+                                    {% include "admin/includes/sidebar_icons/customer.svg" %}
+                                  {% elif model_name == 'payment' %}
+                                    {% include "admin/includes/sidebar_icons/payment.svg" %}
+                                  {% elif model_name == 'rental' %}
+                                    {% include "admin/includes/sidebar_icons/rental.svg" %}
+                                  {% elif model_name == 'maintenancecategory' %}
+                                    {% include "admin/includes/sidebar_icons/maintenance_category.svg" %}
+                                  {% elif model_name == 'maintenancevendor' %}
+                                    {% include "admin/includes/sidebar_icons/maintenance_vendor.svg" %}
+                                  {% elif model_name == 'vehiclemaintenance' %}
+                                    {% include "admin/includes/sidebar_icons/maintenance.svg" %}
+                                  {% elif model_name == 'expensetype' %}
+                                    {% include "admin/includes/sidebar_icons/expense_type.svg" %}
+                                  {% elif model_name == 'otherexpense' %}
+                                    {% include "admin/includes/sidebar_icons/other_expenses.svg" %}
+                                  {% elif model_name == 'financialreport' %}
+                                    {% include "admin/includes/sidebar_icons/financialreport.svg" %}
+                                  {% elif model_name == 'bookingcalendar' %}
+                                    {% include "admin/includes/sidebar_icons/booking_calendar.svg" %}
+                                  {% else %}
+                                    {% include "admin/includes/sidebar_icons/rental.svg" %}
+                                  {% endif %}
+                                </span>
+                                <span class="rental-nav-label">{{ model.name }}</span>
                               </a>
                             {% endif %}
                             {% if model.add_url %}
-                              <a href="{{ model.add_url }}">
-                                <span class="rental-nav-subicon add" aria-hidden="true"></span>
-                                <span>Tambah {{ model.name|lower }}</span>
-                              </a>
-                            {% endif %}
-                            {% if model_name == 'rental' %}
-                              <a href="{{ booking_calendar_url }}"{% if booking_calendar_url in request.path|urlencode %} aria-current="page"{% endif %}>
-                                <span class="rental-nav-subicon calendar" aria-hidden="true"></span>
-                                <span>Kalender Booking</span>
+                              <a href="{{ model.add_url }}" class="rental-nav-add-btn" title="Tambah {{ model.name|lower }}">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                               </a>
                             {% endif %}
                           </div>
-                        </details>
-                      {% endwith %}
-                    {% endfor %}
-                  </div>
+                        {% endwith %}
+                      {% endfor %}
+                    </div>
+                  </details>
                 {% endfor %}
               {% else %}
                 {% for model in app.models %}
                   {% with model_name=model.object_name|lower %}
-                    <details class="rental-nav-item model-{{ model_name }}{% if model.admin_url in request.path|urlencode %} current-model{% endif %}" data-menu-title="{{ model.name }}" {% if model.admin_url in request.path|urlencode %}open{% endif %}>
-                      <summary>
-                        <span class="rental-nav-icon" aria-hidden="true">
-                          {% if model_name == 'group' %}
-                            {% include "admin/includes/sidebar_icons/group.svg" %}
-                          {% elif model_name == 'user' %}
-                            {% include "admin/includes/sidebar_icons/user.svg" %}
-                          {% elif model_name == 'vehiclecategory' %}
-                            {% include "admin/includes/sidebar_icons/vehicle.svg" %}
-                          {% elif model_name == 'vehicle' %}
-                            {% include "admin/includes/sidebar_icons/vehicle.svg" %}
-                          {% elif model_name == 'customer' %}
-                            {% include "admin/includes/sidebar_icons/customer.svg" %}
-                          {% elif model_name == 'payment' %}
-                            {% include "admin/includes/sidebar_icons/payment.svg" %}
-                          {% elif model_name == 'rental' %}
-                            {% include "admin/includes/sidebar_icons/rental.svg" %}
-                          {% elif model_name == 'maintenancecategory' %}
-                            {% include "admin/includes/sidebar_icons/maintenance_category.svg" %}
-                          {% elif model_name == 'maintenancevendor' %}
-                            {% include "admin/includes/sidebar_icons/maintenance_vendor.svg" %}
-                          {% elif model_name == 'vehiclemaintenance' %}
-                            {% include "admin/includes/sidebar_icons/maintenance.svg" %}
-                          {% elif model_name == 'expensetype' %}
-                            {% include "admin/includes/sidebar_icons/maintenance_category.svg" %}
-                          {% elif model_name == 'otherexpense' %}
-                            {% include "admin/includes/sidebar_icons/payment.svg" %}
-                          {% elif model_name == 'financialreport' %}
-                            {% include "admin/includes/sidebar_icons/financialreport.svg" %}
-                          {% else %}
-                            {% include "admin/includes/sidebar_icons/rental.svg" %}
-                          {% endif %}
-                        </span>
-                        <span class="rental-nav-label">{{ model.name }}</span>
-                        <span class="rental-nav-plus" aria-hidden="true">
-                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.20696 20.7071C6.81643 20.3166 6.81643 19.6834 7.20696 19.2929L14.4998 12L7.20696 4.70712C6.81643 4.3166 6.81643 3.68343 7.20696 3.29291L7.91406 2.5858C8.30459 2.19528 8.93775 2.19528 9.32827 2.5858L17.6818 10.9394C18.2676 11.5251 18.2676 12.4749 17.6818 13.0607L9.32828 21.4142C8.93775 21.8048 8.30459 21.8048 7.91406 21.4142L7.20696 20.7071Z" fill="#353438"></path>
-                          </svg>
-                        </span>
-                      </summary>
-                      <div class="rental-nav-submenu">
-                        {% if model.admin_url %}
-                          <a href="{{ model.admin_url }}"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>
-                            <span class="rental-nav-subicon list" aria-hidden="true"></span>
-                            <span>Daftar {{ model.name|lower }}</span>
-                          </a>
-                        {% endif %}
-                        {% if model.add_url %}
-                          <a href="{{ model.add_url }}">
-                            <span class="rental-nav-subicon add" aria-hidden="true"></span>
-                            <span>Tambah {{ model.name|lower }}</span>
-                          </a>
-                        {% endif %}
-                      </div>
-                    </details>
+                    <div class="rental-nav-link-wrapper{% if model.admin_url and model.admin_url in request.path|urlencode %} current{% endif %}" data-menu-title="{{ model.name }}">
+                      {% if model.admin_url %}
+                        <a href="{{ model.admin_url }}" class="rental-nav-link"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>
+                          <span class="rental-nav-icon" aria-hidden="true">
+                            {% if model_name == 'group' %}
+                              {% include "admin/includes/sidebar_icons/group.svg" %}
+                            {% elif model_name == 'user' %}
+                              {% include "admin/includes/sidebar_icons/user.svg" %}
+                            {% else %}
+                              {% include "admin/includes/sidebar_icons/rental.svg" %}
+                            {% endif %}
+                          </span>
+                          <span class="rental-nav-label">{{ model.name }}</span>
+                        </a>
+                      {% endif %}
+                      {% if model.add_url %}
+                        <a href="{{ model.add_url }}" class="rental-nav-add-btn" title="Tambah {{ model.name|lower }}">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        </a>
+                      {% endif %}
+                    </div>
                   {% endwith %}
                 {% endfor %}
               {% endif %}
