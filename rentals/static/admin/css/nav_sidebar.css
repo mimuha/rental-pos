@@ -130,7 +130,7 @@
     line-height: 1;
     cursor: pointer;
 }
-@media (max-width: 1999px) {
+@media (max-width: 1199px) {
     .rental-nav-collapse {
         display: none;
     }
