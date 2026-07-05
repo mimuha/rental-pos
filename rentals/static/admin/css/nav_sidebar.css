@@ -22,7 +22,7 @@
     display: flex;
     flex-direction: column;
     min-height: calc(100vh - 8rem);
-    padding: 1.25rem;
+    padding: 1.25rem .75rem;
     background: var(--white2);
     border: 1px solid #aaacaf1a;
     border-radius: 1rem;
@@ -256,6 +256,7 @@
 
 .current-model {
     background: #f6f6f6;
+    border-radius: .75rem;
 }
 
 .rental-nav-collapsed .rental-nav-section .rental-nav-items {
@@ -263,13 +264,10 @@
 } 
 .rental-nav-section .rental-nav-items {
     margin: 1rem 0;
-    border: 0.1px solid var(--abu2header);
-    border-radius: .75rem;
-    box-shadow: var(--rental-box-shadow);
 }
 
 .rental-nav-group-title {
-    padding: 1rem 1rem 0 1rem;
+    padding: 1rem 0 .5rem 0;
     font-size: .85rem !important;
     font-weight: 600;
     color: #667085;
@@ -288,8 +286,7 @@
     grid-template-columns: 2rem minmax(0, 1fr) 2rem;
     align-items: center;
     gap: .75rem;
-    min-height: 3.55rem;
-    padding: .75rem .9rem;
+    min-height: 2.2rem;
     color: #1f2937;
     cursor: pointer;
     list-style: none;
@@ -316,8 +313,7 @@
 .rental-nav-label {
     min-width: 0;
     color: #1f2937;
-    font-size: .9rem;
-    font-weight: 600;
+    font-size: 13px;
     line-height: 1.25;
 }
 

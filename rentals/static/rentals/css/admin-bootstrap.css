@@ -34,7 +34,7 @@
     --bs-success-rgb: rgb(53, 52, 56);
     --bs-info: #e2cb44;
     --bs-info-rgb: 226, 203, 68;
-    --unguhover: lightgray;
+    --unguhover: #ececec;
     --abu2header: #f8f9fa;
 }
 
@@ -251,8 +251,8 @@ div.breadcrumbs a {
     max-width: none;
     margin-right: auto;
     margin-left: auto;
-    padding-right: 1.5rem;
-    padding-left: 1.5rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
 }
 
 .admin-sidebar-col {
