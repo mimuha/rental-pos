@@ -286,7 +286,7 @@ ul.errorlist {
     color: #842029;
     background: #f8d7da;
     border: 1px solid #f5c2c7;
-    border-radius: .375rem;
+    border-radius: .575rem;
 }
 
 ul.errorlist {
@@ -310,7 +310,7 @@ select,
     color: #212529;
     background: #ffffff;
     border: 1px solid #ced4da;
-    border-radius: .375rem;
+    border-radius: .575rem;
 }
 
 input[type="checkbox"],
@@ -341,7 +341,7 @@ a.button {
     color: #ffffff;
     background: #353438;
     border: 1px solid #353438;
-    border-radius: .375rem;
+    border-radius: .575rem;
     font-weight: 600;
     line-height: 1.5;
     text-decoration: none;
@@ -399,7 +399,7 @@ a.button:hover {
     padding: .45rem .8rem;
     color: #ffffff;
     background: #353438;
-    border-radius: .375rem;
+    border-radius: .575rem;
     font-weight: 600;
     text-decoration: none;
 }
@@ -520,7 +520,7 @@ a.button:hover {
     color: #115c4b;
     background: #d8f0ea;
     border: 1px solid #b7ded4;
-    border-radius: .375rem;
+    border-radius: .575rem;
 }
 
 .messagelist li.warning {
@@ -545,7 +545,7 @@ a.button:hover {
 .addlink {
     background: var(--rental-success) !important;
     color: var(--white2) !important;
-    border-radius: .375rem;
+    border-radius: .575rem;
     padding: 5px;
 }
 .addlink:hover,.historylink:hover {
@@ -555,7 +555,7 @@ a.button:hover {
 .historylink {
     background: var(--rental-warning) !important;
     color: var(--white2) !important;
-    border-radius: .375rem;
+    border-radius: .575rem;
     padding: 5px;
 }
 
@@ -598,7 +598,7 @@ a.button:hover {
     padding: .5rem .75rem;
     background: #ffffff;
     border: 1px solid #353438;
-    border-radius: .375rem;
+    border-radius: .575rem;
     transform: translateY(-150%);
 }
 
