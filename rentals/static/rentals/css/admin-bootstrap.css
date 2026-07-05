@@ -350,7 +350,7 @@ textarea,
 select,
 .vTextField {
     border: 1px solid #ced4da;
-    border-radius: .375rem;
+    border-radius: .575rem;
     padding: .45rem .65rem;
 }
 
@@ -371,7 +371,7 @@ a.button {
     background: var(--rental-primary);
     color: #ffffff !important;
     border: 1px solid var(--rental-primary);
-    border-radius: .375rem;
+    border-radius: .575rem;
     padding: .45rem .8rem;
     font-weight: 600;
 }
@@ -409,7 +409,7 @@ a.button:hover {
 .object-tools a:link,
 .object-tools a:visited {
     background: var(--rental-primary);
-    border-radius: .375rem;
+    border-radius: .575rem;
     font-weight: 600;
 }
 
@@ -439,7 +439,7 @@ a.button:hover {
     color: #ffffff;
     background: var(--rental-primary);
     border: none;
-    border-radius: .375rem;
+    border-radius: .575rem;
     font-size: inherit;
     font-weight: 600;
     cursor: pointer;
@@ -519,7 +519,7 @@ a.button:hover {
     color: #111827;
     background: transparent;
     border: 0;
-    border-radius: .375rem;
+    border-radius: .575rem;
     font-size: 1.25rem;
     line-height: 1;
     cursor: pointer;
@@ -750,7 +750,7 @@ a.button:hover {
 }
 
 .messagelist li {
-    border-radius: .375rem;
+    border-radius: .575rem;
 }
 
 .bootstrap-admin-dashboard #content {
@@ -1156,7 +1156,7 @@ a:focus {
 }
 .submit-row a.deletelink {
     background: tomato !important;
-    border-radius: 4px !important;
+    border-radius: .575rem !important;
     padding: 1rem !important;
     height: auto !important;
     line-height: 0 !important;
