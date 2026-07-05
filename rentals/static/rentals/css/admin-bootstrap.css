@@ -11,6 +11,7 @@
     --header-bg: #ffffff;
     --header-color: #353438;
     --breadcrumbs-bg: #f8f9fa;
+    --breadcrumbs-color: #40a7b9;
     --rental-pos-title: #353438;
     --rental-pos-subtitle: #5a595d;
     --border-color: #d1d1d3;
@@ -210,16 +211,16 @@ textarea {
 }
 
 div.breadcrumbs {
-    background: var(--abu2header) !important;
+    background: var(--white2) !important;
     color: #6c757d !important;
     padding: .85rem 1.5rem !important;
     border-bottom: 1px solid var(--border-color) !important;
-    border-radius: 1rem;
+    border-radius: .75rem;
     margin: 1rem 0 0;
 }
 
 div.breadcrumbs a {
-    color: var(--rental-primary);
+    color: var(--breadcrumbs-color) !important;
 }
 
 .main {
