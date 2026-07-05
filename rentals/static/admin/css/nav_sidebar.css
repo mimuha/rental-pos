@@ -478,7 +478,7 @@
 
 .admin-sidebar-col.rental-nav-collapsed {
     flex: 0 0 4.75rem;
-    max-width: 4.75rem;
+    max-width: 4.25rem;
 }
 
 .admin-sidebar-col.rental-nav-collapsed + .admin-main-col {
