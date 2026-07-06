@@ -1,5 +1,5 @@
 :root {
-    --body-bg: #f5f6f7;
+    --body-bg: #eaf8ff;
     --body-fg: #353438;
     --white: #ffffff;
     --white2: #ffffffe5;
@@ -14,7 +14,7 @@
     --breadcrumbs-color: #40a7b9;
     --rental-pos-title: #353438;
     --rental-pos-subtitle: #5a595d;
-    --border-color: #d1d1d3;
+    --border-color: #ccede4;
     --rental-primary: #353438;
     --rental-primary-dark: #1f1e21;
     --rental-primary-soft: #f7f7f7;
@@ -25,7 +25,7 @@
     --rental-gold-border: rgba(226, 203, 68, 0.35);
     --rental-danger: #e84a4a;
     --rental-box-shadow: rgb(47 77 81 / 10%) 0px 11px 16px -13px;
-    --rental-success: #3cb371;
+    --rental-success: #3cb399;
     --rental-warning: #ffa500;
     --bs-primary: #353438;
     --bs-primary-rgb: rgb(53, 52, 56);
