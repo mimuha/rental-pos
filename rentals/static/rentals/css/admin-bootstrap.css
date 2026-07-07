@@ -361,11 +361,11 @@ tbody tr {
     transition: .5s ease;
 }
 
-.fc-scrollgrid-sync-table tbody tr:hover {
-    background: #efefef !important;
+.results tbody tr:hover, .fc-scrollgrid-sync-table tbody tr:hover {
+    background: #f6f9f9 !important;
 }
 tbody tr:hover {
-    background: #fcfcfc;
+    background: #fff;
 }
 
 tbody tr th a {
