@@ -252,7 +252,7 @@ div.breadcrumbs a {
 }
 
 .container-full {
-    max-width: none;
+    max-width: 1360px;
     margin-right: auto;
     margin-left: auto;
     padding-right: 1rem;

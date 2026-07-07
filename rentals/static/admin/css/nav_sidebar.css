@@ -21,7 +21,6 @@
 .rental-nav-shell {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 8rem);
     padding: 1.25rem .75rem;
     background: var(--white2);
     border: 1px solid #aaacaf1a;
