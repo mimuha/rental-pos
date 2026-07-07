@@ -364,6 +364,11 @@ tbody tr {
 .results tbody tr:hover, .fc-scrollgrid-sync-table tbody tr:hover {
     background: #f6f9f9 !important;
 }
+
+.fc-scrollgrid-sync-inner:hover {
+    background: #ececec !important;
+}
+
 tbody tr:hover {
     background: #fff;
 }
