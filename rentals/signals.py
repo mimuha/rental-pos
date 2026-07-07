@@ -45,6 +45,7 @@ def handle_rental_other_expenses(sender, instance, created, **kwargs):
                 total_cost=instance.additional_fee,
                 status=OtherExpense.Status.PLANNED,
                 reference_number=f'dari {instance.invoice_number} ({instance.customer.full_name})',
+                payee=instance.customer.full_name,
             )
     else:
         if fee_changed or desc_changed:
@@ -57,6 +58,9 @@ def handle_rental_other_expenses(sender, instance, created, **kwargs):
                     if desc_changed:
                         linked_expense.description = description
                         update_fields.append('description')
+                    if not linked_expense.payee:
+                        linked_expense.payee = instance.customer.full_name
+                        update_fields.append('payee')
                     if update_fields:
                         update_fields.append('updated_at')
                         linked_expense.save(update_fields=update_fields)
@@ -69,6 +73,7 @@ def handle_rental_other_expenses(sender, instance, created, **kwargs):
                         total_cost=instance.additional_fee,
                         status=OtherExpense.Status.PLANNED,
                         reference_number=f'dari {instance.invoice_number} ({instance.customer.full_name})',
+                        payee=instance.customer.full_name,
                     )
             elif linked_expense:
                 linked_expense.delete()

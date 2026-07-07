@@ -120,7 +120,7 @@ User ── MenuFavorite (1:N)
 |-------|------|------------|
 | expense_type | FK → ExpenseType, PROTECT | Jenis |
 | expense_date | DateTimeField | Tanggal |
-| payee | CharField(150) | Penerima |
+| payee | CharField(150) | Penerima (auto terisi nama pelanggan dari biaya tambahan) |
 | description | TextField | Deskripsi |
 | total_cost | DecimalField(12,2) | Total biaya |
 | status | CharField(20) | Rencana/Dikerjakan/Selesai/Dibatalkan |
@@ -190,6 +190,7 @@ Saat field `additional_fee` diisi pada form **Order Rental**, sistem otomatis me
    - `status` = **Direncanakan**
    - `total_cost` = nilai `additional_fee`
    - `description` = isian `additional_fee_description` (jika diisi), atau auto `"Biaya tambahan order {invoice}"`
+   - `payee` = auto terisi nama pelanggan (`customer.full_name`)
 
 2. **Order diaktifkan** (Draf → Aktif) → status `OtherExpense` berubah ke **Dikerjakan**
 
