@@ -361,6 +361,9 @@ tbody tr {
     transition: .5s ease;
 }
 
+.fc-scrollgrid-sync-table tbody tr:hover {
+    background: #fff !important;
+}
 tbody tr:hover {
     background: #efefef;
 }
@@ -370,7 +373,7 @@ tbody tr th a {
 }
 
 tbody tr th a:hover {
-    color: #c54444 !important;
+    color: var(--rental-danger) !important;
 }
 
 input[type="text"],
