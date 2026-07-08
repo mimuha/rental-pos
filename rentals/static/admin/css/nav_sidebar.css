@@ -340,9 +340,9 @@
 }
 
 .rental-nav-collapsed .rental-nav-group-items-inner {
-    margin: 0 0 .25rem 0rem;
-    padding: 0 0 0 3px;
-    border-left: 1px solid var(--border-color);
+    margin: 0 0 .25rem 0;
+    padding: 0 0 0 0;
+    border-left: 0px solid var(--border-color);
 }
 
 .rental-nav-group-items-inner {
