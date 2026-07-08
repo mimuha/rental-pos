@@ -12,10 +12,30 @@
         const searchInput = sidebar.querySelector('#nav-filter');
         const items = Array.from(sidebar.querySelectorAll('.rental-nav-link-wrapper'));
 
+        var prevDetailsOpen = [];
+
         function setCollapsed(isCollapsed) {
             if (!sidebarColumn) {
                 return;
             }
+
+            var allDetails = sidebar.querySelectorAll('.rental-nav-group-details');
+
+            if (isCollapsed) {
+                prevDetailsOpen = [];
+                allDetails.forEach(function(d) {
+                    prevDetailsOpen.push(d.open);
+                    d.open = true;
+                });
+            } else {
+                allDetails.forEach(function(d, i) {
+                    if (i < prevDetailsOpen.length) {
+                        d.open = prevDetailsOpen[i];
+                    }
+                });
+                prevDetailsOpen = [];
+            }
+
             sidebarColumn.classList.toggle('rental-nav-collapsed', isCollapsed);
             localStorage.setItem('rental.admin.navCollapsed', isCollapsed ? 'true' : 'false');
             if (collapseButton) {

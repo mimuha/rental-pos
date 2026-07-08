@@ -509,6 +509,7 @@
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-label,
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-group-chevron,
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-add-btn,
+.admin-sidebar-col.rental-nav-collapsed .rental-nav-group-summary,
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite span:not(.rental-nav-favorite-icon),
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite-arrow  {
     display: none;
@@ -573,13 +574,6 @@
     justify-content: center;
     min-height: auto;
     padding: 0;
-}
-
-.admin-sidebar-col.rental-nav-collapsed .rental-nav-group-summary {
-    display: flex;
-    justify-content: center;
-    min-height: auto;
-    padding: .25rem 0;
 }
 
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite {
