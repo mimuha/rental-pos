@@ -94,7 +94,7 @@ tbody, td, tfoot, th, thead, tr {
 
 #user-tools {
     color: #6c757d;
-    font-size: .875rem;
+    font-size: .75rem;
     text-align: right;
 }
 
@@ -275,7 +275,7 @@ p.help {
     display: block;
     margin-top: .375rem;
     color: #6c757d;
-    font-size: .875rem;
+    font-size: .75rem;
 }
 
 .errornote,
@@ -578,7 +578,7 @@ a.button:hover {
 .quiet,
 .mini {
     color: #6c757d;
-    font-size: .875rem;
+    font-size: .75rem;
 }
 
 .clear {
