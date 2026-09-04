@@ -1284,15 +1284,15 @@ html[data-theme="light"] .theme-toggle .theme-label-when-light {
 
 /* ICONS */
 .theme-toggle svg.theme-icon-when-dark {
-    fill: #000;
-    color: #fff;
+    fill: #fff;
+    color: #000;
     border-radius: 5px;
 }
 
 .theme-toggle svg.theme-icon-when-light,
 .theme-toggle svg.theme-icon-when-auto {
-    fill: #fff;
-    color: #000;
+    fill: #000;
+    color: #fff;
     border-radius: 5px;
 }
 
