@@ -525,6 +525,15 @@
         fill: #e2cb44;
     }
 
+    /* Dashboard menu icons (rental-menu-icon) — force white */
+    html[data-theme="auto"] .rental-menu-icon svg * {
+        stroke: #ffffff;
+    }
+
+    html[data-theme="auto"] .rental-menu-icon svg [fill="#353438"] {
+        fill: #ffffff;
+    }
+
     /* Login page */
     html[data-theme="auto"] body.login {
         background: radial-gradient(circle at top left, rgba(226, 203, 68, 0.12), transparent 30rem), #121216;
@@ -1134,6 +1143,15 @@ html[data-theme="dark"] .rental-admin-brand-icon svg .st0 {
     fill: #e2cb44;
 }
 
+/* Dashboard menu icons (rental-menu-icon) — force white */
+html[data-theme="dark"] .rental-menu-icon svg * {
+    stroke: #ffffff;
+}
+
+html[data-theme="dark"] .rental-menu-icon svg [fill="#353438"] {
+    fill: #ffffff;
+}
+
 /* Login page */
 html[data-theme="dark"] body.login {
     background: radial-gradient(circle at top left, rgba(226, 203, 68, 0.12), transparent 30rem), #121216;
@@ -1268,8 +1286,8 @@ html[data-theme="light"] .theme-toggle .theme-label-when-light {
 .theme-toggle svg.theme-icon-when-auto,
 .theme-toggle svg.theme-icon-when-dark,
 .theme-toggle svg.theme-icon-when-light {
-    fill: var(--header-link-color);
-    color: var(--white2);
+    fill: currentColor;
+    color: var(--rental-pos-title);
     border-radius: 5px;
 }
 
