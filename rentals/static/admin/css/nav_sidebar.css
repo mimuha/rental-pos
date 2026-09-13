@@ -496,7 +496,7 @@
 
 .admin-sidebar-col.rental-nav-collapsed + .admin-main-col {
     flex: 1 1 0;
-    max-width: calc(100% - 4.75rem);
+    max-width: calc(100% - 64px);
 }
 
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-shell {
