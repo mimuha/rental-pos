@@ -215,7 +215,7 @@ div.breadcrumbs {
     color: #6c757d !important;
     padding: .85rem 1.5rem !important;
     border-bottom: 1px solid var(--border-color) !important;
-    border-radius: .75rem;
+    border-radius: .325rem;
     margin: 1rem 0 0;
 }
 
@@ -234,7 +234,7 @@ div.breadcrumbs a {
     padding: 1.5rem .75rem;
     background: var(--white2) !important;
     border: 1px solid var(--white2) !important;
-    border-radius: 1rem !important;
+    border-radius: .325rem !important;
     box-shadow: var(--rental-box-shadow);
 }
 
@@ -914,7 +914,7 @@ a.button:hover {
 }
 
 .admin-card {
-    border-radius: 1rem !important;
+    border-radius: .325rem !important;
     overflow: hidden;
     box-shadow: var(--rental-box-shadow);
     padding-bottom: 1rem;
