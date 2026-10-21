@@ -137,7 +137,6 @@ class VehiclePhotoInline(admin.TabularInline):
     readonly_fields = ('url', 'order')
     verbose_name = 'Foto kendaraan'
     verbose_name_plural = 'Foto kendaraan (maks. 5, @max 1MB)'
-    readonly_fields = []
 
     class Media:
         css = {"all": ("admin/css/vehicle_photos_inline.css",)}

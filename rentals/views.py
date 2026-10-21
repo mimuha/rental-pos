@@ -1,5 +1,6 @@
 import json
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime, timedelta
+from datetime import timezone as dt_timezone
 
 from django.contrib import admin
 from django.core.exceptions import ValidationError
@@ -44,6 +45,20 @@ def _date_range(start_date, end_date):
     while current < end_date:
         yield current
         current += timedelta(days=1)
+
+
+def _localize_wall_time(naive_value, tz):
+    candidate = naive_value.replace(tzinfo=tz)
+    if candidate.astimezone(dt_timezone.utc).astimezone(tz).replace(tzinfo=None) == naive_value:
+        return candidate
+
+    for minutes in range(1, 181):
+        shifted = naive_value + timedelta(minutes=minutes)
+        candidate = shifted.replace(tzinfo=tz)
+        if candidate.astimezone(dt_timezone.utc).astimezone(tz).replace(tzinfo=None) == shifted:
+            return candidate
+
+    return naive_value.replace(tzinfo=tz)
 
 
 def booking_calendar(request):
@@ -188,15 +203,29 @@ def booking_calendar_reschedule(request):
     if new_start_date is None:
         return JsonResponse({'ok': False, 'error': 'Tanggal mulai tidak valid.'}, status=400)
 
-    original_start = timezone.localtime(rental.start_at) if timezone.is_aware(rental.start_at) else rental.start_at
-    original_end = timezone.localtime(rental.expected_return_at) if timezone.is_aware(rental.expected_return_at) else rental.expected_return_at
-    duration = original_end - original_start
-    new_start = datetime.combine(new_start_date, original_start.time() or time(hour=9))
-    if timezone.is_naive(new_start):
-        new_start = timezone.make_aware(new_start, timezone.get_current_timezone())
+    current_tz = timezone.get_current_timezone()
+    original_start = rental.start_at
+    original_end = rental.expected_return_at
+    if timezone.is_naive(original_start):
+        original_start = timezone.make_aware(original_start, current_tz)
+    if timezone.is_naive(original_end):
+        original_end = timezone.make_aware(original_end, current_tz)
+
+    duration = (
+        original_end.astimezone(dt_timezone.utc)
+        - original_start.astimezone(dt_timezone.utc)
+    )
+    time_of_day = original_start.astimezone(current_tz).timetz().replace(tzinfo=None)
+    new_start = _localize_wall_time(
+        datetime.combine(new_start_date, time_of_day),
+        current_tz,
+    )
+    new_end = (
+        new_start.astimezone(dt_timezone.utc) + duration
+    ).astimezone(current_tz)
 
     rental.start_at = new_start
-    rental.expected_return_at = new_start + duration
+    rental.expected_return_at = new_end
 
     try:
         rental.save(update_fields=['start_at', 'expected_return_at', 'updated_at'])

@@ -1,4 +1,7 @@
+import ipaddress
 import time
+
+from django.conf import settings
 from django.core.cache import cache
 from django.http import HttpResponse
 
@@ -42,7 +45,22 @@ class LoginRateLimitMiddleware:
 
     @staticmethod
     def _client_ip(request):
+        remote_addr = request.META.get('REMOTE_ADDR', '')
+        trusted_proxies = getattr(settings, 'TRUSTED_PROXY_COUNT', 0)
+
+        if trusted_proxies <= 0:
+            return remote_addr
+
         x_forwarded = request.headers.get('X-Forwarded-For', '')
-        if x_forwarded:
-            return x_forwarded.split(',')[0].strip()
-        return request.META.get('REMOTE_ADDR', '')
+        if not x_forwarded:
+            return remote_addr
+
+        parts = [part.strip() for part in x_forwarded.split(',') if part.strip()]
+        if len(parts) < trusted_proxies:
+            return remote_addr
+
+        candidate = parts[-trusted_proxies]
+        try:
+            return str(ipaddress.ip_address(candidate))
+        except ValueError:
+            return remote_addr

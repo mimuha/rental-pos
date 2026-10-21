@@ -36,7 +36,8 @@ Dokumentasi langkah keamanan yang telah diterapkan pada aplikasi.
 - Maksimal **5 percobaan gagal** dalam **15 menit** per IP
 - IP di-*block* **30 menit** jika melebihi batas (HTTP 429)
 - Counter otomatis reset saat login berhasil
-- Mendeteksi IP asli via `X-Forwarded-For` (Render proxy)
+- IP asli diambil dari `X-Forwarded-For` hanya jika `TRUSTED_PROXY_COUNT` > 0; jumlah proxy dihitung dari kanan sehingga header palsu dari client tidak bisa dipakai untuk bypass
+- Cache rate-limit dapat memakai `REDIS_URL`; tanpa itu dipakai `FileBasedCache` agar counter tetap berlaku lintas worker pada satu host
 
 ## Session Idle Timeout
 
@@ -67,9 +68,11 @@ Dokumentasi langkah keamanan yang telah diterapkan pada aplikasi.
 - Maksimal **5 foto** per kendaraan (validasi server-side di `vehicle_photo_upload`)
 - Hanya tipe gambar yang diterima (`accept="image/*"`)
 
-## Debug
+## Debug & Secret
 
-- `DEBUG = False` di production
+- `DEBUG` dikontrol `DJANGO_DEBUG` (default `False`)
+- `DJANGO_SECRET_KEY` wajib diset; aplikasi gagal start jika kosong saat `DEBUG=False`
+- `SESSION_COOKIE_SECURE` dan `CSRF_COOKIE_SECURE` otomatis aktif saat `DEBUG=False`
 
 ## Rotasi Kredensial (Riwayat)
 

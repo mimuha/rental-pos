@@ -1,16 +1,22 @@
-from datetime import timedelta
+import json
+from datetime import datetime, time, timedelta, timezone as dt_timezone
 from decimal import Decimal
+from zoneinfo import ZoneInfo
 
 from django.contrib import admin
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth import get_user_model
 from django.contrib.messages.storage.fallback import FallbackStorage
-from django.test import TestCase
+from django.core.cache import cache
+from django.http import HttpResponse
+from django.test import TestCase, override_settings
 from django.test.client import RequestFactory
+from django.urls import reverse
 from django.utils import timezone
 
 from .admin import RentalAdmin, rental_admin_app_index
 from .dashboard import apply_rental_menu_groups, get_dashboard_context, group_rental_menu
+from .middleware import LoginRateLimitMiddleware
 from .models import (
     Customer,
     ExpenseType,
@@ -22,6 +28,7 @@ from .models import (
     Vehicle,
     VehicleCategory,
     VehicleMaintenance,
+    VehiclePhoto,
 )
 
 
@@ -195,9 +202,18 @@ class RentalMenuGroupTests(TestCase):
         apply_rental_menu_groups(app_list)
 
         self.assertNotIn('menu_groups', app_list[0])
-        self.assertEqual(len(app_list[1]['menu_groups']), 2)
+        self.assertEqual(len(app_list[1]['menu_groups']), 3)
         self.assertEqual(app_list[1]['menu_groups'][0]['title'], 'Master Data')
-        self.assertEqual(app_list[1]['menu_groups'][1]['title'], 'Keuangan')
+        self.assertEqual(app_list[1]['menu_groups'][1]['title'], 'Transaksi')
+        self.assertEqual(app_list[1]['menu_groups'][2]['title'], 'Keuangan')
+        self.assertEqual(
+            app_list[1]['menu_groups'][1]['models'][0]['object_name'],
+            'bookingcalendar',
+        )
+        self.assertEqual(
+            app_list[1]['menu_groups'][2]['models'][-1]['object_name'],
+            'financialreport',
+        )
 
     def test_rental_admin_each_context_applies_menu_groups_to_available_apps(self):
         User = get_user_model()
@@ -299,3 +315,239 @@ class DashboardContextTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/admin/?period=2026-05')
+
+
+class RentalSignalConsistencyTests(TestCase):
+    def setUp(self):
+        self.customer = Customer.objects.create(
+            full_name='Atep Tatang',
+            identity_number='ID-SIGNAL',
+            phone_number='08123456789',
+            address='Bandung',
+        )
+        self.category = VehicleCategory.objects.create(name='MPV Signal')
+        self.vehicle = Vehicle.objects.create(
+            category=self.category,
+            plate_number='B9001SIG',
+            brand='Toyota',
+            model='Avanza',
+            year=2024,
+            transmission=Vehicle.Transmission.MANUAL,
+            fuel_type=Vehicle.FuelType.GASOLINE,
+            daily_rate=Decimal('150000.00'),
+            odometer=1000,
+        )
+        self.start_at = timezone.make_aware(datetime(2026, 5, 24, 7, 0))
+
+    def create_rental(self, **kwargs):
+        defaults = {
+            'customer': self.customer,
+            'vehicle': self.vehicle,
+            'start_at': self.start_at,
+            'expected_return_at': self.start_at + timedelta(days=1),
+            'start_odometer': 1000,
+            'daily_rate': Decimal('150000.00'),
+        }
+        defaults.update(kwargs)
+        return Rental.objects.create(**defaults)
+
+    def linked_expense(self, rental):
+        return OtherExpense.objects.filter(
+            rental=rental,
+            expense_type__name='Biaya Operasional Perjalanan',
+        ).first()
+
+    def test_update_fields_excluding_fee_does_not_create_expense(self):
+        rental = self.create_rental()
+        rental.additional_fee = Decimal('75000.00')
+
+        rental.save(update_fields=['status', 'updated_at'])
+        rental.refresh_from_db()
+
+        self.assertEqual(rental.additional_fee, Decimal('0.00'))
+        self.assertIsNone(self.linked_expense(rental))
+
+    def test_update_fields_including_fee_keeps_expense_in_sync(self):
+        rental = self.create_rental()
+        rental.additional_fee = Decimal('75000.00')
+        rental.save(update_fields=['additional_fee', 'updated_at'])
+
+        expense = self.linked_expense(rental)
+        self.assertIsNotNone(expense)
+        self.assertEqual(expense.total_cost, Decimal('75000.00'))
+
+        rental.additional_fee = Decimal('125000.00')
+        rental.save(update_fields=['additional_fee', 'updated_at'])
+        expense.refresh_from_db()
+        self.assertEqual(expense.total_cost, Decimal('125000.00'))
+
+        rental.additional_fee = Decimal('0.00')
+        rental.save(update_fields=['additional_fee', 'updated_at'])
+        self.assertIsNone(self.linked_expense(rental))
+
+    def test_created_active_rental_syncs_vehicle_and_expense(self):
+        rental = self.create_rental(
+            status=Rental.Status.ACTIVE,
+            additional_fee=Decimal('50000.00'),
+        )
+
+        self.vehicle.refresh_from_db()
+        expense = self.linked_expense(rental)
+        self.assertEqual(self.vehicle.status, Vehicle.Status.RENTED)
+        self.assertIsNotNone(expense)
+        self.assertEqual(expense.status, OtherExpense.Status.IN_PROGRESS)
+
+
+class VehiclePhotoModelTests(TestCase):
+    def test_vehicle_photo_table_is_available(self):
+        category = VehicleCategory.objects.create(name='MPV Photo')
+        vehicle = Vehicle.objects.create(
+            category=category,
+            plate_number='B9002PHT',
+            brand='Toyota',
+            model='Avanza',
+            year=2024,
+            transmission=Vehicle.Transmission.MANUAL,
+            fuel_type=Vehicle.FuelType.GASOLINE,
+            daily_rate=Decimal('150000.00'),
+            odometer=1000,
+        )
+
+        photo = VehiclePhoto.objects.create(
+            vehicle=vehicle,
+            url='https://example.com/photo.jpg',
+            order=1,
+        )
+
+        self.assertEqual(VehiclePhoto.objects.filter(vehicle=vehicle).count(), 1)
+        self.assertEqual(photo.order, 1)
+
+
+@override_settings(SECURE_SSL_REDIRECT=False)
+class BookingCalendarRescheduleTests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_superuser(
+            username='reschedule_admin',
+            email='reschedule@example.com',
+            password='password123',
+        )
+        self.client.force_login(self.user)
+        self.customer = Customer.objects.create(
+            full_name='Atep Tatang',
+            identity_number='ID-RESCHEDULE',
+            phone_number='08123456789',
+            address='Bandung',
+        )
+        self.category = VehicleCategory.objects.create(name='MPV Reschedule')
+        self.vehicle = Vehicle.objects.create(
+            category=self.category,
+            plate_number='B9003RSC',
+            brand='Toyota',
+            model='Avanza',
+            year=2024,
+            transmission=Vehicle.Transmission.MANUAL,
+            fuel_type=Vehicle.FuelType.GASOLINE,
+            daily_rate=Decimal('150000.00'),
+            odometer=1000,
+        )
+        self.url = reverse('admin:rental_booking_calendar_reschedule')
+
+    def create_rental(self, start_at):
+        return Rental.objects.create(
+            customer=self.customer,
+            vehicle=self.vehicle,
+            start_at=start_at,
+            expected_return_at=start_at + timedelta(days=1),
+            start_odometer=1000,
+            daily_rate=Decimal('150000.00'),
+        )
+
+    def reschedule(self, rental, new_date):
+        return self.client.post(
+            self.url,
+            data=json.dumps({
+                'event_id': f'rental-{rental.pk}',
+                'start': new_date,
+            }),
+            content_type='application/json',
+        )
+
+    def test_reschedule_preserves_midnight_start_time(self):
+        rental = self.create_rental(timezone.make_aware(datetime(2026, 5, 24, 0, 0)))
+
+        response = self.reschedule(rental, '2026-06-01')
+        rental.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(timezone.localtime(rental.start_at).time(), time(0, 0))
+        self.assertEqual(
+            rental.expected_return_at - rental.start_at,
+            timedelta(days=1),
+        )
+
+    def test_reschedule_handles_nonexistent_dst_time(self):
+        tz = ZoneInfo('America/New_York')
+        with timezone.override(tz):
+            rental = self.create_rental(datetime(2026, 3, 1, 2, 30, tzinfo=tz))
+
+            response = self.reschedule(rental, '2026-03-08')
+            rental.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        local_start = rental.start_at.astimezone(tz)
+        self.assertEqual((local_start.hour, local_start.minute), (3, 0))
+
+    def test_reschedule_handles_ambiguous_dst_time(self):
+        tz = ZoneInfo('America/New_York')
+        with timezone.override(tz):
+            rental = self.create_rental(datetime(2026, 10, 1, 1, 30, tzinfo=tz))
+
+            response = self.reschedule(rental, '2026-11-01')
+            rental.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        local_start = rental.start_at.astimezone(tz)
+        self.assertEqual((local_start.hour, local_start.minute), (1, 30))
+        self.assertEqual(local_start.fold, 0)
+
+
+class LoginRateLimitMiddlewareTests(TestCase):
+    def setUp(self):
+        cache.clear()
+
+    def build_request(self, remote_addr, forwarded_for=None):
+        meta = {'REMOTE_ADDR': remote_addr}
+        if forwarded_for is not None:
+            meta['HTTP_X_FORWARDED_FOR'] = forwarded_for
+        return RequestFactory().post('/admin/login/', **meta)
+
+    def call_middleware(self, request):
+        middleware = LoginRateLimitMiddleware(lambda req: HttpResponse(status=200))
+        return middleware(request)
+
+    @override_settings(TRUSTED_PROXY_COUNT=0)
+    def test_x_forwarded_for_spoofing_does_not_bypass_limit(self):
+        for index in range(5):
+            self.call_middleware(
+                self.build_request('10.0.0.5', f'198.51.100.{index}')
+            )
+
+        response = self.call_middleware(
+            self.build_request('10.0.0.5', '203.0.113.99')
+        )
+
+        self.assertEqual(response.status_code, 429)
+
+    @override_settings(TRUSTED_PROXY_COUNT=1)
+    def test_trusted_proxy_uses_client_ip_from_forwarded_header(self):
+        for _ in range(5):
+            self.call_middleware(
+                self.build_request('10.0.0.6', '203.0.113.10')
+            )
+
+        response = self.call_middleware(
+            self.build_request('10.0.0.6', '203.0.113.11')
+        )
+
+        self.assertEqual(response.status_code, 200)

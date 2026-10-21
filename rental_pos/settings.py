@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
+import tempfile
 from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,16 +38,37 @@ load_dotenv(BASE_DIR / '.env')
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-3n0slt74&b-^aj*+y)lmy00qodu&fl^bmphhrf0knm7)+ll1&p')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '').strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False').strip().lower() in ('1', 'true', 'yes', 'on')
+
+if not SECRET_KEY:
+    if DEBUG:
+        SECRET_KEY = 'django-insecure-local-development-only-key'
+    else:
+        raise ImproperlyConfigured(
+            'DJANGO_SECRET_KEY wajib diset saat DEBUG=False. '
+            'Generate dengan: openssl rand -base64 50'
+        )
 
 _ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '')
 if _ALLOWED_HOSTS:
     ALLOWED_HOSTS = [h.strip() for h in _ALLOWED_HOSTS.split(',') if h.strip()]
 else:
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
+
+def _env_int(name, default):
+    try:
+        return int(os.environ.get(name, default))
+    except (TypeError, ValueError):
+        return default
+
+
+# Jumlah reverse proxy tepercaya di depan aplikasi.
+# 0 berarti X-Forwarded-For diabaikan (paling aman bila tanpa proxy).
+TRUSTED_PROXY_COUNT = max(0, _env_int('TRUSTED_PROXY_COUNT', 0))
 
 
 # Application definition
@@ -166,6 +190,25 @@ STATICFILES_DIRS = [
 LOGIN_URL = '/admin/login/'
 LOGIN_REDIRECT_URL = '/admin/'
 
+_REDIS_URL = os.environ.get('REDIS_URL', '').strip()
+if _REDIS_URL:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': _REDIS_URL,
+        },
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': os.environ.get(
+                'DJANGO_CACHE_DIR',
+                str(Path(tempfile.gettempdir()) / 'rental-pos-cache'),
+            ),
+        },
+    }
+
 # ---- Production Security Settings ----
 # Render terminates SSL at load balancer, forwards internally as HTTP
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -179,11 +222,14 @@ for host in ALLOWED_HOSTS:
         CSRF_TRUSTED_ORIGINS.append(f'https://{host}')
 
 SECURE_SSL_REDIRECT = (
-    os.environ.get('DJANGO_SECURE_SSL_REDIRECT', 'True').lower() == 'true'
+    os.environ.get(
+        'DJANGO_SECURE_SSL_REDIRECT',
+        'False' if DEBUG else 'True',
+    ).strip().lower() == 'true'
 )
 
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 SESSION_COOKIE_AGE = int(os.environ.get('DJANGO_SESSION_TIMEOUT', '3600'))
 SESSION_SAVE_EVERY_REQUEST = True

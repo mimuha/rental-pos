@@ -1,7 +1,7 @@
 import re
 
 from django.conf import settings
-from django.db import models
+from django.db import models, transaction, IntegrityError
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.utils import timezone
@@ -115,13 +115,70 @@ class VehiclePhoto(models.Model):
 
     class Meta:
         db_table = 'vehicle_photos'
-        managed = False
         ordering = ['order']
         verbose_name = 'Foto kendaraan'
         verbose_name_plural = 'Foto kendaraan'
 
     def __str__(self):
         return f'Foto {self.vehicle} - {self.order}'
+
+
+class InvoiceSequence(models.Model):
+    prefix = models.CharField('Prefix invoice', max_length=30)
+    year = models.PositiveIntegerField('Tahun')
+    last_number = models.PositiveIntegerField('Nomor terakhir', default=0)
+
+    class Meta:
+        unique_together = [('prefix', 'year')]
+        verbose_name = 'Sequence invoice'
+        verbose_name_plural = 'Sequence invoice'
+
+    def __str__(self):
+        return f'{self.prefix}-{self.year}: {self.last_number}'
+
+
+def _max_invoice_sequence(model, prefix):
+    pattern = re.compile(rf'^{re.escape(prefix)}(\d+)$')
+    max_sequence = 0
+
+    invoice_numbers = model.objects.filter(
+        invoice_number__startswith=prefix,
+    ).values_list('invoice_number', flat=True)
+    for invoice_number in invoice_numbers:
+        match = pattern.match(invoice_number)
+        if match:
+            max_sequence = max(max_sequence, int(match.group(1)))
+
+    return max_sequence
+
+
+def _next_sequence_number(prefix, year, model):
+    full_prefix = f'{prefix}-{year}-'
+
+    for _ in range(5):
+        try:
+            with transaction.atomic():
+                sequence = InvoiceSequence.objects.select_for_update().filter(
+                    prefix=prefix,
+                    year=year,
+                ).first()
+
+                if sequence is None:
+                    last_number = _max_invoice_sequence(model, full_prefix)
+                    sequence = InvoiceSequence.objects.create(
+                        prefix=prefix,
+                        year=year,
+                        last_number=last_number + 1,
+                    )
+                    return sequence.last_number
+
+                sequence.last_number += 1
+                sequence.save(update_fields=['last_number'])
+                return sequence.last_number
+        except IntegrityError:
+            continue
+
+    raise IntegrityError('Gagal membuat nomor invoice unik.')
 
 
 MAX_PHOTOS_PER_VEHICLE = 5
@@ -277,19 +334,8 @@ class OtherExpense(TimeStampedModel):
 
     @classmethod
     def generate_invoice_number(cls, year):
-        prefix = f'{cls.INVOICE_PREFIX}-{year}-'
-        pattern = re.compile(rf'^{re.escape(prefix)}(\d+)$')
-        max_sequence = 0
-
-        invoice_numbers = cls.objects.filter(
-            invoice_number__startswith=prefix,
-        ).values_list('invoice_number', flat=True)
-        for invoice_number in invoice_numbers:
-            match = pattern.match(invoice_number)
-            if match:
-                max_sequence = max(max_sequence, int(match.group(1)))
-
-        return f'{prefix}{max_sequence + 1:05d}'
+        number = _next_sequence_number(cls.INVOICE_PREFIX, year, cls)
+        return f'{cls.INVOICE_PREFIX}-{year}-{number:05d}'
 
     def get_invoice_year(self):
         if self.expense_date:
@@ -300,9 +346,13 @@ class OtherExpense(TimeStampedModel):
         return timezone.localdate().year
 
     def save(self, *args, **kwargs):
-        if not self.invoice_number:
-            self.invoice_number = self.generate_invoice_number(self.get_invoice_year())
-        super().save(*args, **kwargs)
+        with transaction.atomic():
+            if not self.invoice_number:
+                self.invoice_number = self.generate_invoice_number(self.get_invoice_year())
+                update_fields = kwargs.get('update_fields')
+                if update_fields is not None:
+                    kwargs['update_fields'] = set(update_fields) | {'invoice_number'}
+            super().save(*args, **kwargs)
 
 
 class Rental(TimeStampedModel):
@@ -405,19 +455,8 @@ class Rental(TimeStampedModel):
 
     @classmethod
     def generate_invoice_number(cls, year):
-        prefix = f'{cls.INVOICE_PREFIX}-{year}-'
-        pattern = re.compile(rf'^{re.escape(prefix)}(\d+)$')
-        max_sequence = 0
-
-        invoice_numbers = cls.objects.filter(
-            invoice_number__startswith=prefix,
-        ).values_list('invoice_number', flat=True)
-        for invoice_number in invoice_numbers:
-            match = pattern.match(invoice_number)
-            if match:
-                max_sequence = max(max_sequence, int(match.group(1)))
-
-        return f'{prefix}{max_sequence + 1:03d}'
+        number = _next_sequence_number(cls.INVOICE_PREFIX, year, cls)
+        return f'{cls.INVOICE_PREFIX}-{year}-{number:03d}'
 
     def get_invoice_year(self):
         if self.start_at:
@@ -427,11 +466,44 @@ class Rental(TimeStampedModel):
             return start_at.year
         return timezone.localdate().year
 
+    def _lock_vehicles(self):
+        vehicle_ids = {self.vehicle_id} if self.vehicle_id else set()
+        if self.pk:
+            previous_vehicle_id = type(self).objects.filter(
+                pk=self.pk,
+            ).values_list('vehicle_id', flat=True).first()
+            if previous_vehicle_id:
+                vehicle_ids.add(previous_vehicle_id)
+
+        if vehicle_ids:
+            list(
+                Vehicle.objects.select_for_update()
+                .filter(pk__in=sorted(vehicle_ids))
+                .values_list('pk', flat=True)
+            )
+
     def save(self, *args, **kwargs):
-        if not self.invoice_number:
-            self.invoice_number = self.generate_invoice_number(self.get_invoice_year())
-        self.full_clean()
-        super().save(*args, **kwargs)
+        was_adding = self._state.adding
+        auto_invoice = not self.invoice_number
+
+        for attempt in range(3):
+            try:
+                with transaction.atomic():
+                    self._lock_vehicles()
+                    if not self.invoice_number:
+                        self.invoice_number = self.generate_invoice_number(self.get_invoice_year())
+                        update_fields = kwargs.get('update_fields')
+                        if update_fields is not None:
+                            kwargs['update_fields'] = set(update_fields) | {'invoice_number'}
+                    self.full_clean()
+                    super().save(*args, **kwargs)
+                return
+            except IntegrityError:
+                if not auto_invoice or not was_adding or attempt == 2:
+                    raise
+                self.invoice_number = ''
+                self.pk = None
+                self._state.adding = True
 
     @property
     def rental_days(self):
@@ -500,19 +572,8 @@ class Payment(TimeStampedModel):
 
     @classmethod
     def generate_invoice_number(cls, year):
-        prefix = f'{cls.INVOICE_PREFIX}-{year}-'
-        pattern = re.compile(rf'^{re.escape(prefix)}(\d+)$')
-        max_sequence = 0
-
-        invoice_numbers = cls.objects.filter(
-            invoice_number__startswith=prefix,
-        ).values_list('invoice_number', flat=True)
-        for invoice_number in invoice_numbers:
-            match = pattern.match(invoice_number)
-            if match:
-                max_sequence = max(max_sequence, int(match.group(1)))
-
-        return f'{prefix}{max_sequence + 1:05d}'
+        number = _next_sequence_number(cls.INVOICE_PREFIX, year, cls)
+        return f'{cls.INVOICE_PREFIX}-{year}-{number:05d}'
 
     def get_invoice_year(self):
         if self.payment_date:
@@ -523,9 +584,13 @@ class Payment(TimeStampedModel):
         return timezone.localdate().year
 
     def save(self, *args, **kwargs):
-        if not self.invoice_number:
-            self.invoice_number = self.generate_invoice_number(self.get_invoice_year())
-        super().save(*args, **kwargs)
+        with transaction.atomic():
+            if not self.invoice_number:
+                self.invoice_number = self.generate_invoice_number(self.get_invoice_year())
+                update_fields = kwargs.get('update_fields')
+                if update_fields is not None:
+                    kwargs['update_fields'] = set(update_fields) | {'invoice_number'}
+            super().save(*args, **kwargs)
 
 
 class MenuFavorite(TimeStampedModel):

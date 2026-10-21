@@ -53,7 +53,8 @@ cp .env.example .env        # Mac/Linux
 Lalu edit file `.env`, **ubah / hapus** baris berikut agar cocok untuk development lokal:
 
 ```ini
-# Ubah jadi False supaya tidak redirect ke HTTPS
+# Mode development: matikan redirect HTTPS dan tampilkan error detail
+DJANGO_DEBUG=True
 DJANGO_SECURE_SSL_REDIRECT=False
 
 # Hapus atau comment DB_ENGINE supaya pakai SQLite (tidak perlu Postgres)

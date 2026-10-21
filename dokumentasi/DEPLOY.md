@@ -33,9 +33,13 @@ Semua environment variable wajib diset di Render dashboard → Environment → E
 
 | Variable | Wajib? | Keterangan |
 |----------|--------|------------|
-| `DJANGO_SECRET_KEY` | ✅ | Secret key Django (wajib 50+ karakter random) |
+| `DJANGO_SECRET_KEY` | ✅ | Secret key Django (wajib 50+ karakter random). Aplikasi gagal start jika kosong saat `DEBUG=False`. |
 | `DJANGO_ALLOWED_HOSTS` | ✅ Production | Domain aplikasi (comma-separated). Contoh: `rental-pos.onrender.com,rental-pos-production.up.railway.app`. Tanpa ini hanya localhost yang diizinkan. |
+| `DJANGO_DEBUG` | ❌ | Default `False`. Jangan set `True` di production. |
 | `DJANGO_SESSION_TIMEOUT` | ❌ | Auto logout idle (detik), default `3600` (1 jam) |
+| `TRUSTED_PROXY_COUNT` | ✅ Production | Jumlah reverse proxy tepercaya. `1` untuk Render/Railway, `2` jika ada Cloudflare di depan. Default `0` (X-Forwarded-For diabaikan). |
+| `REDIS_URL` | ❌ | Opsional untuk cache rate-limit lintas worker/instance. Jika kosong, dipakai `FileBasedCache`. |
+| `DJANGO_CACHE_DIR` | ❌ | Opsional, lokasi cache file-based. Default: direktori temp sistem. |
 
 ### Static Files
 
@@ -76,7 +80,7 @@ Semua environment variable wajib diset di Render dashboard → Environment → E
 
 | Variable | Default | Keterangan |
 |----------|---------|------------|
-| `DJANGO_SECURE_SSL_REDIRECT` | `True` | Redirect HTTP→HTTPS |
+| `DJANGO_SECURE_SSL_REDIRECT` | `True` saat `DEBUG=False` | Redirect HTTP→HTTPS |
 
 > **Catatan:** `DJANGO_ALLOWED_HOSTS` wajib diset di production. Format: domain1,domain2 tanpa spasi setelah koma. Jika tidak diset, hanya `localhost`/`127.0.0.1` yang diizinkan (untuk development).
 
