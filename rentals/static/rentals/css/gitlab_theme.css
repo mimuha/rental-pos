@@ -28,7 +28,9 @@
     --gl-orange-500: #c74816;
     --gl-orange-600: #b34013;
     --gl-brand-orange: #fc6d26;
+    --gl-green-400: #129c84;
     --gl-green-500: #0d8070;
+    --gl-green-600: #0c7265;
     --gl-green-300: #35b597;
     --gl-red-500: #de1d4b;
     --gl-red-300: #f15168;
@@ -315,8 +317,7 @@ body {
 }
 
 html[data-theme] a,
-html[data-theme] a:link,
-html[data-theme] a:visited {
+html[data-theme] a:where(:link, :visited) {
     color: var(--link-fg) !important;
 }
 
@@ -1158,20 +1159,54 @@ html[data-theme] .rental-menu-button:focus {
 }
 
 /* Filled link buttons keep white text */
-html[data-theme] .addlink,
-html[data-theme] .addlink:hover,
-html[data-theme] .addlink:focus {
+html[data-theme] a.addlink,
+html[data-theme] a.addlink:link,
+html[data-theme] a.addlink:visited,
+html[data-theme] a.addlink:hover,
+html[data-theme] a.addlink:focus,
+html[data-theme] .addlink {
     color: #ffffff !important;
+    background: var(--gl-green-400) !important;
+    border-color: var(--gl-green-400) !important;
+}
+
+html[data-theme] a.addlink:hover,
+html[data-theme] a.addlink:focus {
     background: var(--gl-green-500) !important;
     border-color: var(--gl-green-500) !important;
 }
 
-html[data-theme] .historylink,
-html[data-theme] .historylink:hover,
-html[data-theme] .historylink:focus {
+html[data-theme] a.historylink,
+html[data-theme] a.historylink:link,
+html[data-theme] a.historylink:visited,
+html[data-theme] a.historylink:hover,
+html[data-theme] a.historylink:focus,
+html[data-theme] .historylink {
     color: #ffffff !important;
     background: var(--gl-orange-500) !important;
     border-color: var(--gl-orange-500) !important;
+}
+
+html[data-theme] .object-tools a,
+html[data-theme] .object-tools a:link,
+html[data-theme] .object-tools a:visited,
+html[data-theme] .object-tools a:hover,
+html[data-theme] .object-tools a:focus {
+    color: #ffffff !important;
+}
+
+html[data-theme] .btn-success {
+    color: #ffffff !important;
+    background: var(--gl-green-400) !important;
+    border-color: var(--gl-green-400) !important;
+}
+
+html[data-theme] .btn-success:hover,
+html[data-theme] .btn-success:focus,
+html[data-theme] .btn-success:active {
+    color: #ffffff !important;
+    background: var(--gl-green-500) !important;
+    border-color: var(--gl-green-500) !important;
 }
 
 /* Selected filter stays white */

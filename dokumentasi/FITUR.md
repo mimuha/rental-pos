@@ -20,6 +20,8 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - Preferensi disimpan per user di database dan diterapkan lintas perangkat.
 - Hover, selected, focus ring, dan shadow memakai token tema yang sama.
 - Logo Zandev tetap; ikon lain mengikuti aksen aktif.
+- Tombol solid memakai teks putih; aksi tambah/sukses memakai hijau yang lebih cerah.
+- Card statistik dan card admin memakai background putih pada light mode.
 
 ## Manajemen Kendaraan
 

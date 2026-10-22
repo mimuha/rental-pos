@@ -49,6 +49,8 @@ Tidak ada linter/formatter yang dikonfigurasi. Jalankan test sebelum commit.
 - Palet: blue interaktif `#1f73ca`, purple `#7862c8`, orange `#c74816`, neutral GitLab.
 - Ikon logo Zandev tidak diubah. Ikon lain boleh mengikuti `--rental-accent`.
 - Hover, selected, focus ring, dan shadow memakai token `--rental-*`; jangan menambah hex baru di komponen.
+- Hati-hati specificity: `a:link`/`a:visited` lebih kuat dari `.addlink`. Gunakan `a:where(:link, :visited)` untuk aturan link dasar dan state eksplisit untuk tombol solid.
+- Tombol solid wajib teks putih; aksi tambah/sukses memakai `--gl-green-400`.
 
 ## Format uang
 
