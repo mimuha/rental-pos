@@ -621,7 +621,7 @@ class UserThemePreference(TimeStampedModel):
 
     class Accent(models.TextChoices):
         PURPLE = 'purple', 'Blue + Purple'
-        ORANGE = 'orange', 'Blue + Orange'
+        ORANGE = 'orange', 'Orange'
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,

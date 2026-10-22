@@ -98,6 +98,26 @@ html[data-accent="orange"] {
     --rental-accent-hover: var(--gl-orange-600);
     --rental-accent-soft: var(--gl-orange-50);
     --rental-accent-border: rgba(199, 72, 22, 0.35);
+    --primary: var(--gl-orange-500);
+    --link-fg: var(--gl-orange-500);
+    --link-hover-color: var(--gl-orange-600);
+    --link-selected-fg: #9e3811;
+    --breadcrumbs-color: var(--gl-orange-500);
+    --rental-primary: var(--gl-orange-500);
+    --rental-primary-dark: var(--gl-orange-600);
+    --rental-primary-soft: var(--gl-orange-50);
+    --rental-primary-border: rgba(199, 72, 22, 0.35);
+    --rental-primary-shadow: rgba(199, 72, 22, 0.24);
+    --rental-selected-bg: var(--gl-orange-50);
+    --rental-focus-ring: rgba(199, 72, 22, 0.25);
+    --rental-calendar-rented: var(--gl-orange-500);
+    --unguhover: rgba(199, 72, 22, 0.12);
+    --bs-primary: var(--gl-orange-500);
+    --bs-primary-rgb: 199, 72, 22;
+    --bs-link-color: var(--gl-orange-500);
+    --bs-link-hover-color: var(--gl-orange-600);
+    --bs-info: var(--gl-orange-500);
+    --bs-info-rgb: 199, 72, 22;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -172,6 +192,26 @@ html[data-accent="orange"] {
         --rental-accent-hover: #fada9c;
         --rental-accent-soft: rgba(247, 185, 81, 0.16);
         --rental-accent-border: rgba(247, 185, 81, 0.35);
+        --primary: var(--gl-orange-500);
+        --link-fg: var(--gl-orange-300);
+        --link-hover-color: #fada9c;
+        --link-selected-fg: #fada9c;
+        --breadcrumbs-color: var(--gl-orange-300);
+        --rental-primary: var(--gl-orange-500);
+        --rental-primary-dark: var(--gl-orange-600);
+        --rental-primary-soft: rgba(247, 185, 81, 0.16);
+        --rental-primary-border: rgba(247, 185, 81, 0.35);
+        --rental-primary-shadow: rgba(0, 0, 0, 0.5);
+        --rental-selected-bg: rgba(247, 185, 81, 0.16);
+        --rental-focus-ring: rgba(247, 185, 81, 0.35);
+        --rental-calendar-rented: var(--gl-orange-300);
+        --unguhover: rgba(247, 185, 81, 0.14);
+        --bs-primary: var(--gl-orange-500);
+        --bs-primary-rgb: 199, 72, 22;
+        --bs-link-color: var(--gl-orange-300);
+        --bs-link-hover-color: #fada9c;
+        --bs-info: var(--gl-orange-300);
+        --bs-info-rgb: 247, 185, 81;
     }
 }
 
@@ -246,6 +286,26 @@ html[data-theme="dark"][data-accent="orange"] {
     --rental-accent-hover: #fada9c;
     --rental-accent-soft: rgba(247, 185, 81, 0.16);
     --rental-accent-border: rgba(247, 185, 81, 0.35);
+    --primary: var(--gl-orange-500);
+    --link-fg: var(--gl-orange-300);
+    --link-hover-color: #fada9c;
+    --link-selected-fg: #fada9c;
+    --breadcrumbs-color: var(--gl-orange-300);
+    --rental-primary: var(--gl-orange-500);
+    --rental-primary-dark: var(--gl-orange-600);
+    --rental-primary-soft: rgba(247, 185, 81, 0.16);
+    --rental-primary-border: rgba(247, 185, 81, 0.35);
+    --rental-primary-shadow: rgba(0, 0, 0, 0.5);
+    --rental-selected-bg: rgba(247, 185, 81, 0.16);
+    --rental-focus-ring: rgba(247, 185, 81, 0.35);
+    --rental-calendar-rented: var(--gl-orange-300);
+    --unguhover: rgba(247, 185, 81, 0.14);
+    --bs-primary: var(--gl-orange-500);
+    --bs-primary-rgb: 199, 72, 22;
+    --bs-link-color: var(--gl-orange-300);
+    --bs-link-hover-color: #fada9c;
+    --bs-info: var(--gl-orange-300);
+    --bs-info-rgb: 247, 185, 81;
 }
 
 /* Base surfaces, text, links */
@@ -1082,22 +1142,60 @@ html[data-theme="dark"] {
 }
 
 /* Text links in content, dashboard menu, and changelist form */
-#content a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link),
-#content a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):visited,
-#changelist-form a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link),
-#changelist-form a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):visited,
-.rental-menu-button,
-.rental-menu-button:visited {
+html[data-theme] #content a:where(:not(.btn, .button, .addlink, .historylink, .changelink, .deletelink, .viewlink, .closelink, .page-link, .rental-filter-chip, .rental-filter-apply, .rental-filter-reset)),
+html[data-theme] #changelist-form a:where(:not(.btn, .button, .addlink, .historylink, .changelink, .deletelink, .viewlink, .closelink, .page-link, .rental-filter-chip, .rental-filter-apply, .rental-filter-reset)),
+html[data-theme] .rental-menu-button {
     color: var(--body-fg) !important;
 }
 
-#content a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):hover,
-#content a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):focus,
-#changelist-form a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):hover,
-#changelist-form a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):focus,
-.rental-menu-button:hover,
-.rental-menu-button:focus {
+html[data-theme] #content a:where(:not(.btn, .button, .addlink, .historylink, .changelink, .deletelink, .viewlink, .closelink, .page-link, .rental-filter-chip, .rental-filter-apply, .rental-filter-reset)):hover,
+html[data-theme] #content a:where(:not(.btn, .button, .addlink, .historylink, .changelink, .deletelink, .viewlink, .closelink, .page-link, .rental-filter-chip, .rental-filter-apply, .rental-filter-reset)):focus,
+html[data-theme] #changelist-form a:where(:not(.btn, .button, .addlink, .historylink, .changelink, .deletelink, .viewlink, .closelink, .page-link, .rental-filter-chip, .rental-filter-apply, .rental-filter-reset)):hover,
+html[data-theme] #changelist-form a:where(:not(.btn, .button, .addlink, .historylink, .changelink, .deletelink, .viewlink, .closelink, .page-link, .rental-filter-chip, .rental-filter-apply, .rental-filter-reset)):focus,
+html[data-theme] .rental-menu-button:hover,
+html[data-theme] .rental-menu-button:focus {
     color: var(--body-fg) !important;
+}
+
+/* Filled link buttons keep white text */
+html[data-theme] .addlink,
+html[data-theme] .addlink:hover,
+html[data-theme] .addlink:focus {
+    color: #ffffff !important;
+    background: var(--gl-green-500) !important;
+    border-color: var(--gl-green-500) !important;
+}
+
+html[data-theme] .historylink,
+html[data-theme] .historylink:hover,
+html[data-theme] .historylink:focus {
+    color: #ffffff !important;
+    background: var(--gl-orange-500) !important;
+    border-color: var(--gl-orange-500) !important;
+}
+
+/* Selected filter stays white */
+html[data-theme] #changelist-filter .rental-filter-options li.selected a,
+html[data-theme] #changelist-filter .rental-filter-options li.selected a:hover,
+html[data-theme] #changelist-filter .rental-filter-options li.selected a:focus {
+    color: #ffffff !important;
+    background: var(--rental-primary) !important;
+    border-color: var(--rental-primary) !important;
+}
+
+/* Stat and admin cards: white in light mode */
+html[data-theme="light"] .rental-stat-card,
+html[data-theme="light"] .admin-card,
+html[data-theme="light"] .admin-card .card-header {
+    background: #ffffff !important;
+}
+
+@media (prefers-color-scheme: light) {
+    html[data-theme="auto"] .rental-stat-card,
+    html[data-theme="auto"] .admin-card,
+    html[data-theme="auto"] .admin-card .card-header {
+        background: #ffffff !important;
+    }
 }
 
 /* Solid/filled buttons keep white text */
