@@ -611,3 +611,30 @@ class MenuFavorite(TimeStampedModel):
 
     def __str__(self):
         return f'{self.user} - {self.menu_key}'
+
+
+class UserThemePreference(TimeStampedModel):
+    class Mode(models.TextChoices):
+        LIGHT = 'light', 'Terang'
+        DARK = 'dark', 'Gelap'
+        AUTO = 'auto', 'Ikuti Sistem'
+
+    class Accent(models.TextChoices):
+        PURPLE = 'purple', 'Blue + Purple'
+        ORANGE = 'orange', 'Blue + Orange'
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='theme_preference',
+    )
+    mode = models.CharField('Mode tema', max_length=10, choices=Mode.choices, default=Mode.AUTO)
+    accent = models.CharField('Aksen tema', max_length=10, choices=Accent.choices, default=Accent.PURPLE)
+
+    class Meta:
+        db_table = 'user_theme_preferences'
+        verbose_name = 'Preferensi tema'
+        verbose_name_plural = 'Preferensi tema'
+
+    def __str__(self):
+        return f'{self.user} - {self.get_mode_display()} / {self.get_accent_display()}'

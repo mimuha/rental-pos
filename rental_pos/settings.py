@@ -108,6 +108,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'rentals.context_processors.session_timeout',
+                'rentals.context_processors.theme_preference',
             ],
         },
     },

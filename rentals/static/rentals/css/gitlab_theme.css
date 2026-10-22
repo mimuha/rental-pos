@@ -1,0 +1,1050 @@
+/* GitLab-inspired theme layer. Loaded after admin-bootstrap.css and dark_mode.css. */
+
+:root {
+    --gl-white: #ffffff;
+    --gl-neutral-10: #f7f7f5;
+    --gl-neutral-50: #ecebea;
+    --gl-neutral-100: #dcdbd9;
+    --gl-neutral-300: #a5a3a3;
+    --gl-neutral-500: #747273;
+    --gl-neutral-600: #646163;
+    --gl-neutral-700: #4d4b4e;
+    --gl-neutral-800: #3a383d;
+    --gl-neutral-900: #28272d;
+    --gl-neutral-950: #18171d;
+    --gl-blue-50: #e8f2fd;
+    --gl-blue-300: #64a7e9;
+    --gl-blue-400: #3f8edd;
+    --gl-blue-500: #1f73ca;
+    --gl-blue-600: #2566b5;
+    --gl-blue-700: #27599f;
+    --gl-purple-50: #f4f0fc;
+    --gl-purple-300: #a997e1;
+    --gl-purple-500: #7862c8;
+    --gl-purple-600: #6a54c0;
+    --gl-purple-700: #5b46b8;
+    --gl-orange-50: #fdf0d5;
+    --gl-orange-300: #f7b951;
+    --gl-orange-500: #c74816;
+    --gl-orange-600: #b34013;
+    --gl-brand-orange: #fc6d26;
+    --gl-green-500: #0d8070;
+    --gl-green-300: #35b597;
+    --gl-red-500: #de1d4b;
+    --gl-red-300: #f15168;
+    --gl-red-700: #ac203a;
+
+    --rental-accent: var(--gl-purple-500);
+    --rental-accent-hover: var(--gl-purple-600);
+    --rental-accent-soft: var(--gl-purple-50);
+    --rental-accent-border: rgba(120, 98, 200, 0.35);
+    --rental-brand-orange: var(--gl-brand-orange);
+
+    --body-bg: var(--gl-neutral-10);
+    --body-fg: var(--gl-neutral-900);
+    --white: var(--gl-white);
+    --white2: var(--gl-white);
+    --white3: var(--gl-neutral-10);
+    --primary: var(--gl-blue-500);
+    --primary-fg: #ffffff;
+    --secondary: var(--gl-neutral-600);
+    --link-fg: var(--gl-blue-500);
+    --link-hover-color: var(--gl-blue-600);
+    --link-selected-fg: var(--gl-blue-700);
+    --header-bg: var(--gl-white);
+    --header-color: var(--gl-neutral-900);
+    --breadcrumbs-bg: var(--gl-neutral-10);
+    --breadcrumbs-color: var(--gl-blue-500);
+    --rental-pos-title: var(--gl-neutral-900);
+    --rental-pos-subtitle: var(--gl-neutral-600);
+    --border-color: var(--gl-neutral-100);
+    --hairline-color: var(--gl-neutral-50);
+    --rental-primary: var(--gl-blue-500);
+    --rental-primary-dark: var(--gl-blue-600);
+    --rental-primary-soft: var(--gl-blue-50);
+    --rental-primary-border: rgba(31, 115, 202, 0.35);
+    --rental-primary-shadow: rgba(31, 115, 202, 0.24);
+    --rental-danger: var(--gl-red-500);
+    --rental-success: var(--gl-green-500);
+    --rental-warning: var(--gl-orange-500);
+    --rental-box-shadow: 0 1px 2px rgba(5, 5, 6, 0.06), 0 4px 12px rgba(5, 5, 6, 0.06);
+    --rental-shadow-sm: 0 1px 2px rgba(5, 5, 6, 0.06);
+    --rental-shadow-md: 0 4px 12px rgba(5, 5, 6, 0.08);
+    --rental-shadow-lg: 0 8px 24px rgba(5, 5, 6, 0.12);
+    --rental-hover-bg: var(--gl-neutral-50);
+    --rental-row-hover-bg: var(--gl-neutral-10);
+    --rental-selected-bg: var(--gl-blue-50);
+    --rental-focus-ring: rgba(31, 115, 202, 0.25);
+    --rental-muted-bg: var(--gl-neutral-10);
+    --rental-calendar-available: var(--gl-green-500);
+    --rental-calendar-rented: var(--gl-blue-500);
+    --rental-calendar-draft: var(--gl-neutral-500);
+    --rental-calendar-maintenance: var(--gl-red-500);
+    --unguhover: var(--gl-neutral-50);
+    --abu2header: var(--gl-neutral-10);
+
+    --bs-primary: var(--gl-blue-500);
+    --bs-primary-rgb: 31, 115, 202;
+    --bs-link-color: var(--gl-blue-500);
+    --bs-link-hover-color: var(--gl-blue-600);
+    --bs-success: var(--gl-green-500);
+    --bs-success-rgb: 13, 128, 112;
+    --bs-info: var(--gl-blue-500);
+    --bs-info-rgb: 31, 115, 202;
+}
+
+html[data-accent="orange"] {
+    --rental-accent: var(--gl-orange-500);
+    --rental-accent-hover: var(--gl-orange-600);
+    --rental-accent-soft: var(--gl-orange-50);
+    --rental-accent-border: rgba(199, 72, 22, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] {
+        --body-bg: var(--gl-neutral-950);
+        --body-fg: #ecebea;
+        --white: var(--gl-neutral-900);
+        --white2: var(--gl-neutral-900);
+        --white3: var(--gl-neutral-800);
+        --primary: var(--gl-blue-500);
+        --primary-fg: #ffffff;
+        --secondary: var(--gl-neutral-300);
+        --link-fg: var(--gl-blue-300);
+        --link-hover-color: #9dc8f2;
+        --link-selected-fg: #9dc8f2;
+        --header-bg: var(--gl-neutral-900);
+        --header-color: #ecebea;
+        --breadcrumbs-bg: var(--gl-neutral-900);
+        --breadcrumbs-color: var(--gl-blue-300);
+        --rental-pos-title: #ecebea;
+        --rental-pos-subtitle: var(--gl-neutral-300);
+        --border-color: var(--gl-neutral-800);
+        --hairline-color: var(--gl-neutral-800);
+        --rental-primary: var(--gl-blue-500);
+        --rental-primary-dark: var(--gl-blue-600);
+        --rental-primary-soft: rgba(63, 142, 221, 0.16);
+        --rental-primary-border: rgba(100, 167, 233, 0.35);
+        --rental-primary-shadow: rgba(0, 0, 0, 0.5);
+        --rental-accent: var(--gl-purple-300);
+        --rental-accent-hover: #c9beef;
+        --rental-accent-soft: rgba(169, 151, 225, 0.16);
+        --rental-accent-border: rgba(169, 151, 225, 0.35);
+        --rental-danger: var(--gl-red-300);
+        --rental-success: var(--gl-green-300);
+        --rental-warning: var(--gl-orange-300);
+        --rental-box-shadow: 0 1px 2px rgba(5, 5, 6, 0.4), 0 4px 12px rgba(5, 5, 6, 0.35);
+        --rental-shadow-sm: 0 1px 2px rgba(5, 5, 6, 0.4);
+        --rental-shadow-md: 0 4px 12px rgba(5, 5, 6, 0.35);
+        --rental-shadow-lg: 0 8px 24px rgba(5, 5, 6, 0.45);
+        --rental-hover-bg: var(--gl-neutral-800);
+        --rental-row-hover-bg: rgba(100, 167, 233, 0.10);
+        --rental-selected-bg: rgba(63, 142, 221, 0.16);
+        --rental-focus-ring: rgba(100, 167, 233, 0.35);
+        --rental-muted-bg: var(--gl-neutral-900);
+        --rental-calendar-available: var(--gl-green-300);
+        --rental-calendar-rented: var(--gl-blue-400);
+        --rental-calendar-draft: var(--gl-neutral-300);
+        --rental-calendar-maintenance: var(--gl-red-300);
+        --unguhover: rgba(100, 167, 233, 0.14);
+        --abu2header: var(--gl-neutral-900);
+        --bs-primary: var(--gl-blue-500);
+        --bs-primary-rgb: 31, 115, 202;
+        --bs-link-color: var(--gl-blue-300);
+        --bs-link-hover-color: #9dc8f2;
+        --bs-success: var(--gl-green-300);
+        --bs-success-rgb: 53, 181, 151;
+        --bs-info: var(--gl-blue-300);
+        --bs-info-rgb: 100, 167, 233;
+        --body-quiet-color: var(--gl-neutral-300);
+        --body-medium-color: #c1bfbe;
+        --body-loud-color: #ecebea;
+        --darkened-bg: var(--gl-neutral-800);
+        --selected-bg: rgba(63, 142, 221, 0.16);
+        --selected-row: var(--gl-neutral-800);
+        --close-button-bg: var(--gl-neutral-800);
+        --close-button-hover-bg: var(--gl-neutral-700);
+        --error-fg: var(--gl-red-300);
+    }
+
+    html[data-theme="auto"][data-accent="orange"] {
+        --rental-accent: var(--gl-orange-300);
+        --rental-accent-hover: #fada9c;
+        --rental-accent-soft: rgba(247, 185, 81, 0.16);
+        --rental-accent-border: rgba(247, 185, 81, 0.35);
+    }
+}
+
+html[data-theme="dark"] {
+    --body-bg: var(--gl-neutral-950);
+    --body-fg: #ecebea;
+    --white: var(--gl-neutral-900);
+    --white2: var(--gl-neutral-900);
+    --white3: var(--gl-neutral-800);
+    --primary: var(--gl-blue-500);
+    --primary-fg: #ffffff;
+    --secondary: var(--gl-neutral-300);
+    --link-fg: var(--gl-blue-300);
+    --link-hover-color: #9dc8f2;
+    --link-selected-fg: #9dc8f2;
+    --header-bg: var(--gl-neutral-900);
+    --header-color: #ecebea;
+    --breadcrumbs-bg: var(--gl-neutral-900);
+    --breadcrumbs-color: var(--gl-blue-300);
+    --rental-pos-title: #ecebea;
+    --rental-pos-subtitle: var(--gl-neutral-300);
+    --border-color: var(--gl-neutral-800);
+    --hairline-color: var(--gl-neutral-800);
+    --rental-primary: var(--gl-blue-500);
+    --rental-primary-dark: var(--gl-blue-600);
+    --rental-primary-soft: rgba(63, 142, 221, 0.16);
+    --rental-primary-border: rgba(100, 167, 233, 0.35);
+    --rental-primary-shadow: rgba(0, 0, 0, 0.5);
+    --rental-accent: var(--gl-purple-300);
+    --rental-accent-hover: #c9beef;
+    --rental-accent-soft: rgba(169, 151, 225, 0.16);
+    --rental-accent-border: rgba(169, 151, 225, 0.35);
+    --rental-danger: var(--gl-red-300);
+    --rental-success: var(--gl-green-300);
+    --rental-warning: var(--gl-orange-300);
+    --rental-box-shadow: 0 1px 2px rgba(5, 5, 6, 0.4), 0 4px 12px rgba(5, 5, 6, 0.35);
+    --rental-shadow-sm: 0 1px 2px rgba(5, 5, 6, 0.4);
+    --rental-shadow-md: 0 4px 12px rgba(5, 5, 6, 0.35);
+    --rental-shadow-lg: 0 8px 24px rgba(5, 5, 6, 0.45);
+    --rental-hover-bg: var(--gl-neutral-800);
+    --rental-row-hover-bg: rgba(100, 167, 233, 0.10);
+    --rental-selected-bg: rgba(63, 142, 221, 0.16);
+    --rental-focus-ring: rgba(100, 167, 233, 0.35);
+    --rental-muted-bg: var(--gl-neutral-900);
+    --rental-calendar-available: var(--gl-green-300);
+    --rental-calendar-rented: var(--gl-blue-400);
+    --rental-calendar-draft: var(--gl-neutral-300);
+    --rental-calendar-maintenance: var(--gl-red-300);
+    --unguhover: rgba(100, 167, 233, 0.14);
+    --abu2header: var(--gl-neutral-900);
+    --bs-primary: var(--gl-blue-500);
+    --bs-primary-rgb: 31, 115, 202;
+    --bs-link-color: var(--gl-blue-300);
+    --bs-link-hover-color: #9dc8f2;
+    --bs-success: var(--gl-green-300);
+    --bs-success-rgb: 53, 181, 151;
+    --bs-info: var(--gl-blue-300);
+    --bs-info-rgb: 100, 167, 233;
+    --body-quiet-color: var(--gl-neutral-300);
+    --body-medium-color: #c1bfbe;
+    --body-loud-color: #ecebea;
+    --darkened-bg: var(--gl-neutral-800);
+    --selected-bg: rgba(63, 142, 221, 0.16);
+    --selected-row: var(--gl-neutral-800);
+    --close-button-bg: var(--gl-neutral-800);
+    --close-button-hover-bg: var(--gl-neutral-700);
+    --error-fg: var(--gl-red-300);
+}
+
+html[data-theme="dark"][data-accent="orange"] {
+    --rental-accent: var(--gl-orange-300);
+    --rental-accent-hover: #fada9c;
+    --rental-accent-soft: rgba(247, 185, 81, 0.16);
+    --rental-accent-border: rgba(247, 185, 81, 0.35);
+}
+
+/* Base surfaces, text, links */
+body {
+    background: var(--body-bg) !important;
+    color: var(--body-fg);
+}
+
+html[data-theme] a,
+html[data-theme] a:link,
+html[data-theme] a:visited {
+    color: var(--link-fg) !important;
+}
+
+html[data-theme] a:hover,
+html[data-theme] a:focus {
+    color: var(--link-hover-color) !important;
+}
+
+#header {
+    background: var(--header-bg) !important;
+    border-bottom-color: var(--border-color) !important;
+    box-shadow: var(--rental-shadow-sm) !important;
+}
+
+#site-name,
+#site-name a:link,
+#site-name a:visited,
+#branding h1,
+#branding h1 a:link,
+#branding h1 a:visited {
+    color: var(--rental-pos-title) !important;
+}
+
+#user-tools,
+#user-tools a,
+#logout-form button {
+    color: var(--rental-pos-subtitle) !important;
+}
+
+div.breadcrumbs,
+.breadcrumbs {
+    background: var(--breadcrumbs-bg) !important;
+    color: var(--rental-pos-subtitle) !important;
+    border-color: var(--border-color) !important;
+}
+
+div.breadcrumbs a,
+.breadcrumbs a {
+    color: var(--breadcrumbs-color) !important;
+}
+
+.module,
+.inline-group,
+fieldset.module,
+.login-card,
+.rental-user-menu-popup,
+#changelist,
+#changelist-filter,
+#toolbar,
+.actions,
+.paginator,
+.submit-row {
+    background: var(--white) !important;
+    border-color: var(--border-color) !important;
+}
+
+.module h2,
+.module caption,
+.inline-group h2,
+thead th,
+tfoot td,
+#changelist-filter-header {
+    background: var(--white3) !important;
+    color: var(--rental-pos-title) !important;
+    border-color: var(--border-color) !important;
+}
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+    border-color: var(--border-color) !important;
+}
+
+.help,
+.helptext,
+p.help,
+.rental-pos-subtitle,
+.rental-user-menu-welcome {
+    color: var(--rental-pos-subtitle) !important;
+}
+
+/* Tables and row hover */
+tbody tr:hover,
+.results tbody tr:hover,
+.fc-scrollgrid-sync-table tbody tr:hover {
+    background: var(--rental-row-hover-bg) !important;
+}
+
+.fc-scrollgrid-sync-inner:hover {
+    background: var(--rental-hover-bg) !important;
+}
+
+/* Forms */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+textarea,
+select,
+.vTextField {
+    color: var(--body-fg) !important;
+    background: var(--white) !important;
+    border-color: var(--border-color) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.vTextField:focus {
+    border-color: var(--rental-primary) !important;
+    box-shadow: 0 0 0 0.25rem var(--rental-focus-ring) !important;
+}
+
+/* Buttons */
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button,
+.object-tools a:link,
+.object-tools a:visited {
+    background: var(--rental-primary) !important;
+    border-color: var(--rental-primary) !important;
+    color: #ffffff !important;
+}
+
+.button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.submit-row input:hover,
+a.button:hover,
+.object-tools a:hover {
+    background: var(--rental-primary-dark) !important;
+    border-color: var(--rental-primary-dark) !important;
+}
+
+html[data-theme] .submit-row .rental-status-submit {
+    color: var(--rental-primary) !important;
+    background: var(--white) !important;
+    border-color: var(--rental-primary) !important;
+}
+
+html[data-theme] .submit-row .rental-status-submit:hover,
+html[data-theme] .submit-row .rental-status-submit:focus {
+    color: #ffffff !important;
+    background: var(--rental-primary-dark) !important;
+    border-color: var(--rental-primary-dark) !important;
+}
+
+/* Filters */
+#changelist-filter .rental-filter-options a {
+    color: var(--body-fg) !important;
+    background: var(--white) !important;
+    border-color: var(--border-color) !important;
+}
+
+#changelist-filter .rental-filter-options a:hover {
+    color: var(--rental-pos-title) !important;
+    background: var(--rental-hover-bg) !important;
+    border-color: var(--border-color) !important;
+}
+
+#changelist-filter .rental-filter-options li.selected a,
+html[data-theme] #changelist-filter .rental-filter-options li.selected a {
+    color: #ffffff !important;
+    background: var(--rental-primary) !important;
+    border-color: var(--rental-primary) !important;
+}
+
+.rental-filter-chip {
+    color: var(--rental-accent) !important;
+    background: var(--rental-accent-soft) !important;
+    border-color: var(--rental-accent-border) !important;
+}
+
+.rental-filter-empty {
+    color: var(--rental-pos-subtitle) !important;
+    background: var(--white) !important;
+    border-color: var(--border-color) !important;
+}
+
+.rental-filter-reset {
+    color: var(--rental-danger) !important;
+    background: var(--white) !important;
+    border-color: var(--rental-danger) !important;
+}
+
+.rental-filter-reset:hover {
+    color: #ffffff !important;
+    background: var(--rental-danger) !important;
+}
+
+/* Status colors */
+.rental-stat-card__value--primary,
+.text-primary,
+.link-primary,
+.page-link {
+    color: var(--rental-primary) !important;
+}
+
+.rental-stat-card__value--success,
+.text-success,
+.link-success {
+    color: var(--rental-success) !important;
+}
+
+html[data-theme] .btn-outline-primary {
+    color: var(--rental-primary) !important;
+    border-color: var(--rental-primary) !important;
+}
+
+html[data-theme] .btn-outline-success {
+    color: var(--rental-success) !important;
+    border-color: var(--rental-success) !important;
+}
+
+html[data-theme] .btn-outline-info {
+    color: var(--bs-info) !important;
+    border-color: var(--bs-info) !important;
+}
+
+/* Sidebar and navigation */
+.current-model {
+    background: var(--rental-selected-bg) !important;
+}
+
+.rental-nav-shell,
+.rental-nav-group-details,
+.rental-nav-search,
+.rental-nav-search-btn,
+.rental-nav-collapse,
+.rental-nav-popup {
+    border-color: var(--border-color) !important;
+}
+
+.rental-nav-search,
+.rental-nav-search-btn,
+.rental-nav-collapse,
+.rental-nav-popup,
+.rental-nav-favorite,
+.rental-nav-fav-action {
+    background: var(--white) !important;
+}
+
+.rental-nav-link:hover,
+.rental-nav-group-summary:hover,
+.rental-nav-popup .rental-nav-popup-link:hover,
+.rental-nav-fav-item:hover,
+.rental-nav-add-btn:hover,
+.rental-user-menu-btn:hover {
+    background: var(--rental-hover-bg) !important;
+    color: var(--rental-pos-title) !important;
+}
+
+.rental-nav-add-btn:hover {
+    border-color: var(--border-color) !important;
+}
+
+.rental-nav-icon {
+    color: var(--rental-accent) !important;
+    background: var(--rental-accent-soft) !important;
+}
+
+.rental-nav-icon svg [stroke="#353438"],
+.rental-nav-icon svg [stroke="#292D32"] {
+    stroke: var(--rental-accent) !important;
+}
+
+/* Shadows */
+.rental-user-menu-popup,
+.rental-nav-popup,
+.rental-stat-card,
+.rental-dashboard-card,
+#changelist .actions,
+.login-card,
+.photo-upload-area {
+    box-shadow: var(--rental-shadow-md) !important;
+}
+
+#header {
+    box-shadow: var(--rental-shadow-sm) !important;
+}
+
+/* Photo inline */
+.photo-upload-area {
+    border-color: var(--rental-accent-border) !important;
+}
+
+.photo-upload-input::file-selector-button {
+    background: var(--white3) !important;
+    color: var(--body-fg) !important;
+    border-color: var(--rental-accent-border) !important;
+}
+
+.vehicle-photos-table thead th {
+    border-color: var(--border-color) !important;
+}
+
+/* Login */
+body.login {
+    background:
+        radial-gradient(circle at top left, var(--rental-primary-soft), transparent 30rem),
+        var(--body-bg) !important;
+}
+
+.login-card {
+    background: var(--white) !important;
+    border-color: var(--border-color) !important;
+}
+
+.login-card-header {
+    border-color: var(--border-color) !important;
+}
+
+.login-card-header h1 {
+    color: var(--rental-pos-title) !important;
+}
+
+.login-card-header p {
+    color: var(--rental-pos-subtitle) !important;
+}
+
+body.login .form-row label {
+    color: var(--body-fg) !important;
+}
+
+body.login input[type="text"],
+body.login input[type="password"] {
+    color: var(--body-fg) !important;
+    background: var(--white) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Alerts */
+.errornote,
+.errorlist {
+    color: var(--gl-red-700, #ac203a) !important;
+    background: #feeef0 !important;
+    border-color: #ffd3d7 !important;
+}
+
+html[data-theme="dark"] .errornote,
+html[data-theme="dark"] .errorlist {
+    color: #ffafb8 !important;
+    background: rgba(241, 81, 104, 0.12) !important;
+    border-color: rgba(241, 81, 104, 0.35) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .errornote,
+    html[data-theme="auto"] .errorlist {
+        color: #ffafb8 !important;
+        background: rgba(241, 81, 104, 0.12) !important;
+        border-color: rgba(241, 81, 104, 0.35) !important;
+    }
+}
+
+/* Gear theme settings */
+.rental-user-menu-popup {
+    min-width: 17.5rem;
+    box-shadow: var(--rental-shadow-md) !important;
+}
+
+.rental-theme-settings {
+    padding: 0.5rem 0.65rem 0.7rem;
+    margin-bottom: 0.3rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.rental-theme-title {
+    margin-bottom: 0.45rem;
+    color: var(--rental-pos-title);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.rental-theme-group + .rental-theme-group {
+    margin-top: 0.55rem;
+}
+
+.rental-theme-label {
+    display: block;
+    margin-bottom: 0.3rem;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.rental-theme-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.rental-theme-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.32rem 0.55rem;
+    color: var(--body-fg);
+    background: transparent;
+    border: 1px solid var(--border-color);
+    border-radius: 0.4rem;
+    font-size: 0.75rem;
+    line-height: 1.1;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.rental-theme-option:hover,
+.rental-theme-option:focus-visible {
+    background: var(--rental-hover-bg);
+    border-color: var(--rental-primary);
+}
+
+.rental-theme-option[aria-pressed="true"] {
+    color: var(--rental-primary);
+    background: var(--rental-primary-soft);
+    border-color: var(--rental-primary);
+}
+
+.rental-theme-swatch {
+    display: inline-block;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+}
+
+.rental-theme-swatch-purple {
+    background: var(--gl-purple-500);
+}
+
+.rental-theme-swatch-orange {
+    background: var(--gl-brand-orange);
+}
+
+/* Status badges */
+.rental-status-badge {
+    font-weight: 600;
+}
+
+.rental-status-badge--draft,
+.rental-status-badge--planned {
+    color: var(--rental-pos-subtitle);
+}
+
+.rental-status-badge--active,
+.rental-status-badge--in-progress {
+    color: var(--rental-primary);
+}
+
+.rental-status-badge--completed {
+    color: var(--rental-pos-subtitle);
+}
+
+.rental-status-badge--cancelled {
+    color: var(--rental-danger);
+}
+
+/* Dark-mode icon visibility (Zandev logo untouched) */
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .datetimeshortcuts .date-icon,
+    html[data-theme="auto"] .datetimeshortcuts .clock-icon,
+    html[data-theme="auto"] .selector-add,
+    html[data-theme="auto"] .selector-remove,
+    html[data-theme="auto"] .calendarnav-previous,
+    html[data-theme="auto"] .calendarnav-next {
+        filter: invert(1);
+    }
+}
+
+html[data-theme="dark"] .datetimeshortcuts .date-icon,
+html[data-theme="dark"] .datetimeshortcuts .clock-icon,
+html[data-theme="dark"] .selector-add,
+html[data-theme="dark"] .selector-remove,
+html[data-theme="dark"] .calendarnav-previous,
+html[data-theme="dark"] .calendarnav-next {
+    filter: invert(1);
+}
+
+/* Specificity reinforcement for rules defined with html[data-theme] in dark_mode.css */
+html[data-theme] body {
+    background: var(--body-bg) !important;
+    color: var(--body-fg) !important;
+}
+
+html[data-theme] #header {
+    background: var(--header-bg) !important;
+    border-bottom-color: var(--border-color) !important;
+    box-shadow: var(--rental-shadow-sm) !important;
+}
+
+html[data-theme] div.breadcrumbs,
+html[data-theme] .breadcrumbs {
+    background: var(--breadcrumbs-bg) !important;
+    color: var(--rental-pos-subtitle) !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] div.breadcrumbs a,
+html[data-theme] .breadcrumbs a {
+    color: var(--breadcrumbs-color) !important;
+}
+
+html[data-theme] .module,
+html[data-theme] .inline-group,
+html[data-theme] fieldset.module,
+html[data-theme] #changelist,
+html[data-theme] #changelist-filter,
+html[data-theme] #toolbar,
+html[data-theme] .actions,
+html[data-theme] .paginator,
+html[data-theme] .submit-row,
+html[data-theme] .login-card,
+html[data-theme] .rental-user-menu-popup,
+html[data-theme] .rental-nav-popup,
+html[data-theme] .rental-nav-search,
+html[data-theme] .rental-nav-search-btn,
+html[data-theme] .rental-nav-collapse,
+html[data-theme] .rental-nav-favorite,
+html[data-theme] .rental-nav-fav-action {
+    background: var(--white) !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] .module h2,
+html[data-theme] .module caption,
+html[data-theme] .inline-group h2,
+html[data-theme] thead th,
+html[data-theme] tfoot td,
+html[data-theme] #changelist-filter-header {
+    background: var(--white3) !important;
+    color: var(--rental-pos-title) !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] tbody,
+html[data-theme] td,
+html[data-theme] tfoot,
+html[data-theme] th,
+html[data-theme] thead,
+html[data-theme] tr {
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] .help,
+html[data-theme] .helptext,
+html[data-theme] p.help,
+html[data-theme] .rental-pos-subtitle,
+html[data-theme] .rental-user-menu-welcome {
+    color: var(--rental-pos-subtitle) !important;
+}
+
+html[data-theme] tbody tr:hover,
+html[data-theme] .results tbody tr:hover,
+html[data-theme] .fc-scrollgrid-sync-table tbody tr:hover {
+    background: var(--rental-row-hover-bg) !important;
+}
+
+html[data-theme] .fc-scrollgrid-sync-inner:hover {
+    background: var(--rental-hover-bg) !important;
+}
+
+html[data-theme] input[type="text"],
+html[data-theme] input[type="password"],
+html[data-theme] input[type="email"],
+html[data-theme] input[type="url"],
+html[data-theme] input[type="number"],
+html[data-theme] input[type="date"],
+html[data-theme] input[type="time"],
+html[data-theme] input[type="datetime-local"],
+html[data-theme] textarea,
+html[data-theme] select,
+html[data-theme] .vTextField {
+    color: var(--body-fg) !important;
+    background: var(--white) !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] #changelist-filter .rental-filter-options a {
+    color: var(--body-fg) !important;
+    background: var(--white) !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] #changelist-filter .rental-filter-options a:hover {
+    color: var(--rental-pos-title) !important;
+    background: var(--rental-hover-bg) !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] .rental-filter-chip {
+    color: var(--rental-accent) !important;
+    background: var(--rental-accent-soft) !important;
+    border-color: var(--rental-accent-border) !important;
+}
+
+html[data-theme] .rental-filter-empty {
+    color: var(--rental-pos-subtitle) !important;
+    background: var(--white) !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] .rental-filter-reset {
+    color: var(--rental-danger) !important;
+    background: var(--white) !important;
+    border-color: var(--rental-danger) !important;
+}
+
+html[data-theme] .rental-stat-card__value--primary,
+html[data-theme] .text-primary,
+html[data-theme] .link-primary,
+html[data-theme] .page-link {
+    color: var(--rental-primary) !important;
+}
+
+html[data-theme] .rental-stat-card__value--success,
+html[data-theme] .text-success,
+html[data-theme] .link-success {
+    color: var(--rental-success) !important;
+}
+
+html[data-theme] .current-model {
+    background: var(--rental-selected-bg) !important;
+}
+
+html[data-theme] .rental-user-menu-btn:hover {
+    color: var(--rental-pos-title) !important;
+    background: var(--rental-hover-bg) !important;
+    border-color: var(--rental-primary) !important;
+}
+
+html[data-theme] .rental-nav-icon {
+    color: var(--rental-accent) !important;
+    background: var(--rental-accent-soft) !important;
+}
+
+html[data-theme] .rental-nav-icon svg [stroke="#353438"],
+html[data-theme] .rental-nav-icon svg [stroke="#292D32"] {
+    stroke: var(--rental-accent) !important;
+}
+
+html[data-theme] .rental-nav-popup .rental-nav-popup-link:hover,
+html[data-theme] .rental-nav-fav-item:hover {
+    background: var(--rental-hover-bg) !important;
+    color: var(--rental-pos-title) !important;
+}
+
+html[data-theme] .rental-nav-add-btn:hover {
+    color: var(--rental-pos-title) !important;
+    background: var(--rental-hover-bg) !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] body.login {
+    background:
+        radial-gradient(circle at top left, var(--rental-primary-soft), transparent 30rem),
+        var(--body-bg) !important;
+}
+
+html[data-theme] .login-card {
+    background: var(--white) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--rental-shadow-md) !important;
+}
+
+html[data-theme] .login-card-header {
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] .login-card-header h1 {
+    color: var(--rental-pos-title) !important;
+}
+
+html[data-theme] .login-card-header p {
+    color: var(--rental-pos-subtitle) !important;
+}
+
+html[data-theme] .photo-upload-area {
+    border-color: var(--rental-accent-border) !important;
+}
+
+html[data-theme] .vehicle-photos-table thead th {
+    border-color: var(--border-color) !important;
+}
+
+/* Messages */
+.messagelist li {
+    color: #0b645a !important;
+    background: #e6f5ea !important;
+    border-color: #bee6d0 !important;
+}
+
+.messagelist li.warning {
+    color: #9e3811 !important;
+    background: #fdf0d5 !important;
+    border-color: #fada9c !important;
+}
+
+.messagelist li.error {
+    color: #ac203a !important;
+    background: #feeef0 !important;
+    border-color: #ffd3d7 !important;
+}
+
+html[data-theme="dark"] .messagelist li {
+    color: #84d4b6 !important;
+    background: rgba(13, 128, 112, 0.14) !important;
+    border-color: rgba(53, 181, 151, 0.35) !important;
+}
+
+html[data-theme="dark"] .messagelist li.warning {
+    color: #f7b951 !important;
+    background: rgba(247, 185, 81, 0.14) !important;
+    border-color: rgba(247, 185, 81, 0.35) !important;
+}
+
+html[data-theme="dark"] .messagelist li.error {
+    color: #ffafb8 !important;
+    background: rgba(241, 81, 104, 0.12) !important;
+    border-color: rgba(241, 81, 104, 0.35) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .messagelist li {
+        color: #84d4b6 !important;
+        background: rgba(13, 128, 112, 0.14) !important;
+        border-color: rgba(53, 181, 151, 0.35) !important;
+    }
+
+    html[data-theme="auto"] .messagelist li.warning {
+        color: #f7b951 !important;
+        background: rgba(247, 185, 81, 0.14) !important;
+        border-color: rgba(247, 185, 81, 0.35) !important;
+    }
+
+    html[data-theme="auto"] .messagelist li.error {
+        color: #ffafb8 !important;
+        background: rgba(241, 81, 104, 0.12) !important;
+        border-color: rgba(241, 81, 104, 0.35) !important;
+    }
+}
+
+html[data-theme] .rental-nav-favorite-icon {
+    color: var(--rental-accent) !important;
+    background: var(--rental-accent-soft) !important;
+}
+
+html[data-theme] .photo-upload-area {
+    background: var(--white) !important;
+}
+
+html[data-theme] .photo-upload-input::file-selector-button {
+    background: var(--white3) !important;
+    color: var(--body-fg) !important;
+    border-color: var(--rental-accent-border) !important;
+}
+
+html[data-theme] .vehicle-photos-table thead th {
+    color: var(--rental-pos-subtitle) !important;
+    background: var(--white3) !important;
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] .btn:focus,
+html[data-theme] .btn:focus-visible,
+html[data-theme] .form-control:focus,
+html[data-theme] .form-select:focus,
+html[data-theme] .page-link:focus,
+html[data-theme] .rental-dashboard-summary__filter .form-control:focus {
+    border-color: var(--rental-primary) !important;
+    box-shadow: 0 0 0 0.25rem var(--rental-focus-ring) !important;
+}
+
+html[data-theme] .selector-chosen-title {
+    background: var(--rental-primary-soft) !important;
+}
+
+html[data-theme] input[value="Simpan dan terus mengedit"],
+html[data-theme] input[value="Simpan dan tambahkan lagi"] {
+    background: var(--rental-primary-dark) !important;
+}

@@ -31,6 +31,7 @@ from .models import (
     VehicleCategory,
     VehicleMaintenance,
     VehiclePhoto,
+    UserThemePreference,
 )
 
 
@@ -801,3 +802,80 @@ class LoginRateLimitMiddlewareTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
+
+
+@override_settings(SECURE_SSL_REDIRECT=False)
+class ThemePreferenceTests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_superuser(
+            username='theme_admin',
+            email='theme@example.com',
+            password='password123',
+        )
+
+    def test_default_preference(self):
+        preference = UserThemePreference.objects.create(user=self.user)
+
+        self.assertEqual(preference.mode, UserThemePreference.Mode.AUTO)
+        self.assertEqual(preference.accent, UserThemePreference.Accent.PURPLE)
+
+    def test_endpoint_saves_preference(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse('admin:rental_theme_preference'),
+            data=json.dumps({'mode': 'dark', 'accent': 'orange'}),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        preference = UserThemePreference.objects.get(user=self.user)
+        self.assertEqual(preference.mode, UserThemePreference.Mode.DARK)
+        self.assertEqual(preference.accent, UserThemePreference.Accent.ORANGE)
+
+    def test_endpoint_rejects_invalid_choice(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse('admin:rental_theme_preference'),
+            data=json.dumps({'mode': 'neon', 'accent': 'orange'}),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(UserThemePreference.objects.filter(user=self.user).exists())
+
+    def test_context_processor_returns_saved_preference(self):
+        from .context_processors import theme_preference
+
+        request = RequestFactory().get('/admin/')
+        request.user = self.user
+
+        self.assertEqual(theme_preference(request)['theme_mode'], 'auto')
+
+        UserThemePreference.objects.create(
+            user=self.user,
+            mode=UserThemePreference.Mode.DARK,
+            accent=UserThemePreference.Accent.ORANGE,
+        )
+        context = theme_preference(request)
+
+        self.assertEqual(context['theme_mode'], 'dark')
+        self.assertEqual(context['theme_accent'], 'orange')
+
+    def test_admin_page_renders_saved_theme(self):
+        UserThemePreference.objects.create(
+            user=self.user,
+            mode=UserThemePreference.Mode.DARK,
+            accent=UserThemePreference.Accent.ORANGE,
+        )
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse('admin:index'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'data-theme="dark"')
+        self.assertContains(response, 'data-accent="orange"')
+        self.assertContains(response, 'rental-theme-settings')
+        self.assertContains(response, 'gitlab_theme.css')

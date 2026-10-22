@@ -29,6 +29,7 @@ from .models import (
     VehicleCategory,
     VehicleMaintenance,
     VehiclePhoto,
+    UserThemePreference,
 )
 from .forms import (
     MAX_FILE_SIZE,
@@ -239,15 +240,15 @@ class VehicleMaintenanceAdmin(BaseModelAdmin):
 
     @admin.display(description='Status')
     def status_badge(self, obj):
-        colors = {
-            VehicleMaintenance.Status.PLANNED: '#6b7280',
-            VehicleMaintenance.Status.IN_PROGRESS: '#e2cb44',
-            VehicleMaintenance.Status.COMPLETED: '#353438',
-            VehicleMaintenance.Status.CANCELLED: '#dc2626',
+        classes = {
+            VehicleMaintenance.Status.PLANNED: 'rental-status-badge--planned',
+            VehicleMaintenance.Status.IN_PROGRESS: 'rental-status-badge--in-progress',
+            VehicleMaintenance.Status.COMPLETED: 'rental-status-badge--completed',
+            VehicleMaintenance.Status.CANCELLED: 'rental-status-badge--cancelled',
         }
         return format_html(
-            '<span style="color: {}; font-weight: 600;">{}</span>',
-            colors.get(obj.status, '#111827'),
+            '<span class="rental-status-badge {}">{}</span>',
+            classes.get(obj.status, ''),
             obj.get_status_display(),
         )
 
@@ -302,15 +303,15 @@ class OtherExpenseAdmin(BaseModelAdmin):
 
     @admin.display(description='Status')
     def status_badge(self, obj):
-        colors = {
-            OtherExpense.Status.PLANNED: '#6b7280',
-            OtherExpense.Status.IN_PROGRESS: '#e2cb44',
-            OtherExpense.Status.COMPLETED: '#353438',
-            OtherExpense.Status.CANCELLED: '#dc2626',
+        classes = {
+            OtherExpense.Status.PLANNED: 'rental-status-badge--planned',
+            OtherExpense.Status.IN_PROGRESS: 'rental-status-badge--in-progress',
+            OtherExpense.Status.COMPLETED: 'rental-status-badge--completed',
+            OtherExpense.Status.CANCELLED: 'rental-status-badge--cancelled',
         }
         return format_html(
-            '<span style="color: {}; font-weight: 600;">{}</span>',
-            colors.get(obj.status, '#111827'),
+            '<span class="rental-status-badge {}">{}</span>',
+            classes.get(obj.status, ''),
             obj.get_status_display(),
         )
 
@@ -407,19 +408,19 @@ class RentalAdmin(BaseModelAdmin):
     def status_badge(self, obj):
         if obj is None:
             return format_html(
-                '<span style="color: #6b7280; font-weight: 600;">{}</span>',
+                '<span class="rental-status-badge rental-status-badge--draft">{}</span>',
                 Rental.Status.DRAFT.label,
             )
 
-        colors = {
-            Rental.Status.DRAFT: '#6b7280',
-            Rental.Status.ACTIVE: '#e2cb44',
-            Rental.Status.COMPLETED: '#353438',
-            Rental.Status.CANCELLED: '#dc2626',
+        classes = {
+            Rental.Status.DRAFT: 'rental-status-badge--draft',
+            Rental.Status.ACTIVE: 'rental-status-badge--active',
+            Rental.Status.COMPLETED: 'rental-status-badge--completed',
+            Rental.Status.CANCELLED: 'rental-status-badge--cancelled',
         }
         return format_html(
-            '<span style="color: {}; font-weight: 600;">{}</span>',
-            colors.get(obj.status, '#111827'),
+            '<span class="rental-status-badge {}">{}</span>',
+            classes.get(obj.status, ''),
             obj.get_status_display(),
         )
 
@@ -836,6 +837,33 @@ def menu_favorite_delete(request, favorite_id):
     return JsonResponse({'ok': True})
 
 
+@require_POST
+def theme_preference_view(request):
+    try:
+        payload = json.loads(request.body)
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return JsonResponse({'ok': False, 'error': 'Payload tidak valid.'}, status=400)
+
+    mode = payload.get('mode')
+    accent = payload.get('accent')
+    valid_modes = {choice.value for choice in UserThemePreference.Mode}
+    valid_accents = {choice.value for choice in UserThemePreference.Accent}
+
+    if mode not in valid_modes or accent not in valid_accents:
+        return JsonResponse({'ok': False, 'error': 'Pilihan tema tidak valid.'}, status=400)
+
+    preference, _ = UserThemePreference.objects.update_or_create(
+        user=request.user,
+        defaults={'mode': mode, 'accent': accent},
+    )
+
+    return JsonResponse({
+        'ok': True,
+        'mode': preference.mode,
+        'accent': preference.accent,
+    })
+
+
 def _get_urls():
     urls = admin.AdminSite.get_urls(admin.site)
     my_urls = [
@@ -849,6 +877,7 @@ def _get_urls():
         path('rentals/vehicle/<int:vehicle_id>/photos/<int:photo_id>/order/', admin.site.admin_view(vehicle_photo_update_order), name='vehicle_photo_update_order'),
         path('rentals/favorites/', admin.site.admin_view(menu_favorites_view), name='menu_favorites'),
         path('rentals/favorites/<int:favorite_id>/delete/', admin.site.admin_view(menu_favorite_delete), name='menu_favorite_delete'),
+        path('rentals/theme-preference/', admin.site.admin_view(theme_preference_view), name='rental_theme_preference'),
     ]
     return my_urls + urls
 

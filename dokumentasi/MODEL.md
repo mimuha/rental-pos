@@ -9,7 +9,7 @@ Customer ──┐
             │
 Vehicle ───┘
   │
-  ├── VehiclePhoto (1:N, managed=False)
+  ├── VehiclePhoto (1:N)
   │
   └── VehicleMaintenance (1:N)
         │
@@ -24,6 +24,7 @@ ExpenseType ── OtherExpense (1:N)
 Rental ── OtherExpense (1:N, SET_NULL)
 
 User ── MenuFavorite (1:N)
+User ── UserThemePreference (1:1)
 ```
 
 ## Daftar Model
@@ -72,7 +73,7 @@ User ── MenuFavorite (1:N)
 | url | URLField(500) | URL foto di Supabase |
 | order | IntegerField | Urutan tampilan |
 | created_at | DateTimeField | Auto |
-| **managed = False** | — | Tabel `vehicle_photos`, batas 5 foto @1MB |
+| **db_table** | — | `vehicle_photos`, batas 5 foto @1MB |
 
 ### MaintenanceCategory (Kategori Maintenance)
 
@@ -180,6 +181,16 @@ User ── MenuFavorite (1:N)
 | **unique_together** | — | `(user, menu_key)` — mencegah duplikat |
 | **db_table** | — | `menu_favorites` |
 
+### UserThemePreference (Preferensi Tema)
+
+| Field | Tipe | Keterangan |
+|-------|------|------------|
+| user | OneToOne → User, CASCADE | Pemilik preferensi |
+| mode | CharField(10) | `light`, `dark`, atau `auto` (default `auto`) |
+| accent | CharField(10) | `purple` atau `orange` (default `purple`) |
+| created_at / updated_at | DateTimeField | Auto |
+| **db_table** | — | `user_theme_preferences` |
+
 ## Otomatisasi Biaya Tambahan → OtherExpense
 
 Saat field `additional_fee` diisi pada form **Order Rental**, sistem otomatis membuat record
@@ -210,8 +221,10 @@ Saat status **Order Rental** berubah, status **Vehicle** (kendaraan) terkait oto
 
 1. **Order diaktifkan** (Draf → Aktif) → status Vehicle berubah dari **Tersedia** → **Disewa**
 2. **Order diselesaikan** (Aktif → Selesai) → status Vehicle kembali ke **Tersedia**
+3. **Order dibatalkan** (Aktif → Dibatalkan) → status Vehicle kembali ke **Tersedia** dan biaya tambahan PLANNED/IN_PROGRESS menjadi CANCELLED
 
-> Mekanisme ini berjalan via signal `post_save` pada model Rental di `rentals/signals.py`.
+> Mekanisme ini berjalan via signal `pre_save`/`post_save` pada model Rental di `rentals/signals.py`.
+> DRAFT tidak memblokir slot booking dan tidak menandai kalender sibuk.
 
 ## Field Timestamp (Base)
 

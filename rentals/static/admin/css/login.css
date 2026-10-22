@@ -1,8 +1,8 @@
 body.login {
     min-height: 100%;
     background:
-        radial-gradient(circle at top left, rgba(226, 203, 68, .18), transparent 30rem),
-        #ffffff;
+        radial-gradient(circle at top left, var(--rental-primary-soft), transparent 30rem),
+        var(--body-bg);
     overflow-x: hidden;
 }
 
@@ -54,16 +54,16 @@ body.login #content {
 
 .login-card {
     overflow: hidden;
-    background: #ffffff;
-    border: 1px solid #e6eaee;
+    background: var(--white);
+    border: 1px solid var(--border-color);
     border-radius: 1.25rem;
-    box-shadow: var(--rental-box-shadow);
+    box-shadow: var(--rental-shadow-md);
 }
 
 .login-card-header {
     padding: 2rem 2rem 1.25rem;
     text-align: center;
-    border-bottom: 1px solid #edf0f2;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .login-brand-icon {
@@ -73,8 +73,8 @@ body.login #content {
     width: 6.25rem;
     height: 6.25rem;
     margin: 0 auto 1rem;
-    color: #353438;
-    background: #f8f8f8;
+    color: var(--rental-pos-title);
+    background: var(--rental-muted-bg);
     border-radius: .325rem;
 }
 
@@ -85,14 +85,14 @@ body.login #content {
 
 .login-card-header h1 {
     margin: 0 0 .5rem;
-    color: #111827;
+    color: var(--rental-pos-title);
     font-size: 1.45rem;
     font-weight: 800;
 }
 
 .login-card-header p {
     margin: 0;
-    color: #6c757d;
+    color: var(--rental-pos-subtitle);
     font-size: .9rem;
 }
 
@@ -109,7 +109,7 @@ body.login .form-row {
 body.login .form-row label {
     display: block;
     margin-bottom: .45rem;
-    color: #374151;
+    color: var(--body-fg);
     font-weight: 700;
 }
 
@@ -119,9 +119,9 @@ body.login input[type="password"] {
     max-width: none;
     min-height: 2.75rem;
     padding: .65rem .85rem;
-    border: 1px solid #ced4da;
+    border: 1px solid var(--border-color);
     border-radius: .65rem;
-    background: #ffffff;
+    background: var(--white);
 }
 
 body.login .submit-row {
@@ -135,15 +135,15 @@ body.login .submit-row {
 body.login .submit-row input {
     width: 100%;
     min-height: 2.85rem;
-    background: #353438;
-    border-color: #353438;
+    background: var(--rental-primary);
+    border-color: var(--rental-primary);
     border-radius: .75rem;
     font-weight: 800;
 }
 
 body.login .submit-row input:hover {
-    background: #1f1e21;
-    border-color: #1f1e21;
+    background: var(--rental-primary-dark);
+    border-color: var(--rental-primary-dark);
 }
 
 body.login .errornote {

@@ -40,6 +40,16 @@ Tidak ada linter/formatter yang dikonfigurasi. Jalankan test sebelum commit.
 - `VehiclePhoto` adalah model managed. Migration 0012 membuat tabel `vehicle_photos` bila belum ada.
 - Durasi rental memakai `returned_at`, lalu `expected_return_at`. Jangan menambah logika `timezone.now()` sebagai fallback tanpa mengubah kebijakan billing.
 
+## Tema
+
+- Preferensi tema disimpan per user di `UserThemePreference` (`mode`: light/dark/auto, `accent`: purple/orange).
+- Atribut `<html>`: `data-theme` dan `data-accent`; diisi context processor `theme_preference`.
+- Pilihan tema ada di menu gear pengguna, disimpan lewat `POST /admin/rentals/theme-preference/`.
+- Token warna GitLab ada di `rentals/static/rentals/css/gitlab_theme.css`; file ini dimuat setelah `admin-bootstrap.css` dan `dark_mode.css`.
+- Palet: blue interaktif `#1f73ca`, purple `#7862c8`, orange `#c74816`, neutral GitLab.
+- Ikon logo Zandev tidak diubah. Ikon lain boleh mengikuti `--rental-accent`.
+- Hover, selected, focus ring, dan shadow memakai token `--rental-*`; jangan menambah hex baru di komponen.
+
 ## Format uang
 
 - Field uang memakai `RupiahField` + `RupiahWidget` dari `rentals/forms.py`.

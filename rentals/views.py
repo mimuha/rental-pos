@@ -16,10 +16,10 @@ from .models import Rental, Vehicle, VehicleMaintenance
 
 
 BOOKING_STATUS_COLORS = {
-    'available': '#16a34a',
-    'rented': '#2563eb',
-    'draft': '#6b7280',
-    'maintenance': '#dc2626',
+    'available': 'var(--rental-calendar-available)',
+    'rented': 'var(--rental-calendar-rented)',
+    'draft': 'var(--rental-calendar-draft)',
+    'maintenance': 'var(--rental-calendar-maintenance)',
 }
 
 

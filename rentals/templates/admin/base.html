@@ -1,13 +1,12 @@
 {% load i18n static %}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
-<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}" data-theme="{{ theme_mode|default:'auto' }}" data-accent="{{ theme_accent|default:'purple' }}">
 <head>
 <title>{% block title %}{% endblock %}</title>
 <link rel="icon" type="image/svg+xml" href="{% static 'rentals/img/pos_rental.svg' %}">
 <link rel="stylesheet" href="{% block stylesheet %}{% static "admin/css/base.css" %}?v=2{% endblock %}">
 {% block dark-mode-vars %}
-  <link rel="stylesheet" href="{% static "admin/css/dark_mode.css" %}">
-  <script src="{% static "admin/js/theme.js" %}"></script>
+  <link rel="stylesheet" href="{% static "admin/css/dark_mode.css" %}?v=2">
 {% endblock %}
 {% if not is_popup and is_nav_sidebar_enabled %}
   <link rel="stylesheet" href="{% static "admin/css/nav_sidebar.css" %}?v=11">
@@ -40,13 +39,36 @@
             {% block usertools %}
             {% if has_permission %}
             <div id="user-tools" class="col-auto">
-                {% include "admin/color_theme_toggle.html" %}
                 <div class="rental-user-menu">
                     <button type="button" class="rental-user-menu-btn" id="rental-user-menu-btn" aria-label="Menu pengguna">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
                     </button>
                     <div class="rental-user-menu-popup" id="rental-user-menu-popup">
                         <div class="rental-user-menu-welcome">Selamat datang, <strong>{% firstof user.get_short_name user.get_username %}</strong></div>
+                        <div class="rental-theme-settings" id="rental-theme-settings" data-theme-endpoint="{% url 'admin:rental_theme_preference' %}">
+                            <div class="rental-theme-title">Tema</div>
+                            <div class="rental-theme-group">
+                                <span class="rental-theme-label">Mode</span>
+                                <div class="rental-theme-options" role="group" aria-label="Mode tema">
+                                    <button type="button" class="rental-theme-option" data-theme-mode="light">Terang</button>
+                                    <button type="button" class="rental-theme-option" data-theme-mode="dark">Gelap</button>
+                                    <button type="button" class="rental-theme-option" data-theme-mode="auto">Ikuti Sistem</button>
+                                </div>
+                            </div>
+                            <div class="rental-theme-group">
+                                <span class="rental-theme-label">Aksen</span>
+                                <div class="rental-theme-options" role="group" aria-label="Aksen tema">
+                                    <button type="button" class="rental-theme-option" data-theme-accent="purple">
+                                        <span class="rental-theme-swatch rental-theme-swatch-purple" aria-hidden="true"></span>
+                                        Blue + Purple
+                                    </button>
+                                    <button type="button" class="rental-theme-option" data-theme-accent="orange">
+                                        <span class="rental-theme-swatch rental-theme-swatch-orange" aria-hidden="true"></span>
+                                        Blue + Orange
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         {% if user.has_usable_password %}
                         <a href="{% url 'admin:password_change' %}" class="rental-user-menu-item">Ganti sandi</a>
                         {% endif %}
