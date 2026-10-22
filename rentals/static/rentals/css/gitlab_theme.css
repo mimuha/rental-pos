@@ -964,9 +964,13 @@ html[data-theme] .rental-nav-icon {
     background: var(--rental-accent-soft) !important;
 }
 
-html[data-theme] .rental-nav-icon svg [stroke="#353438"],
-html[data-theme] .rental-nav-icon svg [stroke="#292D32"] {
+html[data-theme] .rental-nav-icon svg * {
     stroke: var(--rental-accent) !important;
+}
+
+html[data-theme] .rental-nav-icon svg [fill="#353438"],
+html[data-theme] .rental-nav-icon svg [fill="#292D32"] {
+    fill: var(--rental-accent) !important;
 }
 
 html[data-theme] .rental-nav-popup .rental-nav-popup-link:hover,
@@ -1266,4 +1270,18 @@ html[data-theme] #booking-calendar .fc-button-primary:focus,
 html[data-theme] input[value="Simpan dan terus mengedit"],
 html[data-theme] input[value="Simpan dan tambahkan lagi"] {
     color: #ffffff !important;
+}
+
+/* Dashboard/menu SVG icons follow the active accent */
+html[data-theme] .rental-menu-icon svg * {
+    stroke: var(--rental-accent) !important;
+}
+
+html[data-theme] .rental-menu-icon svg [fill="#353438"],
+html[data-theme] .rental-menu-icon svg [fill="#292D32"] {
+    fill: var(--rental-accent) !important;
+}
+
+html[data-theme] .rental-menu-icon svg [stroke="#394240"] {
+    stroke: #ffffff !important;
 }

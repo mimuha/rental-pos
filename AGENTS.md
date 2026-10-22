@@ -47,7 +47,8 @@ Tidak ada linter/formatter yang dikonfigurasi. Jalankan test sebelum commit.
 - Pilihan tema ada di menu gear pengguna, disimpan lewat `POST /admin/rentals/theme-preference/`.
 - Token warna GitLab ada di `rentals/static/rentals/css/gitlab_theme.css`; file ini dimuat setelah `admin-bootstrap.css` dan `dark_mode.css`.
 - Palet: blue interaktif `#1f73ca`, purple `#7862c8`, orange `#c74816`, neutral GitLab.
-- Ikon logo Zandev tidak diubah. Ikon lain boleh mengikuti `--rental-accent`.
+- Ikon logo Zandev tidak diubah. Ikon modul sidebar/dashboard mengikuti `--rental-accent`.
+- SVG dengan `<style>` internal (mis. `maintenance_vendor.svg`) harus diwarnai lewat `svg * { stroke: ... }`; selector atribut `[stroke="#..."]` tidak cukup.
 - Hover, selected, focus ring, dan shadow memakai token `--rental-*`; jangan menambah hex baru di komponen.
 - Hati-hati specificity: `a:link`/`a:visited` lebih kuat dari `.addlink`. Gunakan `a:where(:link, :visited)` untuk aturan link dasar dan state eksplisit untuk tombol solid.
 - Tombol solid wajib teks putih; aksi tambah/sukses memakai `--gl-green-400`.
