@@ -1,10 +1,84 @@
 import os
+import re
 import uuid
+from decimal import Decimal, InvalidOperation
+
 import requests
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
+
 from .models import VehiclePhoto, Rental, MAX_PHOTOS_PER_VEHICLE, MAX_FILE_SIZE
+
+MONEY_FIELD_NAMES = {
+    'daily_rate',
+    'deposit_amount',
+    'discount_amount',
+    'additional_fee',
+    'total_cost',
+    'amount',
+}
+
+
+def normalize_rupiah_value(value):
+    if value is None:
+        return value
+
+    text = str(value).strip()
+    if not text:
+        return text
+
+    text = text.replace('\u00a0', '').replace('\u202f', '').replace(' ', '')
+    text = re.sub(r'(?i)^rp\.?\s*', '', text)
+
+    if ',' in text:
+        if '.' in text:
+            text = text.replace('.', '')
+        text = text.replace(',', '.')
+    elif '.' in text and re.fullmatch(r'\d{1,3}(?:\.\d{3})+', text):
+        text = text.replace('.', '')
+
+    return text
+
+
+class RupiahWidget(forms.TextInput):
+    def __init__(self, attrs=None):
+        default_attrs = {
+            'class': 'vTextField rupiah-input',
+            'inputmode': 'decimal',
+            'autocomplete': 'off',
+        }
+        if attrs:
+            default_attrs.update(attrs)
+        super().__init__(default_attrs)
+
+    def format_value(self, value):
+        if value is None or value == '':
+            return ''
+
+        try:
+            source = value if isinstance(value, Decimal) else normalize_rupiah_value(value)
+            number = Decimal(source)
+        except (InvalidOperation, TypeError, ValueError):
+            return super().format_value(value)
+
+        formatted = f'{number.quantize(Decimal("0.01")):,.2f}'
+        integer, _, decimal = formatted.partition('.')
+        integer = integer.replace(',', '.')
+        if decimal == '00':
+            return integer
+        return f'{integer},{decimal}'
+
+
+class RupiahField(forms.DecimalField):
+    widget = RupiahWidget
+
+    def to_python(self, value):
+        if value in self.empty_values:
+            return None
+        if isinstance(value, (Decimal, int, float)):
+            return super().to_python(value)
+        return super().to_python(normalize_rupiah_value(value))
 
 
 def upload_to_supabase(file_obj, vehicle_id):

@@ -445,6 +445,18 @@ a.button:hover {
     border-color: var(--rental-primary-dark) !important;
 }
 
+.submit-row .rental-status-submit-cancel {
+    color: #dc2626 !important;
+    border-color: #dc2626 !important;
+}
+
+.submit-row .rental-status-submit-cancel:hover,
+.submit-row .rental-status-submit-cancel:focus {
+    color: #ffffff !important;
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
+}
+
 .object-tools a:link,
 .object-tools a:visited {
     background: var(--rental-primary);

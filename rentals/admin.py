@@ -2,6 +2,7 @@ import csv
 import json
 
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, get_object_or_404
 from django.template.response import TemplateResponse
@@ -29,7 +30,14 @@ from .models import (
     VehicleMaintenance,
     VehiclePhoto,
 )
-from .forms import RentalForm, VehiclePhotoForm, upload_to_supabase, MAX_FILE_SIZE
+from .forms import (
+    MAX_FILE_SIZE,
+    MONEY_FIELD_NAMES,
+    RentalForm,
+    RupiahField,
+    VehiclePhotoForm,
+    upload_to_supabase,
+)
 from .views import booking_calendar, booking_calendar_events, booking_calendar_reschedule
 
 
@@ -88,6 +96,11 @@ class BaseModelAdmin(admin.ModelAdmin):
     label when blank. This applies across the admin when other ModelAdmin
     classes inherit from this base.
     """
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name in MONEY_FIELD_NAMES:
+            kwargs['form_class'] = RupiahField
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if 'empty_label' not in kwargs:
             kwargs['empty_label'] = 'pilih..'
@@ -316,6 +329,11 @@ class PaymentInline(admin.TabularInline):
     verbose_name = 'Pembayaran'
     verbose_name_plural = 'Pembayaran'
 
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name in MONEY_FIELD_NAMES:
+            kwargs['form_class'] = RupiahField
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
 
 class OtherExpenseInline(admin.TabularInline):
     model = OtherExpense
@@ -423,25 +441,63 @@ class RentalAdmin(BaseModelAdmin):
 
         return initial
 
+    def has_delete_permission(self, request, obj=None):
+        if obj is not None and obj.status != Rental.Status.DRAFT:
+            return False
+        return super().has_delete_permission(request, obj)
+
+    def _save_status(self, request, obj, new_status, success_message):
+        previous_status = obj.status
+        obj.status = new_status
+        try:
+            obj.save(update_fields=['status', 'updated_at'])
+        except ValidationError as exc:
+            obj.status = previous_status
+            self.message_user(request, '; '.join(exc.messages), level='error')
+            return
+
+        self.log_change(request, obj, [{"changed": {"fields": ["status"]}}])
+        self.message_user(request, success_message)
+
     def response_change(self, request, obj):
         if '_activate_rental' in request.POST:
             if obj.status == Rental.Status.DRAFT:
+                previous_status = obj.status
                 obj.status = Rental.Status.ACTIVE
-                obj.save(update_fields=['status', 'updated_at'])
-                self.log_change(request, obj, [{"changed": {"fields": ["status"]}}])
-                self.message_user(request, f'Transaksi {obj.invoice_number} berhasil diaktifkan.')
+                try:
+                    obj.save(update_fields=['status', 'updated_at'])
+                except ValidationError as exc:
+                    obj.status = previous_status
+                    self.message_user(request, '; '.join(exc.messages), level='error')
+                else:
+                    self.log_change(request, obj, [{"changed": {"fields": ["status"]}}])
+                    self.message_user(request, f'Transaksi {obj.invoice_number} berhasil diaktifkan.')
             else:
                 self.message_user(request, 'Hanya transaksi berstatus draf yang dapat diaktifkan.', level='warning')
             return HttpResponseRedirect(request.path)
 
         if '_complete_rental' in request.POST:
             if obj.status == Rental.Status.ACTIVE:
-                obj.status = Rental.Status.COMPLETED
-                obj.save(update_fields=['status', 'updated_at'])
-                self.log_change(request, obj, [{"changed": {"fields": ["status"]}}])
-                self.message_user(request, f'Transaksi {obj.invoice_number} berhasil diselesaikan.')
+                self._save_status(
+                    request,
+                    obj,
+                    Rental.Status.COMPLETED,
+                    f'Transaksi {obj.invoice_number} berhasil diselesaikan.',
+                )
             else:
                 self.message_user(request, 'Hanya transaksi berstatus aktif yang dapat diselesaikan.', level='warning')
+            return HttpResponseRedirect(request.path)
+
+        if '_cancel_rental' in request.POST:
+            if obj.status == Rental.Status.ACTIVE:
+                self._save_status(
+                    request,
+                    obj,
+                    Rental.Status.CANCELLED,
+                    f'Transaksi {obj.invoice_number} berhasil dibatalkan.',
+                )
+            else:
+                self.message_user(request, 'Hanya transaksi berstatus aktif yang dapat dibatalkan.', level='warning')
             return HttpResponseRedirect(request.path)
 
         return super().response_change(request, obj)

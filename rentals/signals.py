@@ -39,6 +39,14 @@ def _sync_status(instance):
         Vehicle.objects.filter(
             pk=instance.vehicle_id,
         ).update(status=Vehicle.Status.AVAILABLE)
+    elif instance.status == Rental.Status.CANCELLED:
+        instance.other_expenses.filter(
+            status__in=[OtherExpense.Status.PLANNED, OtherExpense.Status.IN_PROGRESS],
+        ).update(status=OtherExpense.Status.CANCELLED)
+        Vehicle.objects.filter(
+            pk=instance.vehicle_id,
+            status=Vehicle.Status.RENTED,
+        ).update(status=Vehicle.Status.AVAILABLE)
 
 
 def _should_sync(update_fields, field_name):

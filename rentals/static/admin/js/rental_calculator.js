@@ -59,6 +59,15 @@
             return 'Rp' + result;
         }
 
+        function parseMoney(id) {
+            var el = document.getElementById(id);
+            if (!el) return 0;
+            if (window.RupiahFormat && window.RupiahFormat.parse) {
+                return window.RupiahFormat.parse(el.value);
+            }
+            return parseFloat(el.value) || 0;
+        }
+
         function calculate() {
             var start = parseDatetime('id_start_at_0', 'id_start_at_1');
             if (!start) return;
@@ -71,9 +80,9 @@
             var seconds = Math.max((end.getTime() - start.getTime()) / 1000, 0);
             var days = Math.max(1, Math.ceil(seconds / 86400));
 
-            var dailyRate = parseFloat(document.getElementById('id_daily_rate').value) || 0;
-            var discount = parseFloat(document.getElementById('id_discount_amount').value) || 0;
-            var additionalFee = parseFloat(document.getElementById('id_additional_fee').value) || 0;
+            var dailyRate = parseMoney('id_daily_rate');
+            var discount = parseMoney('id_discount_amount');
+            var additionalFee = parseMoney('id_additional_fee');
 
             var subtotal = dailyRate * days;
             var total = subtotal + additionalFee - discount;

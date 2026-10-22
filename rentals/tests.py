@@ -8,6 +8,7 @@ from django.contrib.admin.sites import AdminSite
 from django.contrib.auth import get_user_model
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.cache import cache
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.test import TestCase, override_settings
 from django.test.client import RequestFactory
@@ -16,6 +17,7 @@ from django.utils import timezone
 
 from .admin import RentalAdmin, rental_admin_app_index
 from .dashboard import apply_rental_menu_groups, get_dashboard_context, group_rental_menu
+from .forms import RupiahField, RupiahWidget
 from .middleware import LoginRateLimitMiddleware
 from .models import (
     Customer,
@@ -510,6 +512,254 @@ class BookingCalendarRescheduleTests(TestCase):
         local_start = rental.start_at.astimezone(tz)
         self.assertEqual((local_start.hour, local_start.minute), (1, 30))
         self.assertEqual(local_start.fold, 0)
+
+
+    def test_reschedule_rejects_non_numeric_event_id(self):
+        response = self.client.post(
+            self.url,
+            data=json.dumps({
+                'event_id': 'rental-abc',
+                'start': '2026-06-01',
+            }),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(response.json()['ok'])
+
+    def test_reschedule_rejects_cancelled_rental(self):
+        rental = self.create_rental(timezone.make_aware(datetime(2026, 5, 24, 7, 0)))
+        rental.status = Rental.Status.CANCELLED
+        rental.save(update_fields=['status', 'updated_at'])
+
+        response = self.reschedule(rental, '2026-06-01')
+
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(response.json()['ok'])
+
+
+class RentalCancellationTests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_superuser(
+            username='cancel_admin',
+            email='cancel@example.com',
+            password='password123',
+        )
+        self.customer = Customer.objects.create(
+            full_name='Atep Tatang',
+            identity_number='ID-CANCEL',
+            phone_number='08123456789',
+            address='Bandung',
+        )
+        self.category = VehicleCategory.objects.create(name='MPV Cancel')
+        self.vehicle = Vehicle.objects.create(
+            category=self.category,
+            plate_number='B9004CNL',
+            brand='Toyota',
+            model='Avanza',
+            year=2024,
+            transmission=Vehicle.Transmission.MANUAL,
+            fuel_type=Vehicle.FuelType.GASOLINE,
+            daily_rate=Decimal('150000.00'),
+            odometer=1000,
+        )
+        self.start_at = timezone.make_aware(datetime(2026, 7, 1, 9, 0))
+
+    def create_rental(self, start_at=None, **kwargs):
+        if start_at is None:
+            start_at = self.start_at
+        defaults = {
+            'customer': self.customer,
+            'vehicle': self.vehicle,
+            'start_at': start_at,
+            'expected_return_at': start_at + timedelta(days=1),
+            'start_odometer': 1000,
+            'daily_rate': Decimal('150000.00'),
+        }
+        defaults.update(kwargs)
+        return Rental.objects.create(**defaults)
+
+    def linked_expense(self, rental):
+        return OtherExpense.objects.filter(
+            rental=rental,
+            expense_type__name='Biaya Operasional Perjalanan',
+        ).first()
+
+    def build_admin_post_request(self, data):
+        request = RequestFactory().post('/admin/rentals/rental/1/change/', data)
+        request.user = self.user
+        request.session = {}
+        request._messages = FallbackStorage(request)
+        return request
+
+    def test_cancelled_rental_releases_vehicle_and_expenses(self):
+        rental = self.create_rental(
+            status=Rental.Status.ACTIVE,
+            additional_fee=Decimal('50000.00'),
+        )
+        self.vehicle.refresh_from_db()
+        self.assertEqual(self.vehicle.status, Vehicle.Status.RENTED)
+
+        rental.status = Rental.Status.CANCELLED
+        rental.save(update_fields=['status', 'updated_at'])
+
+        self.vehicle.refresh_from_db()
+        self.assertEqual(self.vehicle.status, Vehicle.Status.AVAILABLE)
+        self.assertEqual(self.linked_expense(rental).status, OtherExpense.Status.CANCELLED)
+
+    def test_admin_cancel_button_cancels_active_rental(self):
+        rental = self.create_rental(status=Rental.Status.ACTIVE)
+        request = self.build_admin_post_request({'_cancel_rental': '1'})
+
+        RentalAdmin(Rental, AdminSite()).response_change(request, rental)
+        rental.refresh_from_db()
+
+        self.assertEqual(rental.status, Rental.Status.CANCELLED)
+
+    def test_delete_allowed_only_for_draft_rentals(self):
+        model_admin = RentalAdmin(Rental, AdminSite())
+        request = RequestFactory().get('/admin/')
+        request.user = self.user
+        draft = self.create_rental(
+            start_at=self.start_at,
+            status=Rental.Status.DRAFT,
+        )
+        active = self.create_rental(
+            start_at=self.start_at + timedelta(days=5),
+            status=Rental.Status.ACTIVE,
+        )
+
+        self.assertTrue(model_admin.has_delete_permission(request, draft))
+        self.assertFalse(model_admin.has_delete_permission(request, active))
+
+
+@override_settings(SECURE_SSL_REDIRECT=False)
+class RentalDraftOverlapTests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_superuser(
+            username='draft_admin',
+            email='draft@example.com',
+            password='password123',
+        )
+        self.customer = Customer.objects.create(
+            full_name='Atep Tatang',
+            identity_number='ID-DRAFT',
+            phone_number='08123456789',
+            address='Bandung',
+        )
+        self.category = VehicleCategory.objects.create(name='MPV Draft')
+        self.vehicle = Vehicle.objects.create(
+            category=self.category,
+            plate_number='B9005DRF',
+            brand='Toyota',
+            model='Avanza',
+            year=2024,
+            transmission=Vehicle.Transmission.MANUAL,
+            fuel_type=Vehicle.FuelType.GASOLINE,
+            daily_rate=Decimal('150000.00'),
+            odometer=1000,
+        )
+        self.start_at = timezone.make_aware(datetime(2026, 8, 1, 9, 0))
+
+    def create_rental(self, start_at=None, **kwargs):
+        if start_at is None:
+            start_at = self.start_at
+        defaults = {
+            'customer': self.customer,
+            'vehicle': self.vehicle,
+            'start_at': start_at,
+            'expected_return_at': start_at + timedelta(days=2),
+            'start_odometer': 1000,
+            'daily_rate': Decimal('150000.00'),
+        }
+        defaults.update(kwargs)
+        return Rental.objects.create(**defaults)
+
+    def test_active_rental_can_be_created_over_a_draft(self):
+        self.create_rental(status=Rental.Status.DRAFT)
+
+        rental = self.create_rental(status=Rental.Status.ACTIVE)
+
+        self.assertEqual(rental.status, Rental.Status.ACTIVE)
+
+    def test_drafts_do_not_block_each_other(self):
+        self.create_rental(status=Rental.Status.DRAFT)
+        second = self.create_rental(status=Rental.Status.DRAFT)
+
+        self.assertEqual(second.status, Rental.Status.DRAFT)
+
+    def test_draft_cannot_overlap_a_confirmed_rental(self):
+        self.create_rental(status=Rental.Status.ACTIVE)
+
+        with self.assertRaises(ValidationError):
+            self.create_rental(status=Rental.Status.DRAFT)
+
+    def test_draft_calendar_is_not_marked_busy(self):
+        draft = self.create_rental(status=Rental.Status.DRAFT)
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse('admin:rental_booking_calendar_events'),
+            {'start': '2026-08-01', 'end': '2026-08-05'},
+        )
+        events = response.json()
+
+        self.assertTrue(any(event['id'] == f'rental-{draft.pk}' for event in events))
+        self.assertTrue(any(
+            event['id'].startswith(f'available-{self.vehicle.pk}-')
+            for event in events
+        ))
+
+    def test_activating_conflicting_draft_keeps_it_as_draft(self):
+        draft = self.create_rental(status=Rental.Status.DRAFT)
+        self.create_rental(status=Rental.Status.ACTIVE)
+
+        request = RequestFactory().post('/admin/rentals/rental/1/change/', {'_activate_rental': '1'})
+        request.user = self.user
+        request.session = {}
+        request._messages = FallbackStorage(request)
+
+        RentalAdmin(Rental, AdminSite()).response_change(request, draft)
+        draft.refresh_from_db()
+
+        self.assertEqual(draft.status, Rental.Status.DRAFT)
+
+
+class RupiahFieldTests(TestCase):
+    def test_clean_accepts_indonesian_format(self):
+        field = RupiahField(max_digits=12, decimal_places=2)
+
+        self.assertEqual(field.clean('1.500.000'), Decimal('1500000'))
+        self.assertEqual(field.clean('1.500.000,50'), Decimal('1500000.50'))
+        self.assertEqual(field.clean('Rp 2.000.000'), Decimal('2000000'))
+
+    def test_clean_accepts_legacy_decimal_format(self):
+        field = RupiahField(max_digits=12, decimal_places=2)
+
+        self.assertEqual(field.clean('1500.50'), Decimal('1500.50'))
+
+    def test_clean_rejects_invalid_value(self):
+        field = RupiahField(max_digits=12, decimal_places=2)
+
+        with self.assertRaises(ValidationError):
+            field.clean('abc')
+
+    def test_widget_formats_currency_without_trailing_zeroes(self):
+        widget = RupiahWidget()
+
+        self.assertEqual(widget.format_value(Decimal('1500000')), '1.500.000')
+        self.assertEqual(widget.format_value(Decimal('1500000.50')), '1.500.000,50')
+
+    def test_rental_money_field_uses_rupiah_field(self):
+        request = RequestFactory().get('/admin/')
+        form_field = RentalAdmin(Rental, AdminSite()).formfield_for_dbfield(
+            Rental._meta.get_field('daily_rate'),
+            request,
+        )
+
+        self.assertIsInstance(form_field, RupiahField)
 
 
 class LoginRateLimitMiddlewareTests(TestCase):

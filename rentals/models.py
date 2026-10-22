@@ -443,7 +443,7 @@ class Rental(TimeStampedModel):
             start_at__lt=self.expected_return_at,
             expected_return_at__gt=self.start_at,
         ).exclude(
-            status=Rental.Status.CANCELLED,
+            status__in=[Rental.Status.DRAFT, Rental.Status.CANCELLED],
         )
         if self.pk:
             overlapping_rentals = overlapping_rentals.exclude(pk=self.pk)

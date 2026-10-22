@@ -7,6 +7,7 @@
         <input type="submit" value="Aktifkan" class="rental-status-submit rental-status-submit-activate" name="_activate_rental">
     {% elif original.status == 'active' %}
         <input type="submit" value="Selesaikan" class="rental-status-submit rental-status-submit-complete" name="_complete_rental">
+        <input type="submit" value="Batalkan" class="rental-status-submit rental-status-submit-cancel" name="_cancel_rental" onclick="return confirm('Batalkan transaksi ini? Status akan menjadi Dibatalkan.');">
     {% endif %}
 {% endif %}
 {% if show_save_as_new %}<input type="submit" value="{% translate 'Save as new' %}" name="_saveasnew">{% endif %}

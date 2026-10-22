@@ -1,4 +1,5 @@
 import json
+import re
 from datetime import date, datetime, timedelta
 from datetime import timezone as dt_timezone
 
@@ -17,6 +18,7 @@ from .models import Rental, Vehicle, VehicleMaintenance
 BOOKING_STATUS_COLORS = {
     'available': '#16a34a',
     'rented': '#2563eb',
+    'draft': '#6b7280',
     'maintenance': '#dc2626',
 }
 
@@ -70,6 +72,7 @@ def booking_calendar(request):
             ('', 'Semua status'),
             ('available', 'Tersedia'),
             ('rented', 'Sedang dirental'),
+            ('draft', 'Draf'),
             ('maintenance', 'Maintenance'),
         ),
         'events_url': reverse('admin:rental_booking_calendar_events'),
@@ -99,11 +102,24 @@ def booking_calendar_events(request):
         expected_return_at__date__gte=start_date,
     ).exclude(status=Rental.Status.CANCELLED)
 
-    if status in ('', 'rented'):
-        for rental in rentals:
+    for rental in rentals.exclude(status=Rental.Status.DRAFT):
+        rental_start = max(_local_date(rental.start_at), start_date)
+        rental_end = min(_exclusive_end_date(rental.expected_return_at), end_date)
+        busy_dates_by_vehicle.setdefault(rental.vehicle_id, set()).update(_date_range(rental_start, rental_end))
+
+    if status in ('', 'rented', 'draft'):
+        if status == 'rented':
+            display_rentals = rentals.exclude(status=Rental.Status.DRAFT)
+        elif status == 'draft':
+            display_rentals = rentals.filter(status=Rental.Status.DRAFT)
+        else:
+            display_rentals = rentals
+
+        for rental in display_rentals:
+            is_draft = rental.status == Rental.Status.DRAFT
+            color = BOOKING_STATUS_COLORS['draft' if is_draft else 'rented']
             rental_start = max(_local_date(rental.start_at), start_date)
             rental_end = min(_exclusive_end_date(rental.expected_return_at), end_date)
-            busy_dates_by_vehicle.setdefault(rental.vehicle_id, set()).update(_date_range(rental_start, rental_end))
             events.append({
                 'id': f'rental-{rental.pk}',
                 'title': f'{rental.vehicle.plate_number}\n{rental.customer.full_name}',
@@ -111,8 +127,8 @@ def booking_calendar_events(request):
                 'end': rental_end.isoformat(),
                 'allDay': True,
                 'editable': True,
-                'backgroundColor': BOOKING_STATUS_COLORS['rented'],
-                'borderColor': BOOKING_STATUS_COLORS['rented'],
+                'backgroundColor': color,
+                'borderColor': color,
                 'url': reverse('admin:rentals_rental_change', args=[rental.pk]),
                 'extendedProps': {
                     'type': 'rental',
@@ -121,11 +137,6 @@ def booking_calendar_events(request):
                     'status_label': rental.get_status_display(),
                 },
             })
-    else:
-        for rental in rentals:
-            rental_start = max(_local_date(rental.start_at), start_date)
-            rental_end = min(_exclusive_end_date(rental.expected_return_at), end_date)
-            busy_dates_by_vehicle.setdefault(rental.vehicle_id, set()).update(_date_range(rental_start, rental_end))
 
     maintenances = VehicleMaintenance.objects.select_related('vehicle').filter(
         vehicle_id__in=vehicle_ids,
@@ -133,11 +144,15 @@ def booking_calendar_events(request):
         maintenance_date__date__lt=end_date,
     ).exclude(status=VehicleMaintenance.Status.CANCELLED)
 
+    for maintenance in maintenances:
+        busy_dates_by_vehicle.setdefault(maintenance.vehicle_id, set()).add(
+            _local_date(maintenance.maintenance_date)
+        )
+
     if status in ('', 'maintenance'):
         for maintenance in maintenances:
             maintenance_start = _local_date(maintenance.maintenance_date)
             maintenance_end = maintenance_start + timedelta(days=1)
-            busy_dates_by_vehicle.setdefault(maintenance.vehicle_id, set()).add(maintenance_start)
             events.append({
                 'id': f'maintenance-{maintenance.pk}',
                 'title': f'{maintenance.vehicle.plate_number}\nMaintenance',
@@ -155,9 +170,6 @@ def booking_calendar_events(request):
                     'status_label': maintenance.get_status_display(),
                 },
             })
-    else:
-        for maintenance in maintenances:
-            busy_dates_by_vehicle.setdefault(maintenance.vehicle_id, set()).add(_local_date(maintenance.maintenance_date))
 
     if status in ('', 'available'):
         available_vehicles = vehicle_qs.filter(status=Vehicle.Status.AVAILABLE)
@@ -195,10 +207,13 @@ def booking_calendar_reschedule(request):
         return JsonResponse({'ok': False, 'error': 'Payload tidak valid.'}, status=400)
 
     event_id = str(payload.get('event_id', ''))
-    if not event_id.startswith('rental-'):
-        return JsonResponse({'ok': False, 'error': 'Hanya booking rental yang dapat di-reschedule.'}, status=400)
+    match = re.fullmatch(r'rental-(\d+)', event_id)
+    if not match:
+        return JsonResponse({'ok': False, 'error': 'ID booking tidak valid.'}, status=400)
 
-    rental = get_object_or_404(Rental, pk=event_id.replace('rental-', '', 1))
+    rental = get_object_or_404(Rental, pk=int(match.group(1)))
+    if rental.status == Rental.Status.CANCELLED:
+        return JsonResponse({'ok': False, 'error': 'Booking yang dibatalkan tidak dapat di-reschedule.'}, status=400)
     new_start_date = _parse_date(payload.get('start'), None)
     if new_start_date is None:
         return JsonResponse({'ok': False, 'error': 'Tanggal mulai tidak valid.'}, status=400)

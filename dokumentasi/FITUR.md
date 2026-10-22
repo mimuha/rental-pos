@@ -29,12 +29,15 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - **Invoice otomatis** format: `order-rental-{tahun}-{nomor_urut}` (contoh: order-rental-2026-001)
 - Input: pelanggan, kendaraan, tanggal mulai, tanggal kembali, odometer awal
 - Finansial: tarif harian, diskon, biaya tambahan, uraian biaya tambahan (textarea), uang jaminan
+- **Format uang Indonesia** — input memakai titik ribuan dan koma desimal (`1.500.000`, `1.500.000,50`); nilai bulat tidak menampilkan `,00`
 - **Kalkulasi real-time** — subtotal dan total terupdate otomatis saat input diubah (client-side JS)
-- **Status workflow:** DRAFT → AKTIF (tombol "Aktifkan") → SELESAI (tombol "Selesaikan")
+- **Status workflow:** DRAFT → AKTIF (tombol "Aktifkan") → SELESAI (tombol "Selesaikan"); ACTIVE dapat dibatalkan (tombol "Batalkan")
+- DRAFT tidak memblokir slot booking dan tidak menandai kalender sibuk
 - Validasi tumpang tindih tanggal rental
+- Delete hanya diizinkan untuk DRAFT; ACTIVE/COMPLETED dibatalkan lewat CANCELLED
 - Inline pembayaran multi-metode
 - **Biaya tambahan otomatis** — field `additional_fee` + `additional_fee_description` otomatis membuat record `OtherExpense` (jenis "Biaya Operasional Perjalanan") dengan status: Direncanakan → Dikerjakan → Selesai, mengikuti status order rental; `payee` otomatis terisi nama pelanggan
-- **Sinkronisasi status kendaraan** — saat order diaktifkan, status kendaraan otomatis berubah dari Tersedia → Disewa; saat order diselesaikan, status kendaraan otomatis kembali ke Tersedia
+- **Sinkronisasi status kendaraan** — saat order diaktifkan, status kendaraan otomatis berubah dari Tersedia → Disewa; saat order diselesaikan/dibatalkan, status kendaraan otomatis kembali ke Tersedia
 
 ## Pembayaran
 
@@ -49,7 +52,7 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - Filter per kendaraan dan status rental
 - Klik tanggal untuk tambah rental baru (diarahkan ke form dengan tanggal terisi)
 - **Drag & drop** untuk mengubah jadwal rental
-- Color legend: rental aktif, selesai, dibatalkan, maintenance, ketersediaan
+- Color legend: rental aktif, draf (abu-abu, tidak memblokir), maintenance, ketersediaan
 
 ## Maintenance Kendaraan
 
