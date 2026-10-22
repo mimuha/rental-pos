@@ -1048,3 +1048,89 @@ html[data-theme] input[value="Simpan dan terus mengedit"],
 html[data-theme] input[value="Simpan dan tambahkan lagi"] {
     background: var(--rental-primary-dark) !important;
 }
+
+/* Slightly brighter page and container surfaces */
+:root {
+    --body-bg: #fbfafd;
+    --white3: #fbfafd;
+    --rental-muted-bg: #fbfafd;
+    --abu2header: #fbfafd;
+}
+
+html[data-theme="dark"] {
+    --body-bg: #1f1e24;
+    --white: #2f2e36;
+    --white2: #2f2e36;
+    --white3: #3a383d;
+    --rental-muted-bg: #2f2e36;
+    --abu2header: #2f2e36;
+    --darkened-bg: #3a383d;
+    --selected-row: #3a383d;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] {
+        --body-bg: #1f1e24;
+        --white: #2f2e36;
+        --white2: #2f2e36;
+        --white3: #3a383d;
+        --rental-muted-bg: #2f2e36;
+        --abu2header: #2f2e36;
+        --darkened-bg: #3a383d;
+        --selected-row: #3a383d;
+    }
+}
+
+/* Text links in content, dashboard menu, and changelist form */
+#content a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link),
+#content a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):visited,
+#changelist-form a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link),
+#changelist-form a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):visited,
+.rental-menu-button,
+.rental-menu-button:visited {
+    color: var(--body-fg) !important;
+}
+
+#content a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):hover,
+#content a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):focus,
+#changelist-form a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):hover,
+#changelist-form a:not(.btn):not(.button):not(.addlink):not(.changelink):not(.deletelink):not(.viewlink):not(.closelink):not(.page-link):focus,
+.rental-menu-button:hover,
+.rental-menu-button:focus {
+    color: var(--body-fg) !important;
+}
+
+/* Solid/filled buttons keep white text */
+html[data-theme] .button,
+html[data-theme] input[type="submit"]:not(.rental-status-submit),
+html[data-theme] input[type="button"]:not(.rental-status-submit),
+html[data-theme] .submit-row input:not(.rental-status-submit),
+html[data-theme] a.button,
+html[data-theme] #toolbar form input[type="submit"],
+html[data-theme] #toolbar form input[type="submit"]:hover,
+html[data-theme] #toolbar form input[type="submit"]:focus,
+html[data-theme] #changelist .actions .button,
+html[data-theme] .rental-filter-apply,
+html[data-theme] .rental-filter-apply:hover,
+html[data-theme] .rental-filter-options li.selected a,
+html[data-theme] .btn-primary,
+html[data-theme] .btn-primary:hover,
+html[data-theme] .btn-primary:focus,
+html[data-theme] .btn-info,
+html[data-theme] .btn-info:hover,
+html[data-theme] .btn-info:focus,
+html[data-theme] .btn-success,
+html[data-theme] .btn-success:hover,
+html[data-theme] .btn-success:focus,
+html[data-theme] .btn-outline-primary:hover,
+html[data-theme] .btn-outline-success:hover,
+html[data-theme] .btn-outline-info:hover,
+html[data-theme] .active > .page-link,
+html[data-theme] .page-link.active,
+html[data-theme] #booking-calendar .fc-button-primary,
+html[data-theme] #booking-calendar .fc-button-primary:hover,
+html[data-theme] #booking-calendar .fc-button-primary:focus,
+html[data-theme] input[value="Simpan dan terus mengedit"],
+html[data-theme] input[value="Simpan dan tambahkan lagi"] {
+    color: #ffffff !important;
+}
