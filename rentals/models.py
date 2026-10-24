@@ -97,6 +97,9 @@ class Vehicle(TimeStampedModel):
         ordering = ['plate_number']
         verbose_name = 'Daftar kendaraan'
         verbose_name_plural = 'Daftar kendaraan'
+        indexes = [
+            models.Index(fields=['status'], name='vehicle_status_idx'),
+        ]
 
     def __str__(self):
         return f'{self.plate_number} - {self.brand} {self.model}'
@@ -269,6 +272,9 @@ class VehicleMaintenance(TimeStampedModel):
         ordering = ['-maintenance_date']
         verbose_name = 'Maintenance kendaraan'
         verbose_name_plural = 'Maintenance kendaraan'
+        indexes = [
+            models.Index(fields=['maintenance_date'], name='veh_maint_date_idx'),
+        ]
 
     def __str__(self):
         return f'{self.vehicle} - {self.category} - {self.maintenance_date:%d/%m/%Y}'
@@ -328,6 +334,9 @@ class OtherExpense(TimeStampedModel):
         ordering = ['-expense_date']
         verbose_name = 'Biaya lain-lain'
         verbose_name_plural = 'Biaya lain-lain'
+        indexes = [
+            models.Index(fields=['expense_date'], name='other_expense_date_idx'),
+        ]
 
     def __str__(self):
         return f'{self.invoice_number or self.expense_type} - {self.expense_date:%d/%m/%Y}'
@@ -423,6 +432,17 @@ class Rental(TimeStampedModel):
         ordering = ['-start_at']
         verbose_name = 'Order rental'
         verbose_name_plural = 'Order rental'
+        indexes = [
+            # Cek overlap booking + query kalender per kendaraan.
+            models.Index(
+                fields=['vehicle', 'start_at', 'expected_return_at'],
+                name='rental_vehicle_overlap_idx',
+            ),
+            # Changelist default (ordering -start_at) dan date_hierarchy.
+            models.Index(fields=['-start_at'], name='rental_start_at_desc_idx'),
+            # Filter status + urutan tanggal.
+            models.Index(fields=['status', 'start_at'], name='rental_status_start_idx'),
+        ]
 
     def __str__(self):
         return f'{self.invoice_number} - {self.customer}'
@@ -485,17 +505,29 @@ class Rental(TimeStampedModel):
     def save(self, *args, **kwargs):
         was_adding = self._state.adding
         auto_invoice = not self.invoice_number
+        update_fields = kwargs.get('update_fields')
+        # Update status saja tidak perlu mengunci baris kendaraan maupun
+        # memvalidasi ulang overlap jadwal. Keduanya menambah round trip ke
+        # database remote pada aksi yang seharusnya murah (aktifkan/batalkan).
+        # Pengecualian: transisi menuju ACTIVE tetap wajib divalidasi karena
+        # draft baru boleh diaktifkan bila slotnya benar-benar kosong.
+        status_only = (
+            update_fields is not None
+            and set(update_fields) <= {'status', 'updated_at'}
+            and self.status != Rental.Status.ACTIVE
+        )
 
         for attempt in range(3):
             try:
                 with transaction.atomic():
-                    self._lock_vehicles()
+                    if not status_only:
+                        self._lock_vehicles()
                     if not self.invoice_number:
                         self.invoice_number = self.generate_invoice_number(self.get_invoice_year())
-                        update_fields = kwargs.get('update_fields')
                         if update_fields is not None:
                             kwargs['update_fields'] = set(update_fields) | {'invoice_number'}
-                    self.full_clean()
+                    if not status_only:
+                        self.full_clean()
                     super().save(*args, **kwargs)
                 return
             except IntegrityError:
@@ -566,6 +598,9 @@ class Payment(TimeStampedModel):
         ordering = ['-payment_date']
         verbose_name = 'Order payment'
         verbose_name_plural = 'Order payment'
+        indexes = [
+            models.Index(fields=['payment_date'], name='payment_date_idx'),
+        ]
 
     def __str__(self):
         return f'{self.invoice_number or self.rental.invoice_number} - {self.amount}'

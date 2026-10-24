@@ -1,6 +1,6 @@
 import json
 import re
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time as dt_time, timedelta
 from datetime import timezone as dt_timezone
 
 from django.contrib import admin
@@ -36,6 +36,18 @@ def _local_date(value):
     if timezone.is_aware(value):
         return timezone.localtime(value).date()
     return value.date()
+
+
+def _aware_midnight(day):
+    """Awal hari (00:00) di timezone aktif, untuk filter rentang datetime.
+
+    Lookup `__date` membuat Postgres menghitung konversi tanggal per baris
+    sehingga index pada kolom datetime tidak terpakai.
+    """
+    return timezone.make_aware(
+        datetime.combine(day, dt_time.min),
+        timezone.get_current_timezone(),
+    )
 
 
 def _exclusive_end_date(value):
@@ -88,30 +100,42 @@ def booking_calendar_events(request):
     vehicle_id = request.GET.get('vehicle') or ''
     status = request.GET.get('status') or ''
 
-    vehicle_qs = Vehicle.objects.order_by('plate_number')
+    vehicle_qs = Vehicle.objects.order_by('plate_number').only(
+        'pk', 'plate_number', 'status',
+    )
     if vehicle_id:
         vehicle_qs = vehicle_qs.filter(pk=vehicle_id)
     vehicle_ids = list(vehicle_qs.values_list('pk', flat=True))
 
+    range_start = _aware_midnight(start_date)
+    range_end = _aware_midnight(end_date)
+
     events = []
     busy_dates_by_vehicle = {pk: set() for pk in vehicle_ids}
 
-    rentals = Rental.objects.select_related('vehicle', 'customer').filter(
-        vehicle_id__in=vehicle_ids,
-        start_at__date__lt=end_date,
-        expected_return_at__date__gte=start_date,
-    ).exclude(status=Rental.Status.CANCELLED)
+    rentals = list(
+        Rental.objects.select_related('vehicle', 'customer').filter(
+            vehicle_id__in=vehicle_ids,
+            start_at__lt=range_end,
+            expected_return_at__gte=range_start,
+        ).exclude(status=Rental.Status.CANCELLED)
+    )
+    confirmed_rentals = [
+        rental for rental in rentals if rental.status != Rental.Status.DRAFT
+    ]
 
-    for rental in rentals.exclude(status=Rental.Status.DRAFT):
+    for rental in confirmed_rentals:
         rental_start = max(_local_date(rental.start_at), start_date)
         rental_end = min(_exclusive_end_date(rental.expected_return_at), end_date)
         busy_dates_by_vehicle.setdefault(rental.vehicle_id, set()).update(_date_range(rental_start, rental_end))
 
     if status in ('', 'rented', 'draft'):
         if status == 'rented':
-            display_rentals = rentals.exclude(status=Rental.Status.DRAFT)
+            display_rentals = confirmed_rentals
         elif status == 'draft':
-            display_rentals = rentals.filter(status=Rental.Status.DRAFT)
+            display_rentals = [
+                rental for rental in rentals if rental.status == Rental.Status.DRAFT
+            ]
         else:
             display_rentals = rentals
 
@@ -138,11 +162,13 @@ def booking_calendar_events(request):
                 },
             })
 
-    maintenances = VehicleMaintenance.objects.select_related('vehicle').filter(
-        vehicle_id__in=vehicle_ids,
-        maintenance_date__date__gte=start_date,
-        maintenance_date__date__lt=end_date,
-    ).exclude(status=VehicleMaintenance.Status.CANCELLED)
+    maintenances = list(
+        VehicleMaintenance.objects.select_related('vehicle').filter(
+            vehicle_id__in=vehicle_ids,
+            maintenance_date__gte=range_start,
+            maintenance_date__lt=range_end,
+        ).exclude(status=VehicleMaintenance.Status.CANCELLED)
+    )
 
     for maintenance in maintenances:
         busy_dates_by_vehicle.setdefault(maintenance.vehicle_id, set()).add(

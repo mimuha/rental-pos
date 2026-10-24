@@ -9,9 +9,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
+from django.db import connection
 from django.http import HttpResponse
 from django.test import TestCase, override_settings
 from django.test.client import RequestFactory
+from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 from django.utils import timezone
 
@@ -234,8 +236,10 @@ class RentalMenuGroupTests(TestCase):
         self.assertEqual(rentals_app['menu_groups'][0]['title'], 'Master Data')
 
 
+@override_settings(DASHBOARD_CACHE_SECONDS=0)
 class DashboardContextTests(TestCase):
     def setUp(self):
+        cache.clear()
         category = VehicleCategory.objects.create(name='MPV')
         self.vehicle = Vehicle.objects.create(
             category=category,
@@ -807,6 +811,7 @@ class LoginRateLimitMiddlewareTests(TestCase):
 @override_settings(SECURE_SSL_REDIRECT=False)
 class ThemePreferenceTests(TestCase):
     def setUp(self):
+        cache.clear()
         User = get_user_model()
         self.user = User.objects.create_superuser(
             username='theme_admin',
@@ -879,3 +884,127 @@ class ThemePreferenceTests(TestCase):
         self.assertContains(response, 'data-accent="orange"')
         self.assertContains(response, 'rental-theme-settings')
         self.assertContains(response, 'gitlab_theme.css')
+
+
+@override_settings(SECURE_SSL_REDIRECT=False, DASHBOARD_CACHE_SECONDS=0)
+class AdminQueryBudgetTests(TestCase):
+    """Menjaga optimasi N+1 dan round trip admin agar tidak regresi."""
+
+    def setUp(self):
+        cache.clear()
+        self.user = get_user_model().objects.create_superuser(
+            username='budget_admin',
+            email='budget@example.com',
+            password='password123',
+        )
+        self.customer = Customer.objects.create(
+            full_name='Budi Budget',
+            identity_number='ID-BUDGET',
+            phone_number='08120000000',
+            address='Jakarta',
+        )
+        category = VehicleCategory.objects.create(name='SUV')
+        start = timezone.now().replace(microsecond=0) + timedelta(days=10)
+        self.rentals = []
+        for index in range(5):
+            vehicle = Vehicle.objects.create(
+                category=category,
+                plate_number=f'B100{index}BD',
+                brand='Toyota',
+                model='Rush',
+                year=2024,
+                transmission=Vehicle.Transmission.AUTOMATIC,
+                fuel_type=Vehicle.FuelType.GASOLINE,
+                daily_rate=Decimal('200000.00'),
+                odometer=1000,
+            )
+            rental = Rental.objects.create(
+                customer=self.customer,
+                vehicle=vehicle,
+                start_at=start + timedelta(days=index * 3),
+                expected_return_at=start + timedelta(days=index * 3 + 2),
+                start_odometer=1000,
+                daily_rate=Decimal('200000.00'),
+                status=Rental.Status.COMPLETED,
+            )
+            for _ in range(2):
+                Payment.objects.create(
+                    rental=rental,
+                    method=Payment.Method.CASH,
+                    amount=Decimal('100000.00'),
+                )
+            self.rentals.append(rental)
+
+    def _captured_sql(self, url):
+        with CaptureQueriesContext(connection) as captured:
+            response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        return [query['sql'].lower() for query in captured.captured_queries]
+
+    def test_rental_changelist_prefetches_payments(self):
+        self.client.force_login(self.user)
+
+        sql = self._captured_sql(reverse('admin:rentals_rental_changelist'))
+
+        payment_queries = [query for query in sql if 'from "rentals_payment"' in query]
+        self.assertLessEqual(
+            len(payment_queries),
+            1,
+            f'Changelist Rental melakukan {len(payment_queries)} query pembayaran (N+1).',
+        )
+
+    def test_payment_changelist_avoids_customer_n_plus_one(self):
+        self.client.force_login(self.user)
+
+        sql = self._captured_sql(reverse('admin:rentals_payment_changelist'))
+
+        customer_queries = [query for query in sql if 'from "rentals_customer"' in query]
+        self.assertLessEqual(
+            len(customer_queries),
+            1,
+            f'Changelist Payment melakukan {len(customer_queries)} query pelanggan (N+1).',
+        )
+
+    def test_dashboard_counts_vehicles_in_single_query(self):
+        self.client.force_login(self.user)
+
+        sql = self._captured_sql(reverse('admin:index'))
+
+        count_queries = [
+            query for query in sql
+            if 'count(' in query and 'rentals_vehicle' in query
+        ]
+        self.assertLessEqual(
+            len(count_queries),
+            1,
+            f'Dashboard menghitung kendaraan lewat {len(count_queries)} query.',
+        )
+
+    def test_status_only_save_does_not_lock_vehicle(self):
+        rental = self.rentals[0]
+        rental.status = Rental.Status.CANCELLED
+
+        with CaptureQueriesContext(connection) as captured:
+            rental.save(update_fields=['status', 'updated_at'])
+
+        rental.refresh_from_db()
+        self.assertEqual(rental.status, Rental.Status.CANCELLED)
+
+        sql = ' '.join(query['sql'].lower() for query in captured.captured_queries)
+        self.assertNotIn('for update', sql)
+
+    def test_rental_add_form_uses_autocomplete(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse('admin:rentals_rental_add'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'admin-autocomplete')
+
+    def test_payment_add_form_uses_autocomplete(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse('admin:rentals_payment_add'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'admin-autocomplete')

@@ -38,15 +38,18 @@ Semua environment variable wajib diset di Render dashboard → Environment → E
 | `DJANGO_DEBUG` | ❌ | Default `False`. Jangan set `True` di production. |
 | `DJANGO_SESSION_TIMEOUT` | ❌ | Auto logout idle (detik), default `3600` (1 jam) |
 | `TRUSTED_PROXY_COUNT` | ✅ Production | Jumlah reverse proxy tepercaya. `1` untuk Render/Railway, `2` jika ada Cloudflare di depan. Default `0` (X-Forwarded-For diabaikan). |
-| `REDIS_URL` | ❌ | Opsional untuk cache rate-limit lintas worker/instance. Jika kosong, dipakai `FileBasedCache`. |
+| `REDIS_URL` | ❌ | Opsional. Bila diisi: cache memakai Redis **dan** sesi memakai `cached_db` (tidak menulis sesi ke database remote di setiap request). Jika kosong, dipakai `FileBasedCache` + sesi database. |
 | `DJANGO_CACHE_DIR` | ❌ | Opsional, lokasi cache file-based. Default: direktori temp sistem. |
+| `DJANGO_SESSION_SAVE_EVERY_REQUEST` | ❌ | Default `False`. Set `True` untuk perilaku lama (timeout dihitung dari aktivitas terakhir, tetapi menulis sesi ke database di setiap request). |
+| `DASHBOARD_CACHE_SECONDS` | ❌ | Default `60`. Lama cache angka dashboard. Set `0` untuk selalu menghitung ulang. |
+| `DB_CONN_MAX_AGE` | ❌ | Default `300` detik. Lama koneksi database dipakai ulang antar request. Set `0` untuk membuka koneksi baru tiap request (lambat, tidak disarankan). |
 
 ### Static Files
 
 | Item | Keterangan |
 |------|------------|
 | Storage | `CompressedStaticFilesStorage` (non-manifest) |
-| Finder | `WHITENOISE_USE_FINDERS = True` — Whitenoise langsung serve dari app directory, tidak butuh `collectstatic` |
+| Finder | `WHITENOISE_USE_FINDERS` mengikuti `DJANGO_DEBUG` — saat produksi file dilayani dari `STATIC_ROOT` (hasil `collectstatic`), sehingga build command wajib menjalankan `collectstatic`. |
 | Command | `collectstatic --noinput` di build command (opsional tapi disarankan) |
 
 ### Database (Supabase)

@@ -129,6 +129,10 @@ if os.environ.get('DB_ENGINE') == 'postgres':
             'PASSWORD': os.environ.get('DB_PASSWORD', ''),
             'HOST': os.environ.get('DB_HOST', ''),
             'PORT': os.environ.get('DB_PORT', '5432'),
+            # Reuse koneksi antar request agar tidak membayar handshake
+            # TCP + TLS + auth pooler Supabase di setiap request.
+            'CONN_MAX_AGE': _env_int('DB_CONN_MAX_AGE', 300),
+            'CONN_HEALTH_CHECKS': True,
             'OPTIONS': {
                 'sslmode': os.environ.get('DB_SSLMODE', 'require'),
                 'prepare_threshold': None,
@@ -183,7 +187,9 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
-WHITENOISE_USE_FINDERS = True
+# Saat produksi cukup layani dari STATIC_ROOT (hasil collectstatic);
+# finder hanya dipakai supaya developer tidak perlu collectstatic.
+WHITENOISE_USE_FINDERS = DEBUG
 STATICFILES_DIRS = [
     BASE_DIR / 'rentals' / 'static',
 ]
@@ -210,6 +216,15 @@ else:
         },
     }
 
+# Sesi disimpan di cache + DB agar setiap request tidak perlu menulis ke
+# database remote. Hanya diaktifkan bila cache bersama (Redis) tersedia;
+# tanpa Redis, backend DB tetap dipakai supaya sesi tidak hilang saat restart.
+if _REDIS_URL:
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+# Data dashboard boleh sedikit tertinggal agar tidak dihitung ulang tiap request.
+DASHBOARD_CACHE_SECONDS = max(0, _env_int('DASHBOARD_CACHE_SECONDS', 60))
+
 # ---- Production Security Settings ----
 # Render terminates SSL at load balancer, forwards internally as HTTP
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -233,7 +248,13 @@ SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 
 SESSION_COOKIE_AGE = int(os.environ.get('DJANGO_SESSION_TIMEOUT', '3600'))
-SESSION_SAVE_EVERY_REQUEST = True
+# Menulis sesi ke database di setiap request adalah biaya terbesar pada
+# database remote. Default mati; set env ke true untuk perilaku lama
+# (timeout dihitung dari aktivitas terakhir, bukan dari waktu login).
+SESSION_SAVE_EVERY_REQUEST = (
+    os.environ.get('DJANGO_SESSION_SAVE_EVERY_REQUEST', 'False').strip().lower()
+    in ('1', 'true', 'yes', 'on')
+)
 
 SECURE_HSTS_SECONDS = int(os.environ.get('DJANGO_HSTS_SECONDS', '31536000'))
 SECURE_HSTS_INCLUDE_SUBDOMAINS = (

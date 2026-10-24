@@ -5,6 +5,7 @@ packaging==26.2
 psycopg==3.2.13
 psycopg-binary==3.2.13
 requests>=2.31.0
+redis>=5.0.0
 sqlparse==0.5.5
 tzdata==2026.2
 whitenoise==6.12.0

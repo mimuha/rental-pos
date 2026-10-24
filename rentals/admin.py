@@ -9,13 +9,14 @@ from django.template.response import TemplateResponse
 from django.views.decorators.http import require_POST
 from decimal import Decimal
 from django.db.models import Sum, Q
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, time
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils import timezone
 from django.utils.encoding import smart_str
 
 from .dashboard import apply_rental_menu_groups, get_dashboard_context
+from .context_processors import THEME_SESSION_KEY
 from .models import (
     Customer,
     ExpenseType,
@@ -213,6 +214,7 @@ class VehicleMaintenanceAdmin(BaseModelAdmin):
         'total_cost_rupiah',
     ]
     list_filter = ['status', 'category', 'vendor', 'maintenance_date']
+    autocomplete_fields = ['vehicle', 'category', 'vendor']
     search_fields = [
         'vehicle__plate_number',
         'vehicle__brand',
@@ -277,6 +279,7 @@ class OtherExpenseAdmin(BaseModelAdmin):
         'total_cost_rupiah',
     ]
     list_filter = ['status', 'expense_type', 'expense_date']
+    autocomplete_fields = ['expense_type']
     search_fields = [
         'invoice_number',
         'expense_type__name',
@@ -378,6 +381,15 @@ class RentalAdmin(BaseModelAdmin):
     inlines = [PaymentInline, OtherExpenseInline]
     date_hierarchy = 'start_at'
     list_per_page = 25
+    autocomplete_fields = ['customer', 'vehicle']
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related('customer', 'vehicle')
+            .prefetch_related('payments')
+        )
 
     fieldsets = (
         ('Informasi transaksi', {
@@ -534,6 +546,9 @@ class PaymentAdmin(BaseModelAdmin):
     list_filter = ['method', 'payment_date']
     search_fields = ['invoice_number', 'rental__invoice_number', 'reference_number']
     date_hierarchy = 'payment_date'
+    autocomplete_fields = ['rental']
+    # Rental.__str__ menyentuh customer; ikutkan agar tidak 1 query per baris.
+    list_select_related = ('rental', 'rental__customer')
 
     @admin.display(description='Jumlah pembayaran')
     def amount_rupiah(self, obj):
@@ -606,16 +621,31 @@ def parse_date_range(request):
     return start, end
 
 
+def _date_range_bounds(start_date, end_date):
+    """Ubah rentang tanggal menjadi rentang datetime sadar-timezone.
+
+    Lookup `__date` mencegah Postgres memakai index pada kolom datetime.
+    """
+    current_tz = timezone.get_current_timezone()
+    start = timezone.make_aware(datetime.combine(start_date, time.min), current_tz)
+    end = timezone.make_aware(
+        datetime.combine(end_date + timedelta(days=1), time.min),
+        current_tz,
+    )
+    return start, end
+
+
 def financial_report(request):
     start_date, end_date = parse_date_range(request)
+    start_dt, end_dt = _date_range_bounds(start_date, end_date)
 
-    payments_qs = Payment.objects.filter(payment_date__date__gte=start_date, payment_date__date__lte=end_date)
+    payments_qs = Payment.objects.filter(payment_date__gte=start_dt, payment_date__lt=end_dt)
     payments_total = payments_qs.aggregate(total=Sum('amount'))['total'] or Decimal('0')
 
-    other_qs = OtherExpense.objects.filter(expense_date__date__gte=start_date, expense_date__date__lte=end_date).exclude(status=OtherExpense.Status.CANCELLED)
+    other_qs = OtherExpense.objects.filter(expense_date__gte=start_dt, expense_date__lt=end_dt).exclude(status=OtherExpense.Status.CANCELLED)
     other_total = other_qs.exclude(status=OtherExpense.Status.PLANNED).aggregate(total=Sum('total_cost'))['total'] or Decimal('0')
 
-    maintenance_qs = VehicleMaintenance.objects.filter(maintenance_date__date__gte=start_date, maintenance_date__date__lte=end_date).exclude(status=VehicleMaintenance.Status.CANCELLED)
+    maintenance_qs = VehicleMaintenance.objects.filter(maintenance_date__gte=start_dt, maintenance_date__lt=end_dt).exclude(status=VehicleMaintenance.Status.CANCELLED)
     maintenance_total = maintenance_qs.exclude(status=VehicleMaintenance.Status.PLANNED).aggregate(total=Sum('total_cost'))['total'] or Decimal('0')
 
     income_total = payments_total
@@ -683,10 +713,11 @@ def financial_report(request):
 
 def financial_report_csv(request):
     start_date, end_date = parse_date_range(request)
+    start_dt, end_dt = _date_range_bounds(start_date, end_date)
 
-    payments_qs = Payment.objects.filter(payment_date__date__gte=start_date, payment_date__date__lte=end_date)
-    other_qs = OtherExpense.objects.filter(expense_date__date__gte=start_date, expense_date__date__lte=end_date).exclude(status=OtherExpense.Status.CANCELLED)
-    maintenance_qs = VehicleMaintenance.objects.filter(maintenance_date__date__gte=start_date, maintenance_date__date__lte=end_date).exclude(status=VehicleMaintenance.Status.CANCELLED)
+    payments_qs = Payment.objects.filter(payment_date__gte=start_dt, payment_date__lt=end_dt).select_related('rental')
+    other_qs = OtherExpense.objects.filter(expense_date__gte=start_dt, expense_date__lt=end_dt).exclude(status=OtherExpense.Status.CANCELLED)
+    maintenance_qs = VehicleMaintenance.objects.filter(maintenance_date__gte=start_dt, maintenance_date__lt=end_dt).exclude(status=VehicleMaintenance.Status.CANCELLED).select_related('vendor')
     now = timezone.now().strftime("%Y%m%d_%H%M%S")
     filename = f"financial_report_{start_date}_{end_date}_{now}.csv"
 
@@ -856,6 +887,8 @@ def theme_preference_view(request):
         user=request.user,
         defaults={'mode': mode, 'accent': accent},
     )
+    # Segarkan cache tema di sesi agar context processor tidak query ulang.
+    request.session[THEME_SESSION_KEY] = {'mode': preference.mode, 'accent': preference.accent}
 
     return JsonResponse({
         'ok': True,
