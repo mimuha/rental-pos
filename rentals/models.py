@@ -424,9 +424,6 @@ class Rental(TimeStampedModel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._previous_status = self.status
-        self._previous_additional_fee = self.additional_fee
-        self._previous_additional_fee_description = self.additional_fee_description
 
     class Meta:
         ordering = ['-start_at']
@@ -486,14 +483,21 @@ class Rental(TimeStampedModel):
             return start_at.year
         return timezone.localdate().year
 
-    def _lock_vehicles(self):
+    def _fetch_previous_state(self):
+        """Ambil state tersimpan sekali untuk locking dan sinkronisasi signal."""
+        if not self.pk:
+            return None
+        return type(self).objects.filter(pk=self.pk).values(
+            'vehicle_id',
+            'status',
+            'additional_fee',
+            'additional_fee_description',
+        ).first()
+
+    def _lock_vehicles(self, previous_vehicle_id=None):
         vehicle_ids = {self.vehicle_id} if self.vehicle_id else set()
-        if self.pk:
-            previous_vehicle_id = type(self).objects.filter(
-                pk=self.pk,
-            ).values_list('vehicle_id', flat=True).first()
-            if previous_vehicle_id:
-                vehicle_ids.add(previous_vehicle_id)
+        if previous_vehicle_id:
+            vehicle_ids.add(previous_vehicle_id)
 
         if vehicle_ids:
             list(
@@ -520,8 +524,18 @@ class Rental(TimeStampedModel):
         for attempt in range(3):
             try:
                 with transaction.atomic():
+                    previous_state = self._fetch_previous_state()
+                    if previous_state is not None:
+                        # Dipakai ulang oleh receiver pre_save/post_save agar
+                        # tidak ada SELECT state sebelumnya yang kedua.
+                        self._db_previous_status = previous_state['status']
+                        self._db_previous_additional_fee = previous_state['additional_fee']
+                        self._db_previous_additional_fee_description = previous_state['additional_fee_description']
+                        self._previous_state_loaded = True
                     if not status_only:
-                        self._lock_vehicles()
+                        self._lock_vehicles(
+                            (previous_state or {}).get('vehicle_id')
+                        )
                     if not self.invoice_number:
                         self.invoice_number = self.generate_invoice_number(self.get_invoice_year())
                         if update_fields is not None:

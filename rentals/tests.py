@@ -1008,3 +1008,14 @@ class AdminQueryBudgetTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'admin-autocomplete')
+
+    def test_rental_search_by_customer_name(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse('admin:rentals_rental_changelist'),
+            {'q': 'Budi Budget'},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.rentals[0].invoice_number)

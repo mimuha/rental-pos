@@ -61,6 +61,27 @@ def _date_range(start_date, end_date):
         current += timedelta(days=1)
 
 
+def _free_date_ranges(start_date, end_date, busy_dates):
+    """Gabungkan hari kosong berurutan menjadi satu rentang [awal, akhir).
+
+    Satu event per rentang membuat payload kalender jauh lebih kecil
+    dibanding satu event per kendaraan per hari.
+    """
+    range_start = None
+    current = start_date
+    while current < end_date:
+        if current in busy_dates:
+            if range_start is not None:
+                yield range_start, current
+                range_start = None
+        elif range_start is None:
+            range_start = current
+        current += timedelta(days=1)
+
+    if range_start is not None:
+        yield range_start, end_date
+
+
 def _localize_wall_time(naive_value, tz):
     candidate = naive_value.replace(tzinfo=tz)
     if candidate.astimezone(dt_timezone.utc).astimezone(tz).replace(tzinfo=None) == naive_value:
@@ -201,14 +222,12 @@ def booking_calendar_events(request):
         available_vehicles = vehicle_qs.filter(status=Vehicle.Status.AVAILABLE)
         for vehicle in available_vehicles:
             busy_dates = busy_dates_by_vehicle.get(vehicle.pk, set())
-            for current_date in _date_range(start_date, end_date):
-                if current_date in busy_dates:
-                    continue
+            for free_start, free_end in _free_date_ranges(start_date, end_date, busy_dates):
                 events.append({
-                    'id': f'available-{vehicle.pk}-{current_date.isoformat()}',
+                    'id': f'available-{vehicle.pk}-{free_start.isoformat()}',
                     'title': f'{vehicle.plate_number}\nTersedia',
-                    'start': current_date.isoformat(),
-                    'end': (current_date + timedelta(days=1)).isoformat(),
+                    'start': free_start.isoformat(),
+                    'end': free_end.isoformat(),
                     'allDay': True,
                     'editable': False,
                     'backgroundColor': BOOKING_STATUS_COLORS['available'],

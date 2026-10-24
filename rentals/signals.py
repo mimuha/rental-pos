@@ -55,6 +55,10 @@ def _should_sync(update_fields, field_name):
 
 @receiver(pre_save, sender=Rental)
 def capture_rental_previous_state(sender, instance, **kwargs):
+    if getattr(instance, '_previous_state_loaded', False):
+        # Rental.save() sudah mengambil state ini dalam satu query.
+        return
+
     previous = None
     if instance.pk:
         previous = sender.objects.filter(pk=instance.pk).values(

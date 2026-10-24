@@ -50,7 +50,7 @@ Semua environment variable wajib diset di Render dashboard → Environment → E
 |------|------------|
 | Storage | `CompressedStaticFilesStorage` (non-manifest) |
 | Finder | `WHITENOISE_USE_FINDERS` mengikuti `DJANGO_DEBUG` — saat produksi file dilayani dari `STATIC_ROOT` (hasil `collectstatic`), sehingga build command wajib menjalankan `collectstatic`. |
-| Command | `collectstatic --noinput` di build command (opsional tapi disarankan) |
+| Command | `collectstatic --noinput` di build command (wajib, karena finder nonaktif di produksi) |
 
 ### Database (Supabase)
 
@@ -63,6 +63,20 @@ Semua environment variable wajib diset di Render dashboard → Environment → E
 | `DB_HOST` | Host pooler Supabase |
 | `DB_PORT` | `6543` (pooler) |
 | `DB_SSLMODE` | `require` |
+| `DB_CONN_MAX_AGE` | Opsional, default `300` detik. Koneksi dipakai ulang antar request; `0` = buka koneksi baru tiap request (lambat). |
+
+### Index pencarian (pg_trgm)
+
+Migration `0016_trigram_search_indexes` menjalankan `CREATE EXTENSION IF NOT EXISTS pg_trgm`
+lalu membuat GIN index untuk kolom yang dicari admin dengan `icontains`
+(nama/identitas/telepon pelanggan, nopol/merek/model kendaraan, nomor invoice).
+
+- Butuh role yang boleh `CREATE EXTENSION` (di Supabase: `postgres`), atau aktifkan
+  extension `pg_trgm` dari dashboard Supabase lebih dulu.
+- Migration tidak melakukan apa pun di SQLite, jadi pengembangan lokal tetap aman.
+- Biaya disk: beberapa MB untuk ribuan baris. Kalau kuota free tier mepet, index
+  bisa dihapus manual (`DROP INDEX IF EXISTS rentals_customer_name_trgm_idx`) tanpa
+  merusak aplikasi — pencarian hanya kembali ke sequential scan.
 
 ### Supabase
 
