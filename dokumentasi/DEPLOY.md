@@ -38,7 +38,12 @@ Semua environment variable wajib diset di Render dashboard → Environment → E
 | `DJANGO_DEBUG` | ❌ | Default `False`. Jangan set `True` di production. |
 | `DJANGO_SESSION_TIMEOUT` | ❌ | Auto logout idle (detik), default `3600` (1 jam) |
 | `TRUSTED_PROXY_COUNT` | ✅ Production | Jumlah reverse proxy tepercaya. `1` untuk Render/Railway, `2` jika ada Cloudflare di depan. Default `0` (X-Forwarded-For diabaikan). |
-| `REDIS_URL` | ❌ | Opsional. Bila diisi: cache memakai Redis **dan** sesi memakai `cached_db` (tidak menulis sesi ke database remote di setiap request). Jika kosong, dipakai `FileBasedCache` + sesi database. |
+| `REDIS_URL` | ❌ | Opsional. Gunakan format TLS Upstash: `rediss://default:<token>@<endpoint>:6379` (wajib `rediss://`, bukan `redis://`). Bila diisi, Redis dipakai untuk cache dashboard + rate-limit login; sesi tetap di database. Jika kosong, dipakai `FileBasedCache`. |
+| `REDIS_KEY_PREFIX` | ❌ | Default `rentalpos`. Awalan key agar tidak bentrok bila database Redis dipakai bersama. |
+| `REDIS_CONNECT_TIMEOUT` | ❌ | Default `2` detik. Timeout koneksi Redis. |
+| `REDIS_SOCKET_TIMEOUT` | ❌ | Default `2` detik. Timeout perintah Redis. |
+| `REDIS_MAX_CONNECTIONS` | ❌ | Default `5`. Ukuran connection pool Redis. |
+| `DJANGO_SESSION_CACHE` | ❌ | Default `False`. Set `True` untuk menyimpan sesi lewat `cached_db`. Perlu `REDIS_URL`. Risiko: bila Redis mati, halaman admin ikut gagal karena Django 6 tidak lagi punya `IGNORE_EXCEPTIONS`. |
 | `DJANGO_CACHE_DIR` | ❌ | Opsional, lokasi cache file-based. Default: direktori temp sistem. |
 | `DJANGO_SESSION_SAVE_EVERY_REQUEST` | ❌ | Default `False`. Set `True` untuk perilaku lama (timeout dihitung dari aktivitas terakhir, tetapi menulis sesi ke database di setiap request). |
 | `DASHBOARD_CACHE_SECONDS` | ❌ | Default `60`. Lama cache angka dashboard. Set `0` untuk selalu menghitung ulang. |

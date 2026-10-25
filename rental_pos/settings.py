@@ -203,6 +203,16 @@ if _REDIS_URL:
         'default': {
             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
             'LOCATION': _REDIS_URL,
+            'KEY_PREFIX': os.environ.get('REDIS_KEY_PREFIX', 'rentalpos'),
+            'TIMEOUT': _env_int('DJANGO_CACHE_TIMEOUT', 300),
+            # Upstash wajib TLS (rediss://). Timeout dibuat pendek supaya cache
+            # yang bermasalah tidak menahan request; akses cache sendiri
+            # dibungkus helper best-effort di rentals/cache_utils.py.
+            'OPTIONS': {
+                'socket_connect_timeout': _env_int('REDIS_CONNECT_TIMEOUT', 2),
+                'socket_timeout': _env_int('REDIS_SOCKET_TIMEOUT', 2),
+                'max_connections': _env_int('REDIS_MAX_CONNECTIONS', 5),
+            },
         },
     }
 else:
@@ -216,10 +226,14 @@ else:
         },
     }
 
-# Sesi disimpan di cache + DB agar setiap request tidak perlu menulis ke
-# database remote. Hanya diaktifkan bila cache bersama (Redis) tersedia;
-# tanpa Redis, backend DB tetap dipakai supaya sesi tidak hilang saat restart.
-if _REDIS_URL:
+# Sesi cached_db hanya bila diminta eksplisit. Sejak Django 6 opsi
+# IGNORE_EXCEPTIONS sudah tidak ada, jadi cache yang mati akan membuat seluruh
+# admin 500 bila sesi dipindah ke Redis tanpa backend yang tahan gangguan.
+# Default: sesi tetap di database, Redis hanya dipakai untuk cache dashboard
+# dan rate-limit login (keduanya best-effort).
+if _REDIS_URL and os.environ.get(
+    'DJANGO_SESSION_CACHE', 'False'
+).strip().lower() in ('1', 'true', 'yes', 'on'):
     SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 # Data dashboard boleh sedikit tertinggal agar tidak dihitung ulang tiap request.

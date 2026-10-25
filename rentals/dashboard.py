@@ -2,11 +2,11 @@ from datetime import datetime
 from decimal import Decimal, ROUND_HALF_UP
 
 from django.conf import settings
-from django.core.cache import cache
 from django.db.models import Count, Q, Sum
 from django.urls import reverse
 from django.utils import timezone
 
+from .cache_utils import safe_cache_get, safe_cache_set
 from .models import OtherExpense, Payment, Vehicle, VehicleMaintenance
 
 
@@ -214,7 +214,7 @@ def get_dashboard_context(request):
     cache_key = f'rental-dashboard:{year:04d}-{month:02d}'
 
     if cache_seconds > 0:
-        cached_context = cache.get(cache_key)
+        cached_context = safe_cache_get(cache_key)
         if cached_context is not None:
             return cached_context
 
@@ -245,6 +245,6 @@ def get_dashboard_context(request):
     }
 
     if cache_seconds > 0:
-        cache.set(cache_key, context, cache_seconds)
+        safe_cache_set(cache_key, context, cache_seconds)
 
     return context

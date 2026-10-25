@@ -1,6 +1,7 @@
 import json
 from datetime import datetime, time, timedelta, timezone as dt_timezone
 from decimal import Decimal
+from unittest import mock
 from zoneinfo import ZoneInfo
 
 from django.contrib import admin
@@ -1019,3 +1020,48 @@ class AdminQueryBudgetTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.rentals[0].invoice_number)
+
+
+class _BrokenCache:
+    """Meniru cache yang tidak bisa dihubungi (Redis mati/kuota habis)."""
+
+    def get(self, *args, **kwargs):
+        raise RuntimeError('redis tidak dapat dihubungi')
+
+    def set(self, *args, **kwargs):
+        raise RuntimeError('redis tidak dapat dihubungi')
+
+    def delete(self, *args, **kwargs):
+        raise RuntimeError('redis tidak dapat dihubungi')
+
+
+@override_settings(SECURE_SSL_REDIRECT=False, DASHBOARD_CACHE_SECONDS=60)
+class CacheResilienceTests(TestCase):
+    """Cache bermasalah tidak boleh menjatuhkan halaman admin."""
+
+    def setUp(self):
+        cache.clear()
+        self.user = get_user_model().objects.create_superuser(
+            username='cache_admin',
+            email='cache@example.com',
+            password='password123',
+        )
+
+    def test_dashboard_still_renders_when_cache_fails(self):
+        self.client.force_login(self.user)
+
+        with mock.patch('rentals.cache_utils.cache', _BrokenCache()):
+            response = self.client.get(reverse('admin:index'))
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_login_rate_limit_fails_open_when_cache_fails(self):
+        request = RequestFactory().post('/admin/login/')
+        request.META['REMOTE_ADDR'] = '10.0.0.9'
+        middleware = LoginRateLimitMiddleware(lambda req: HttpResponse(status=200))
+
+        with mock.patch('rentals.cache_utils.cache', _BrokenCache()):
+            for _ in range(8):
+                response = middleware(request)
+
+        self.assertEqual(response.status_code, 200)
