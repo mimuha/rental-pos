@@ -1288,3 +1288,37 @@ class SingleActiveRentalPerVehicleTests(TestCase):
 
         first.refresh_from_db()
         self.assertEqual(first.notes, 'catatan baru')
+
+
+class RentalChangeFormLayoutTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.user = get_user_model().objects.create_superuser(
+            username='form_admin', email='form@example.com', password='password123',
+        )
+        self.client.force_login(self.user)
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_add_form_uses_two_column_layout_with_summary(self):
+        response = self.client.get(reverse('admin:rentals_rental_add'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'rental-form-layout')
+        self.assertContains(response, 'rental-form-side')
+        self.assertContains(response, 'Pelanggan &amp; kendaraan')
+        self.assertContains(response, 'Jadwal &amp; odometer')
+        self.assertContains(response, 'Tarif &amp; biaya')
+        self.assertContains(response, 'Ringkasan')
+        for field in ('subtotal_rupiah', 'total_amount_rupiah', 'remaining_amount_rupiah', 'duration_display'):
+            self.assertContains(response, f'field-{field}')
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_summary_is_rendered_only_once_and_submit_row_in_side(self):
+        response = self.client.get(reverse('admin:rentals_rental_add'))
+        html = response.content.decode()
+
+        self.assertEqual(html.count('class="submit-row"'), 1)
+        side_start = html.index('class="rental-form-side"')
+        self.assertLess(side_start, html.index('class="submit-row"'))
+        self.assertEqual(html.count('form-row field-total_amount_rupiah'), 1)
+        self.assertEqual(html.count('name="_save"'), 1)

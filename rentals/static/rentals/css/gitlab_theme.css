@@ -2049,3 +2049,294 @@ html[data-theme] #payments-group p.datetime span {
 html[data-theme] #payments-group td.field-payment_date {
     min-width: 21rem;
 }
+
+/* ---- Border lebih tipis: garis sidebar dan tabel dilembutkan ---- */
+html[data-theme] {
+    --border-color: #e8e7e5;
+    --hairline-color: #f0efee;
+}
+
+html[data-theme="dark"] {
+    --border-color: #35333a;
+    --hairline-color: #2f2e36;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] {
+        --border-color: #35333a;
+        --hairline-color: #2f2e36;
+    }
+}
+
+html[data-theme] .rental-nav-shell {
+    border-color: var(--border-color) !important;
+}
+
+html[data-theme] .rental-nav-group-items-inner {
+    border-left-color: var(--hairline-color) !important;
+}
+
+html[data-theme] .rental-nav-section {
+    border-bottom-color: var(--hairline-color) !important;
+}
+
+html[data-theme] .results td,
+html[data-theme] .results th,
+html[data-theme] .inline-group td,
+html[data-theme] .inline-group th,
+html[data-theme] .module td,
+html[data-theme] .module th {
+    border-color: var(--hairline-color) !important;
+}
+
+html[data-theme] thead th {
+    border-bottom-color: var(--border-color) !important;
+}
+
+/* ---- Form Order rental: dua kolom, kartu, ringkasan dan aksi menempel ---- */
+.rental-form-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 22rem;
+    gap: 1.5rem;
+    align-items: start;
+    margin-bottom: 1.5rem;
+}
+
+.rental-form-main {
+    display: grid;
+    gap: 1.25rem;
+    min-width: 0;
+}
+
+.rental-form-side {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+}
+
+@media (min-width: 1200px) {
+    .rental-form-side {
+        position: sticky;
+        top: 1rem;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .rental-form-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Kartu */
+html[data-theme] .rental-form-layout fieldset.module {
+    margin: 0;
+    padding: 1.1rem 1.25rem 0.5rem;
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--rental-radius-lg) !important;
+}
+
+html[data-theme] .rental-form-layout fieldset.module > .fieldset-heading,
+html[data-theme] .rental-form-layout fieldset.module h2 {
+    margin: 0 0 0.85rem;
+    padding: 0 !important;
+    color: var(--rental-pos-title) !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+/* Baris: label di atas input, field berpasangan dua kolom */
+html[data-theme] .rental-form-layout .form-row {
+    display: block;
+    padding: 0 0 1rem !important;
+    border: 0 !important;
+    overflow: visible;
+}
+
+html[data-theme] .rental-form-layout .form-row .form-multiline {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+html[data-theme] .rental-form-layout .form-row .flex-container {
+    display: block;
+}
+
+html[data-theme] .rental-form-layout .form-row label {
+    display: block;
+    float: none;
+    width: auto !important;
+    min-width: 0 !important;
+    margin: 0 0 0.3rem;
+    padding: 0;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+html[data-theme] .rental-form-layout .form-row .readonly {
+    margin: 0;
+    padding: 0.4rem 0;
+    color: var(--body-fg);
+}
+
+html[data-theme] .rental-form-layout .form-row input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme] .rental-form-layout .form-row select,
+html[data-theme] .rental-form-layout .form-row textarea {
+    width: 100%;
+    max-width: none;
+    min-height: 2.25rem;
+    border-radius: 0.4rem !important;
+}
+
+html[data-theme] .rental-form-layout .form-row textarea {
+    min-height: 4rem;
+    resize: vertical;
+}
+
+html[data-theme] .rental-form-layout .related-widget-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+html[data-theme] .rental-form-layout .related-widget-wrapper > select,
+html[data-theme] .rental-form-layout .related-widget-wrapper .select2-container {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100% !important;
+}
+
+/* Tanggal dan waktu berdampingan; pintasan di bawah masing-masing input.
+   Urutan anak: label, input, pintasan, br, label, input, pintasan. */
+html[data-theme] .rental-form-layout p.datetime {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 0.25rem 0.6rem;
+    margin: 0;
+}
+
+html[data-theme] .rental-form-layout p.datetime > label,
+html[data-theme] .rental-form-layout p.datetime > br {
+    display: none !important;
+}
+
+html[data-theme] .rental-form-layout p.datetime > input:nth-of-type(1) { grid-column: 1; grid-row: 1; }
+html[data-theme] .rental-form-layout p.datetime > input:nth-of-type(2) { grid-column: 2; grid-row: 1; }
+html[data-theme] .rental-form-layout p.datetime > .datetimeshortcuts:nth-of-type(1) { grid-column: 1; grid-row: 2; }
+html[data-theme] .rental-form-layout p.datetime > .datetimeshortcuts:nth-of-type(2) { grid-column: 2; grid-row: 2; }
+
+html[data-theme] .rental-form-layout p.datetime .datetimeshortcuts {
+    width: auto !important;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.72rem;
+    white-space: nowrap;
+}
+
+/* Ringkasan */
+html[data-theme] .rental-form-layout .rental-summary .form-row {
+    padding: 0.3rem 0 !important;
+}
+
+html[data-theme] .rental-form-layout .rental-summary .form-row .flex-container {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+html[data-theme] .rental-form-layout .rental-summary .form-row label {
+    margin: 0;
+    font-weight: 500;
+}
+
+html[data-theme] .rental-form-layout .rental-summary .form-row .readonly {
+    padding: 0;
+    text-align: right;
+    font-weight: 600;
+}
+
+html[data-theme] .rental-form-layout .rental-summary .field-total_amount_rupiah {
+    margin-top: 0.4rem;
+    padding-top: 0.7rem !important;
+    border-top: 1px solid var(--border-color) !important;
+}
+
+html[data-theme] .rental-form-layout .rental-summary .field-total_amount_rupiah label,
+html[data-theme] .rental-form-layout .rental-summary .field-total_amount_rupiah .readonly {
+    color: var(--rental-pos-title);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+html[data-theme] .rental-form-layout .rental-summary .field-remaining_amount_rupiah {
+    margin: 0.5rem 0 0.4rem;
+    padding: 0.7rem 0.75rem !important;
+    background: var(--rental-muted-bg);
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--rental-radius-sm);
+}
+
+html[data-theme] .rental-form-layout .rental-summary .field-remaining_amount_rupiah .readonly {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* Aksi: Simpan tombol utama, lainnya outline */
+html[data-theme] .rental-form-side .submit-row {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 1rem;
+    float: none;
+}
+
+html[data-theme] .rental-form-side .submit-row input,
+html[data-theme] .rental-form-side .submit-row a {
+    display: block;
+    float: none;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+html[data-theme] .rental-form-side .submit-row input[name="_save"] {
+    order: 1;
+}
+
+html[data-theme] .rental-form-side .submit-row input[name="_continue"],
+html[data-theme] .rental-form-side .submit-row input[name="_addanother"] {
+    order: 2;
+    color: var(--rental-primary) !important;
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+html[data-theme] .rental-form-side .submit-row input[name="_continue"]:hover,
+html[data-theme] .rental-form-side .submit-row input[name="_addanother"]:hover {
+    background: var(--rental-hover-bg) !important;
+}
+
+html[data-theme] .rental-form-side .submit-row .rental-status-submit {
+    order: 3;
+}
+
+html[data-theme] .rental-form-side .submit-row .rental-status-submit-cancel {
+    color: var(--rental-danger) !important;
+    border-color: var(--rental-danger) !important;
+}
+
+html[data-theme] .rental-form-side .submit-row .rental-status-submit-cancel:hover {
+    color: #ffffff !important;
+    background: var(--rental-danger) !important;
+}
+
+html[data-theme] .rental-form-side .submit-row .closelink,
+html[data-theme] .rental-form-side .submit-row .deletelink {
+    order: 4;
+}

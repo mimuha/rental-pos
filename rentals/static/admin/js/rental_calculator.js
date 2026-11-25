@@ -92,6 +92,20 @@
 
             if (subtotalEl) subtotalEl.textContent = formatRupiah(subtotal);
             if (totalEl) totalEl.textContent = formatRupiah(total);
+
+            var durationEl = document.querySelector('.field-duration_display .readonly');
+            if (durationEl) durationEl.textContent = days + ' hari';
+
+            // Sisa dan kelebihan bayar mengikuti total terbaru (dibulatkan, tidak negatif).
+            var paidEl = document.querySelector('.field-paid_amount_rupiah .readonly');
+            var remainingEl = document.querySelector('.field-remaining_amount_rupiah .readonly');
+            var overpaidEl = document.querySelector('.field-overpaid_amount_rupiah .readonly');
+            if (paidEl && (remainingEl || overpaidEl)) {
+                var paid = parseFloat(paidEl.textContent.replace(/[^0-9,]/g, '').replace(',', '.')) || 0;
+                var diff = Math.round(total) - paid;
+                if (remainingEl) remainingEl.textContent = formatRupiah(Math.max(diff, 0));
+                if (overpaidEl) overpaidEl.textContent = diff < 0 ? formatRupiah(-diff) : '-';
+            }
         }
 
         var fieldIds = [

@@ -381,6 +381,7 @@ class RentalAdmin(BaseModelAdmin):
         'paid_amount_rupiah',
         'remaining_amount_rupiah',
         'overpaid_amount_rupiah',
+        'duration_display',
     ]
     form = RentalForm
     inlines = [PaymentInline, OtherExpenseInline]
@@ -397,19 +398,31 @@ class RentalAdmin(BaseModelAdmin):
         )
 
     fieldsets = (
-        ('Informasi transaksi', {
-            'fields': ('invoice_number', 'customer', 'vehicle', 'status_badge', 'notes'),
-        }),
-        ('Jadwal dan odometer', {
-            'fields': ('start_at', 'expected_return_at', 'returned_at', 'start_odometer', 'end_odometer'),
-        }),
-        ('Nominal Rupiah', {
+        ('Pelanggan & kendaraan', {
             'fields': (
-                'daily_rate',
-                'discount_amount',
-                'additional_fee',
-                'additional_fee_description',
+                ('invoice_number', 'status_badge'),
+                ('customer', 'vehicle'),
+                'notes',
+            ),
+        }),
+        ('Jadwal & odometer', {
+            'fields': (
+                ('start_at', 'expected_return_at'),
+                ('returned_at', 'start_odometer'),
+                'end_odometer',
+            ),
+        }),
+        ('Tarif & biaya', {
+            'fields': (
+                ('daily_rate', 'discount_amount'),
+                ('additional_fee', 'additional_fee_description'),
                 'deposit_amount',
+            ),
+        }),
+        ('Ringkasan', {
+            'classes': ('rental-summary',),
+            'fields': (
+                'duration_display',
                 'subtotal_rupiah',
                 'total_amount_rupiah',
                 'paid_amount_rupiah',
@@ -520,6 +533,12 @@ class RentalAdmin(BaseModelAdmin):
             return HttpResponseRedirect(request.path)
 
         return super().response_change(request, obj)
+
+    @admin.display(description='Durasi')
+    def duration_display(self, obj):
+        if obj is None or not obj.pk:
+            return '-'
+        return f'{obj.rental_days} hari'
 
     @admin.display(description='Subtotal')
     def subtotal_rupiah(self, obj):
