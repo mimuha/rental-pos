@@ -840,6 +840,19 @@ class ThemePreferenceTests(TestCase):
         self.assertEqual(preference.mode, UserThemePreference.Mode.DARK)
         self.assertEqual(preference.accent, UserThemePreference.Accent.ORANGE)
 
+    def test_endpoint_saves_gray_accent(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse('admin:rental_theme_preference'),
+            data=json.dumps({'mode': 'light', 'accent': 'gray'}),
+            content_type='application/json',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        preference = UserThemePreference.objects.get(user=self.user)
+        self.assertEqual(preference.accent, UserThemePreference.Accent.GRAY)
+
     def test_endpoint_rejects_invalid_choice(self):
         self.client.force_login(self.user)
 

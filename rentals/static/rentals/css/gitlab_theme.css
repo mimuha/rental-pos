@@ -763,6 +763,10 @@ html[data-theme="dark"] .errorlist {
     background: var(--gl-brand-orange);
 }
 
+.rental-theme-swatch-gray {
+    background: var(--gl-neutral-500);
+}
+
 /* Status badges */
 .rental-status-badge {
     font-weight: 600;
@@ -1284,4 +1288,176 @@ html[data-theme] .rental-menu-icon svg [fill="#292D32"] {
 
 html[data-theme] .rental-menu-icon svg [stroke="#394240"] {
     stroke: #ffffff !important;
+}
+
+/* Grayscale accent: semua warna aksen, tautan, tombol, dan status menjadi netral.
+   Ditaruh paling akhir agar menang atas aturan accent lain. */
+html[data-accent="gray"] {
+    --gl-green-300: #a5a3a3;
+    --gl-green-400: #646163;
+    --gl-green-500: #4d4b4e;
+    --gl-orange-300: #a5a3a3;
+    --gl-orange-500: #3a383d;
+    --gl-orange-50: #ecebea;
+    --rental-accent: var(--gl-neutral-700);
+    --rental-accent-hover: var(--gl-neutral-900);
+    --rental-accent-soft: var(--gl-neutral-50);
+    --rental-accent-border: rgba(77, 75, 78, 0.35);
+    --primary: var(--gl-neutral-700);
+    --link-fg: var(--gl-neutral-700);
+    --link-hover-color: var(--gl-neutral-950);
+    --link-selected-fg: var(--gl-neutral-950);
+    --breadcrumbs-color: var(--gl-neutral-700);
+    --rental-primary: var(--gl-neutral-700);
+    --rental-primary-dark: var(--gl-neutral-900);
+    --rental-primary-soft: var(--gl-neutral-50);
+    --rental-primary-border: rgba(77, 75, 78, 0.35);
+    --rental-primary-shadow: rgba(40, 39, 45, 0.24);
+    --rental-selected-bg: var(--gl-neutral-50);
+    --rental-focus-ring: rgba(77, 75, 78, 0.25);
+    --rental-danger: var(--gl-neutral-900);
+    --rental-success: var(--gl-neutral-600);
+    --rental-warning: var(--gl-neutral-700);
+    --rental-calendar-available: var(--gl-neutral-300);
+    --rental-calendar-rented: var(--gl-neutral-700);
+    --rental-calendar-draft: var(--gl-neutral-500);
+    --rental-calendar-maintenance: var(--gl-neutral-950);
+    --unguhover: var(--gl-neutral-50);
+    --error-fg: var(--gl-neutral-900);
+    --bs-primary: var(--gl-neutral-700);
+    --bs-primary-rgb: 77, 75, 78;
+    --bs-link-color: var(--gl-neutral-700);
+    --bs-link-hover-color: var(--gl-neutral-950);
+    --bs-success: var(--gl-neutral-600);
+    --bs-success-rgb: 100, 97, 99;
+    --bs-info: var(--gl-neutral-700);
+    --bs-info-rgb: 77, 75, 78;
+}
+
+html[data-accent="gray"] body.login {
+    background: var(--body-bg) !important;
+}
+
+html[data-accent="gray"] .errornote,
+html[data-accent="gray"] .errorlist,
+html[data-accent="gray"] .messagelist li.error {
+    color: var(--gl-neutral-900) !important;
+    background: var(--gl-neutral-50) !important;
+    border-color: var(--gl-neutral-300) !important;
+}
+
+html[data-accent="gray"] .messagelist li,
+html[data-accent="gray"] .messagelist li.warning {
+    color: var(--gl-neutral-800) !important;
+    background: var(--gl-neutral-10) !important;
+    border-color: var(--gl-neutral-100) !important;
+}
+
+html[data-accent="gray"] .rental-menu-icon svg [stroke="#394240"] {
+    stroke: #ffffff !important;
+}
+
+/* Gray accent, dark mode */
+html[data-theme="dark"][data-accent="gray"] {
+    --gl-green-400: #747273;
+    --gl-green-500: #646163;
+    --gl-orange-500: #646163;
+    --rental-accent: var(--gl-neutral-300);
+    --rental-accent-hover: #dcdbd9;
+    --rental-accent-soft: rgba(165, 163, 163, 0.16);
+    --rental-accent-border: rgba(165, 163, 163, 0.35);
+    --primary: var(--gl-neutral-500);
+    --link-fg: #c1bfbe;
+    --link-hover-color: #ffffff;
+    --link-selected-fg: #ffffff;
+    --breadcrumbs-color: #c1bfbe;
+    --rental-primary: var(--gl-neutral-500);
+    --rental-primary-dark: var(--gl-neutral-600);
+    --rental-primary-soft: rgba(165, 163, 163, 0.16);
+    --rental-primary-border: rgba(165, 163, 163, 0.35);
+    --rental-primary-shadow: rgba(0, 0, 0, 0.5);
+    --rental-selected-bg: rgba(165, 163, 163, 0.16);
+    --rental-focus-ring: rgba(165, 163, 163, 0.35);
+    --rental-row-hover-bg: rgba(165, 163, 163, 0.10);
+    --rental-danger: #ecebea;
+    --rental-success: #c1bfbe;
+    --rental-warning: #c1bfbe;
+    --rental-calendar-available: var(--gl-neutral-600);
+    --rental-calendar-rented: var(--gl-neutral-300);
+    --rental-calendar-draft: var(--gl-neutral-500);
+    --rental-calendar-maintenance: #ecebea;
+    --unguhover: rgba(165, 163, 163, 0.14);
+    --selected-bg: rgba(165, 163, 163, 0.16);
+    --error-fg: #ecebea;
+    --bs-primary: var(--gl-neutral-500);
+    --bs-primary-rgb: 116, 114, 115;
+    --bs-link-color: #c1bfbe;
+    --bs-link-hover-color: #ffffff;
+    --bs-success: #c1bfbe;
+    --bs-success-rgb: 193, 191, 190;
+    --bs-info: #c1bfbe;
+    --bs-info-rgb: 193, 191, 190;
+}
+
+html[data-theme="dark"][data-accent="gray"] .errornote,
+html[data-theme="dark"][data-accent="gray"] .errorlist,
+html[data-theme="dark"][data-accent="gray"] .messagelist li,
+html[data-theme="dark"][data-accent="gray"] .messagelist li.warning,
+html[data-theme="dark"][data-accent="gray"] .messagelist li.error {
+    color: #ecebea !important;
+    background: rgba(165, 163, 163, 0.12) !important;
+    border-color: rgba(165, 163, 163, 0.35) !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"][data-accent="gray"] {
+        --gl-green-400: #747273;
+        --gl-green-500: #646163;
+        --gl-orange-500: #646163;
+        --rental-accent: var(--gl-neutral-300);
+        --rental-accent-hover: #dcdbd9;
+        --rental-accent-soft: rgba(165, 163, 163, 0.16);
+        --rental-accent-border: rgba(165, 163, 163, 0.35);
+        --primary: var(--gl-neutral-500);
+        --link-fg: #c1bfbe;
+        --link-hover-color: #ffffff;
+        --link-selected-fg: #ffffff;
+        --breadcrumbs-color: #c1bfbe;
+        --rental-primary: var(--gl-neutral-500);
+        --rental-primary-dark: var(--gl-neutral-600);
+        --rental-primary-soft: rgba(165, 163, 163, 0.16);
+        --rental-primary-border: rgba(165, 163, 163, 0.35);
+        --rental-primary-shadow: rgba(0, 0, 0, 0.5);
+        --rental-selected-bg: rgba(165, 163, 163, 0.16);
+        --rental-focus-ring: rgba(165, 163, 163, 0.35);
+        --rental-row-hover-bg: rgba(165, 163, 163, 0.10);
+        --rental-danger: #ecebea;
+        --rental-success: #c1bfbe;
+        --rental-warning: #c1bfbe;
+        --rental-calendar-available: var(--gl-neutral-600);
+        --rental-calendar-rented: var(--gl-neutral-300);
+        --rental-calendar-draft: var(--gl-neutral-500);
+        --rental-calendar-maintenance: #ecebea;
+        --unguhover: rgba(165, 163, 163, 0.14);
+        --selected-bg: rgba(165, 163, 163, 0.16);
+        --error-fg: #ecebea;
+        --bs-primary: var(--gl-neutral-500);
+        --bs-primary-rgb: 116, 114, 115;
+        --bs-link-color: #c1bfbe;
+        --bs-link-hover-color: #ffffff;
+        --bs-success: #c1bfbe;
+        --bs-success-rgb: 193, 191, 190;
+        --bs-info: #c1bfbe;
+        --bs-info-rgb: 193, 191, 190;
+    }
+
+    html[data-theme="auto"][data-accent="gray"] .errornote,
+    html[data-theme="auto"][data-accent="gray"] .errorlist,
+    html[data-theme="auto"][data-accent="gray"] .messagelist li,
+    html[data-theme="auto"][data-accent="gray"] .messagelist li.warning,
+    html[data-theme="auto"][data-accent="gray"] .messagelist li.error {
+        color: #ecebea !important;
+        background: rgba(165, 163, 163, 0.12) !important;
+        border-color: rgba(165, 163, 163, 0.35) !important;
+    }
 }

@@ -187,7 +187,7 @@ User ── UserThemePreference (1:1)
 |-------|------|------------|
 | user | OneToOne → User, CASCADE | Pemilik preferensi |
 | mode | CharField(10) | `light`, `dark`, atau `auto` (default `auto`) |
-| accent | CharField(10) | `purple` atau `orange` (default `purple`) |
+| accent | CharField(10) | `purple`, `orange`, atau `gray` (default `purple`) |
 | created_at / updated_at | DateTimeField | Auto |
 | **db_table** | — | `user_theme_preferences` |
 

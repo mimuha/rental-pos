@@ -16,7 +16,7 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 
 - Pilihan tema tersedia di menu gear pengguna.
 - Mode: Terang, Gelap, Ikuti Sistem.
-- Aksen: Blue + Purple (default) atau Orange, mengikuti palet GitLab.
+- Aksen: Blue + Purple (default), Orange, atau Grayscale (seluruh warna aksen, tautan, tombol, dan status menjadi abu-abu netral).
 - Preferensi disimpan per user di database dan diterapkan lintas perangkat.
 - Hover, selected, focus ring, dan shadow memakai token tema yang sama.
 - Logo Zandev tetap; seluruh ikon modul di sidebar dan dashboard mengikuti aksen aktif (purple/orange).
