@@ -340,6 +340,7 @@ class OtherExpenseAdmin(BaseModelAdmin):
 
 class PaymentInline(admin.TabularInline):
     model = Payment
+    template = 'admin/rentals/edit_inline/payments.html'
     extra = 0
     fields = ['payment_date', 'method', 'amount', 'invoice_number', 'reference_number', 'notes']
     readonly_fields = ['invoice_number']

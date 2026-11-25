@@ -1891,106 +1891,6 @@ html[data-theme] #nav-sidebar::-webkit-scrollbar-thumb:hover {
     background-color: var(--rental-scroll-thumb-hover);
 }
 
-/* ---- Inline Pembayaran di Order rental: lebar kolom dan font seragam ---- */
-html[data-theme] #payments-group .tabular {
-    overflow-x: auto;
-}
-
-html[data-theme] #payments-group table {
-    width: 100%;
-}
-
-html[data-theme] #payments-group th,
-html[data-theme] #payments-group td,
-html[data-theme] #payments-group td p,
-html[data-theme] #payments-group td label,
-html[data-theme] #payments-group td input,
-html[data-theme] #payments-group td select,
-html[data-theme] #payments-group td textarea,
-html[data-theme] #payments-group .datetimeshortcuts,
-html[data-theme] #payments-group .datetimeshortcuts a {
-    font-family: inherit;
-    font-size: 0.8125rem;
-    line-height: 1.4;
-}
-
-html[data-theme] #payments-group th {
-    white-space: nowrap;
-}
-
-html[data-theme] #payments-group td {
-    padding: 0.6rem 0.75rem;
-    vertical-align: middle;
-}
-
-/* Judul baris (pay-... - nominal) hanya mengulang kolom Nomor invoice */
-html[data-theme] #payments-group td.original {
-    width: 0;
-    padding: 0;
-}
-
-html[data-theme] #payments-group td.original p {
-    display: none;
-}
-
-/* Tanggal dan waktu: dua baris rapi (label | input | pintasan) */
-html[data-theme] #payments-group p.datetime {
-    display: grid !important;
-    grid-template-columns: auto minmax(7.5rem, 1fr) auto;
-    align-items: center;
-    gap: 0.4rem 0.6rem;
-    margin: 0;
-}
-
-html[data-theme] #payments-group p.datetime label {
-    margin: 0;
-    color: var(--rental-pos-subtitle);
-}
-
-html[data-theme] #payments-group p.datetime input {
-    width: 100%;
-    max-width: none;
-}
-
-html[data-theme] #payments-group .datetimeshortcuts {
-    white-space: nowrap;
-    color: var(--rental-pos-subtitle);
-}
-
-html[data-theme] #payments-group td.field-payment_date {
-    min-width: 17rem;
-}
-
-html[data-theme] #payments-group td.field-method select {
-    min-width: 9rem;
-}
-
-html[data-theme] #payments-group td.field-amount input {
-    min-width: 9.5rem;
-}
-
-html[data-theme] #payments-group td.field-invoice_number,
-html[data-theme] #payments-group td.field-invoice_number p {
-    min-width: 8.5rem;
-    white-space: nowrap;
-    color: var(--rental-pos-subtitle);
-}
-
-html[data-theme] #payments-group td.field-reference_number input {
-    min-width: 9.5rem;
-}
-
-html[data-theme] #payments-group td.field-notes textarea {
-    width: 100%;
-    min-width: 14rem;
-    height: 4rem;
-    resize: vertical;
-}
-
-html[data-theme] #payments-group td.delete {
-    text-align: center;
-}
-
 /* ---- Perbaikan lanjutan: sidebar sticky dan inline tabular ---- */
 
 /* Kolom sidebar harus setinggi baris agar sticky punya ruang bergerak
@@ -2027,27 +1927,6 @@ html[data-theme] .inline-group .tabular td textarea {
 
 html[data-theme] .inline-group .tabular td.original p {
     font-weight: 600;
-}
-
-/* Tanggal + waktu: kolom mengikuti isi, tanpa potongan dan tanpa wrap */
-html[data-theme] #payments-group p.datetime {
-    grid-template-columns: max-content minmax(7.5rem, 1fr) max-content !important;
-}
-
-html[data-theme] #payments-group p.datetime label {
-    width: auto !important;
-    min-width: 0 !important;
-    white-space: nowrap;
-}
-
-html[data-theme] #payments-group p.datetime .datetimeshortcuts,
-html[data-theme] #payments-group p.datetime span {
-    width: auto !important;
-    white-space: nowrap;
-}
-
-html[data-theme] #payments-group td.field-payment_date {
-    min-width: 21rem;
 }
 
 /* ---- Border lebih tipis: garis sidebar dan tabel dilembutkan ---- */
@@ -2874,4 +2753,299 @@ html[data-theme] .flatpickr-calendar select:focus-visible {
 html[data-theme] .flatpickr-calendar .flatpickr-time input,
 html[data-theme] .flatpickr-calendar .flatpickr-time input:focus {
     border: 0 !important;
+}
+
+
+/* ---- Inline Pembayaran: satu baris per pembayaran (grid), hapus lewat ikon ---- */
+.rental-payments__summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0 0 0.75rem;
+}
+
+.rental-payments__chip {
+    padding: 0.2rem 0.8rem;
+    color: var(--body-fg);
+    background: var(--rental-muted-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+html[data-theme] .rental-payments__chip--paid {
+    color: #0b645a;
+    background: #e6f5ea;
+    border-color: #bee6d0;
+}
+
+html[data-theme="dark"] .rental-payments__chip--paid {
+    color: #84d4b6;
+    background: rgba(13, 128, 112, 0.14);
+    border-color: rgba(53, 181, 151, 0.35);
+}
+
+html[data-accent="gray"] .rental-payments__chip--paid {
+    color: var(--body-fg);
+    background: var(--rental-muted-bg);
+    border-color: var(--border-color);
+}
+
+.rental-payments__count {
+    margin-left: auto;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.75rem;
+}
+
+html[data-theme] #payments-group fieldset.module {
+    padding: 1.1rem 1.25rem 1rem;
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--rental-radius-lg) !important;
+}
+
+html[data-theme] #payments-group fieldset.module > h2 {
+    margin: 0 0 0.6rem;
+    padding: 0 !important;
+    color: var(--rental-pos-title) !important;
+    background: transparent !important;
+    border: 0 !important;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+html[data-theme] #payments-group .wrapper,
+html[data-theme] #payments-group .tabular {
+    overflow: visible;
+}
+
+html[data-theme] #payments-group table,
+html[data-theme] #payments-group thead,
+html[data-theme] #payments-group tbody {
+    display: block;
+    width: 100% !important;
+    max-width: none !important;
+}
+
+/* Judul kolom dan baris memakai grid yang sama */
+html[data-theme] #payments-group thead tr,
+html[data-theme] #payments-group tbody tr.form-row {
+    display: grid;
+    grid-template-columns: 1.7fr 1.1fr 1.1fr 1.2fr 1.9fr 2.5rem;
+    grid-template-areas: "date method amount ref notes del";
+    align-items: start;
+    gap: 0 0.75rem;
+    padding: 0.7rem 0;
+    background: transparent !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--hairline-color) !important;
+}
+
+html[data-theme] #payments-group thead tr {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+html[data-theme] #payments-group thead th.original,
+html[data-theme] #payments-group thead th.column-invoice_number,
+html[data-theme] #payments-group tbody td.original {
+    display: none;
+}
+
+html[data-theme] #payments-group thead th,
+html[data-theme] #payments-group tbody td {
+    min-width: 0;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    font-family: inherit;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+}
+
+html[data-theme] #payments-group thead th {
+    color: var(--rental-pos-subtitle) !important;
+    font-size: 0.7rem !important;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+html[data-theme] #payments-group thead th.column-payment_date { grid-area: date; }
+html[data-theme] #payments-group thead th.column-method { grid-area: method; }
+html[data-theme] #payments-group thead th.column-amount { grid-area: amount; }
+html[data-theme] #payments-group thead th.column-reference_number { grid-area: ref; }
+html[data-theme] #payments-group thead th.column-notes { grid-area: notes; }
+html[data-theme] #payments-group thead th:last-child { grid-area: del; font-size: 0 !important; }
+
+html[data-theme] #payments-group td.field-payment_date { grid-area: date; }
+html[data-theme] #payments-group td.field-method { grid-area: method; }
+html[data-theme] #payments-group td.field-amount { grid-area: amount; }
+html[data-theme] #payments-group td.field-reference_number { grid-area: ref; }
+html[data-theme] #payments-group td.field-notes { grid-area: notes; }
+html[data-theme] #payments-group td.delete { grid-area: del; }
+
+/* Nomor invoice: keterangan kecil di bawah tanggal */
+html[data-theme] #payments-group tbody tr.form-row {
+    grid-template-areas:
+        "date method amount ref notes del"
+        "inv  .      .      .   .     .";
+}
+
+html[data-theme] #payments-group td.field-invoice_number {
+    grid-area: inv;
+    margin-top: 0.3rem;
+}
+
+html[data-theme] #payments-group td.field-invoice_number p {
+    margin: 0;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.7rem;
+}
+
+html[data-theme] #payments-group tr.empty-form {
+    display: none !important;
+}
+
+/* Kontrol */
+html[data-theme] #payments-group td input:not([type="checkbox"]),
+html[data-theme] #payments-group td select,
+html[data-theme] #payments-group td textarea {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 2.25rem;
+    font-family: inherit;
+    font-size: 0.8125rem !important;
+    border-radius: 0.4rem !important;
+}
+
+html[data-theme] #payments-group td.field-notes textarea {
+    height: 2.25rem;
+    min-height: 2.25rem;
+    padding-top: 0.5rem;
+    resize: vertical;
+}
+
+html[data-theme] #payments-group td.field-amount input {
+    font-weight: 700;
+}
+
+/* Tanggal dan jam sebaris (label disembunyikan, pintasan diganti picker) */
+html[data-theme] #payments-group p.datetime {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) !important;
+    gap: 0.4rem !important;
+    margin: 0;
+}
+
+html[data-theme] #payments-group p.datetime > label,
+html[data-theme] #payments-group p.datetime > br {
+    display: none !important;
+}
+
+/* Hapus: tombol tong sampah; baris yang ditandai tampil redup dan tercoret */
+html[data-theme] #payments-group td.delete {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+html[data-theme] #payments-group td.delete input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    flex: 0 0 auto;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: 0;
+    background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23747273' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6'/%3E%3C/svg%3E") center / 1rem no-repeat;
+    border: 1px solid var(--border-color);
+    border-radius: 0.4rem;
+    cursor: pointer;
+}
+
+html[data-theme] #payments-group td.delete input[type="checkbox"]:hover {
+    background-color: var(--rental-hover-bg);
+}
+
+html[data-theme] #payments-group td.delete input[type="checkbox"]:checked {
+    background: #feeef0 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23de1d4b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6'/%3E%3C/svg%3E") center / 1rem no-repeat;
+    border-color: var(--rental-danger);
+}
+
+html[data-theme] #payments-group tr.form-row:has(td.delete input:checked) {
+    background: #feeef0 !important;
+}
+
+html[data-theme] #payments-group tr.form-row:has(td.delete input:checked) td:not(.delete):not(.field-invoice_number) {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+html[data-theme] #payments-group tr.form-row:has(td.delete input:checked) td.field-invoice_number p::after {
+    content: "  -  Akan dihapus";
+    white-space: nowrap;
+    color: var(--rental-danger);
+    font-weight: 700;
+}
+
+/* Tambah pembayaran: baris putus-putus */
+html[data-theme] #payments-group tr.add-row {
+    display: block;
+    padding: 0.75rem 0 0;
+    border: 0 !important;
+    background: transparent !important;
+}
+
+html[data-theme] #payments-group tr.add-row td {
+    display: block;
+    padding: 0 !important;
+    border: 0 !important;
+}
+
+html[data-theme] #payments-group tr.add-row a,
+html[data-theme] #payments-group tr.add-row a:link,
+html[data-theme] #payments-group tr.add-row a:visited {
+    display: block;
+    padding: 0.7rem;
+    color: var(--rental-primary) !important;
+    background: transparent !important;
+    border: 1px dashed var(--gl-neutral-300) !important;
+    border-radius: var(--rental-radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+}
+
+html[data-theme] #payments-group tr.add-row a:hover {
+    background: var(--rental-hover-bg) !important;
+}
+
+html[data-theme] #payments-group tr.add-row a::before {
+    content: "+ ";
+}
+
+/* Layar sempit: tiap pembayaran menjadi kartu bertumpuk */
+@media (max-width: 1099.98px) {
+    html[data-theme] #payments-group thead {
+        display: none;
+    }
+
+    html[data-theme] #payments-group tbody tr.form-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-areas:
+            "date date"
+            "method amount"
+            "ref ref"
+            "notes notes"
+            "inv del";
+        gap: 0.6rem 0.75rem;
+        padding: 0.9rem 0;
+    }
 }
