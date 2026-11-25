@@ -3049,3 +3049,634 @@ html[data-theme] #payments-group tr.add-row a::before {
         padding: 0.9rem 0;
     }
 }
+
+/* ---- Palet baru: Indigo (aksen "purple") dan Terakota (aksen "orange") ---- */
+html[data-theme="light"][data-accent="purple"],
+html[data-theme="auto"][data-accent="purple"] {
+    --rental-accent: #4f46e5;
+    --rental-accent-hover: #4338ca;
+    --rental-accent-soft: #eef2ff;
+    --rental-accent-border: rgba(79, 70, 229, 0.35);
+    --primary: #4f46e5;
+    --link-fg: #4f46e5;
+    --link-hover-color: #4338ca;
+    --link-selected-fg: #3730a3;
+    --breadcrumbs-color: #4f46e5;
+    --rental-primary: #4f46e5;
+    --rental-primary-dark: #4338ca;
+    --rental-primary-soft: #eef2ff;
+    --rental-primary-border: rgba(79, 70, 229, 0.35);
+    --rental-primary-shadow: rgba(79, 70, 229, 0.24);
+    --rental-selected-bg: #eef2ff;
+    --rental-focus-ring: rgba(79, 70, 229, 0.25);
+    --rental-calendar-rented: #4f46e5;
+    --unguhover: rgba(79, 70, 229, 0.08);
+    --bs-primary: #4f46e5;
+    --bs-primary-rgb: 79, 70, 229;
+    --bs-link-color: #4f46e5;
+    --bs-link-hover-color: #4338ca;
+    --bs-info: #4f46e5;
+    --bs-info-rgb: 79, 70, 229;
+}
+
+html[data-theme="light"][data-accent="orange"],
+html[data-theme="auto"][data-accent="orange"] {
+    --rental-accent: #b4532a;
+    --rental-accent-hover: #98441f;
+    --rental-accent-soft: #faece4;
+    --rental-accent-border: rgba(180, 83, 42, 0.35);
+    --primary: #b4532a;
+    --link-fg: #b4532a;
+    --link-hover-color: #98441f;
+    --link-selected-fg: #7a3718;
+    --breadcrumbs-color: #b4532a;
+    --rental-primary: #b4532a;
+    --rental-primary-dark: #98441f;
+    --rental-primary-soft: #faece4;
+    --rental-primary-border: rgba(180, 83, 42, 0.35);
+    --rental-primary-shadow: rgba(180, 83, 42, 0.24);
+    --rental-selected-bg: #faece4;
+    --rental-focus-ring: rgba(180, 83, 42, 0.25);
+    --rental-calendar-rented: #b4532a;
+    --unguhover: rgba(180, 83, 42, 0.08);
+    --bs-primary: #b4532a;
+    --bs-primary-rgb: 180, 83, 42;
+    --bs-link-color: #b4532a;
+    --bs-link-hover-color: #98441f;
+    --bs-info: #b4532a;
+    --bs-info-rgb: 180, 83, 42;
+}
+
+html[data-theme="dark"][data-accent="purple"] {
+    --rental-accent: #a5b4fc;
+    --rental-accent-hover: #c7d2fe;
+    --rental-accent-soft: rgba(129, 140, 248, 0.16);
+    --rental-accent-border: rgba(129, 140, 248, 0.35);
+    --primary: #4f46e5;
+    --link-fg: #a5b4fc;
+    --link-hover-color: #c7d2fe;
+    --link-selected-fg: #c7d2fe;
+    --breadcrumbs-color: #a5b4fc;
+    --rental-primary: #4f46e5;
+    --rental-primary-dark: #4338ca;
+    --rental-primary-soft: rgba(129, 140, 248, 0.16);
+    --rental-primary-border: rgba(129, 140, 248, 0.35);
+    --rental-primary-shadow: rgba(0, 0, 0, 0.5);
+    --rental-selected-bg: rgba(129, 140, 248, 0.16);
+    --selected-bg: rgba(129, 140, 248, 0.16);
+    --rental-focus-ring: rgba(129, 140, 248, 0.35);
+    --rental-row-hover-bg: rgba(129, 140, 248, 0.10);
+    --rental-calendar-rented: #a5b4fc;
+    --unguhover: rgba(129, 140, 248, 0.14);
+    --bs-primary: #4f46e5;
+    --bs-primary-rgb: 79, 70, 229;
+    --bs-link-color: #a5b4fc;
+    --bs-link-hover-color: #c7d2fe;
+    --bs-info: #a5b4fc;
+    --bs-info-rgb: 129, 140, 248;
+}
+
+html[data-theme="dark"][data-accent="orange"] {
+    --rental-accent: #e29a78;
+    --rental-accent-hover: #f0b79d;
+    --rental-accent-soft: rgba(226, 154, 120, 0.16);
+    --rental-accent-border: rgba(226, 154, 120, 0.35);
+    --primary: #b4532a;
+    --link-fg: #e29a78;
+    --link-hover-color: #f0b79d;
+    --link-selected-fg: #f0b79d;
+    --breadcrumbs-color: #e29a78;
+    --rental-primary: #b4532a;
+    --rental-primary-dark: #98441f;
+    --rental-primary-soft: rgba(226, 154, 120, 0.16);
+    --rental-primary-border: rgba(226, 154, 120, 0.35);
+    --rental-primary-shadow: rgba(0, 0, 0, 0.5);
+    --rental-selected-bg: rgba(226, 154, 120, 0.16);
+    --selected-bg: rgba(226, 154, 120, 0.16);
+    --rental-focus-ring: rgba(226, 154, 120, 0.35);
+    --rental-row-hover-bg: rgba(226, 154, 120, 0.10);
+    --rental-calendar-rented: #e29a78;
+    --unguhover: rgba(226, 154, 120, 0.14);
+    --bs-primary: #b4532a;
+    --bs-primary-rgb: 180, 83, 42;
+    --bs-link-color: #e29a78;
+    --bs-link-hover-color: #f0b79d;
+    --bs-info: #e29a78;
+    --bs-info-rgb: 226, 154, 120;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"][data-accent="purple"] {
+        --rental-accent: #a5b4fc;
+        --rental-accent-hover: #c7d2fe;
+        --rental-accent-soft: rgba(129, 140, 248, 0.16);
+        --rental-accent-border: rgba(129, 140, 248, 0.35);
+        --primary: #4f46e5;
+        --link-fg: #a5b4fc;
+        --link-hover-color: #c7d2fe;
+        --link-selected-fg: #c7d2fe;
+        --breadcrumbs-color: #a5b4fc;
+        --rental-primary: #4f46e5;
+        --rental-primary-dark: #4338ca;
+        --rental-primary-soft: rgba(129, 140, 248, 0.16);
+        --rental-primary-border: rgba(129, 140, 248, 0.35);
+        --rental-primary-shadow: rgba(0, 0, 0, 0.5);
+        --rental-selected-bg: rgba(129, 140, 248, 0.16);
+        --selected-bg: rgba(129, 140, 248, 0.16);
+        --rental-focus-ring: rgba(129, 140, 248, 0.35);
+        --rental-row-hover-bg: rgba(129, 140, 248, 0.10);
+        --rental-calendar-rented: #a5b4fc;
+        --unguhover: rgba(129, 140, 248, 0.14);
+        --bs-primary: #4f46e5;
+        --bs-primary-rgb: 79, 70, 229;
+        --bs-link-color: #a5b4fc;
+        --bs-link-hover-color: #c7d2fe;
+        --bs-info: #a5b4fc;
+        --bs-info-rgb: 129, 140, 248;
+    }
+
+    html[data-theme="auto"][data-accent="orange"] {
+        --rental-accent: #e29a78;
+        --rental-accent-hover: #f0b79d;
+        --rental-accent-soft: rgba(226, 154, 120, 0.16);
+        --rental-accent-border: rgba(226, 154, 120, 0.35);
+        --primary: #b4532a;
+        --link-fg: #e29a78;
+        --link-hover-color: #f0b79d;
+        --link-selected-fg: #f0b79d;
+        --breadcrumbs-color: #e29a78;
+        --rental-primary: #b4532a;
+        --rental-primary-dark: #98441f;
+        --rental-primary-soft: rgba(226, 154, 120, 0.16);
+        --rental-primary-border: rgba(226, 154, 120, 0.35);
+        --rental-primary-shadow: rgba(0, 0, 0, 0.5);
+        --rental-selected-bg: rgba(226, 154, 120, 0.16);
+        --selected-bg: rgba(226, 154, 120, 0.16);
+        --rental-focus-ring: rgba(226, 154, 120, 0.35);
+        --rental-row-hover-bg: rgba(226, 154, 120, 0.10);
+        --rental-calendar-rented: #e29a78;
+        --unguhover: rgba(226, 154, 120, 0.14);
+        --bs-primary: #b4532a;
+        --bs-primary-rgb: 180, 83, 42;
+        --bs-link-color: #e29a78;
+        --bs-link-hover-color: #f0b79d;
+        --bs-info: #e29a78;
+        --bs-info-rgb: 226, 154, 120;
+    }
+
+}
+
+/* Swatch menu tema dan tombol Riwayat mengikuti palet baru */
+html[data-theme] .rental-theme-swatch-purple {
+    background: #4f46e5;
+}
+
+html[data-theme] .rental-theme-swatch-orange {
+    background: #b4532a;
+}
+
+html[data-theme] a.historylink,
+html[data-theme] a.historylink:link,
+html[data-theme] a.historylink:visited,
+html[data-theme] a.historylink:hover,
+html[data-theme] a.historylink:focus,
+html[data-theme] .historylink {
+    background: var(--rental-primary-dark) !important;
+    border-color: var(--rental-primary-dark) !important;
+}
+
+/* ---- Kalender Booking: toolbar, chip status, panel detail, warna event ---- */
+.booking-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 19.5rem;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+@media (max-width: 1199.98px) {
+    .booking-page {
+        grid-template-columns: 1fr;
+    }
+}
+
+.booking-main {
+    min-width: 0;
+}
+
+.booking-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.booking-toolbar__vehicle {
+    flex: 0 1 15rem;
+    min-width: 11rem;
+}
+
+.booking-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+html[data-theme] .booking-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.85rem;
+    color: var(--body-fg);
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+html[data-theme] .booking-chip:hover {
+    background: var(--rental-hover-bg);
+}
+
+html[data-theme] .booking-chip.is-active {
+    color: var(--white);
+    background: var(--body-fg);
+    border-color: var(--body-fg);
+    font-weight: 700;
+}
+
+.booking-dot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+}
+
+.booking-dot--available { background: var(--rental-calendar-available); }
+.booking-dot--rented { background: var(--rental-calendar-rented); }
+.booking-dot--draft { background: var(--rental-calendar-draft); }
+.booking-dot--maintenance { background: var(--rental-calendar-maintenance); }
+
+html[data-theme] #content a.booking-add,
+html[data-theme] #content a.booking-add:link,
+html[data-theme] #content a.booking-add:visited {
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    color: #ffffff !important;
+    background: var(--rental-primary) !important;
+    border-radius: var(--rental-radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+html[data-theme] #content a.booking-add:hover {
+    background: var(--rental-primary-dark) !important;
+}
+
+/* FullCalendar */
+html[data-theme] #booking-calendar {
+    --fc-border-color: var(--hairline-color);
+    --fc-today-bg-color: var(--rental-primary-soft);
+    --fc-page-bg-color: var(--white);
+    --fc-neutral-bg-color: var(--rental-muted-bg);
+    --fc-small-font-size: 0.75rem;
+    min-height: 0;
+}
+
+html[data-theme] #booking-calendar .fc-header-toolbar {
+    margin-bottom: 1rem;
+}
+
+html[data-theme] #booking-calendar .fc-toolbar-chunk:first-child {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+html[data-theme] #booking-calendar .fc-toolbar-title {
+    margin-left: 0.5rem;
+    color: var(--rental-pos-title);
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+html[data-theme] #booking-calendar .fc-toolbar .fc-button.fc-button-primary {
+    color: var(--body-fg) !important;
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--rental-radius-sm) !important;
+    box-shadow: none !important;
+    font-size: 0.8125rem;
+    font-weight: 600 !important;
+    text-transform: none;
+}
+
+html[data-theme] #booking-calendar .fc-toolbar .fc-button.fc-button-primary:hover {
+    background: var(--rental-hover-bg) !important;
+}
+
+html[data-theme] #booking-calendar .fc-toolbar .fc-button.fc-button-primary:disabled {
+    opacity: 0.5;
+}
+
+html[data-theme] #booking-calendar .fc-toolbar .fc-button.fc-button-primary.fc-button-active {
+    color: var(--rental-pos-title) !important;
+    background: var(--rental-hover-bg) !important;
+    font-weight: 800 !important;
+}
+
+html[data-theme] #booking-calendar .fc-toolbar .fc-button-group {
+    gap: 0;
+}
+
+html[data-theme] #booking-calendar .fc-toolbar-chunk:first-child .fc-button-group {
+    gap: 0.5rem;
+}
+
+html[data-theme] #booking-calendar .fc-view-harness {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--rental-radius-lg);
+    overflow: hidden;
+}
+
+html[data-theme] #booking-calendar .fc-scrollgrid,
+html[data-theme] #booking-calendar .fc-theme-standard .fc-scrollgrid {
+    border: 0;
+}
+
+html[data-theme] #booking-calendar .fc-col-header-cell {
+    background: var(--rental-muted-bg);
+}
+
+html[data-theme] #booking-calendar .fc-col-header-cell-cushion {
+    padding: 0.5rem;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+html[data-theme] #booking-calendar .fc-daygrid-day-number {
+    margin: 0.25rem;
+    padding: 0.15rem 0.45rem;
+    color: var(--body-fg);
+    font-size: 0.75rem;
+}
+
+html[data-theme] #booking-calendar .fc-day-other .fc-daygrid-day-number {
+    color: var(--gl-neutral-300);
+}
+
+html[data-theme] #booking-calendar .fc-day-today .fc-daygrid-day-number {
+    min-width: 1.5rem;
+    color: #ffffff;
+    background: var(--rental-primary);
+    border-radius: 999px;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Warna event menurut jenis booking */
+html[data-theme] #booking-calendar .fc-event.bk-event {
+    padding: 0.1rem 0.25rem;
+    border: 1px solid transparent;
+    border-radius: 0.4rem;
+    cursor: pointer;
+}
+
+html[data-theme] #booking-calendar .fc-event .booking-calendar-event {
+    color: inherit;
+}
+
+html[data-theme] #booking-calendar .fc-event.bk-event--active {
+    color: #ffffff !important;
+    background: var(--rental-primary);
+    border-color: var(--rental-primary);
+}
+
+html[data-theme] #booking-calendar .fc-event.bk-event--completed {
+    color: var(--rental-primary-dark) !important;
+    background: var(--rental-primary-soft);
+    border-color: var(--rental-primary-border);
+}
+
+html[data-theme="dark"] #booking-calendar .fc-event.bk-event--completed {
+    color: var(--rental-accent) !important;
+}
+
+html[data-theme] #booking-calendar .fc-event.bk-event--draft {
+    color: var(--rental-pos-subtitle) !important;
+    background: var(--white);
+    border: 1px dashed var(--gl-neutral-300);
+}
+
+html[data-theme] #booking-calendar .fc-event.bk-event--maintenance {
+    color: #ffffff !important;
+    background: var(--rental-calendar-maintenance);
+    border-color: var(--rental-calendar-maintenance);
+}
+
+html[data-theme] #booking-calendar .fc-event.bk-event--available {
+    color: #ffffff !important;
+    background: var(--rental-calendar-available);
+    border-color: var(--rental-calendar-available);
+}
+
+html[data-theme] #booking-calendar .fc-event.bk-event--selected {
+    outline: 2px solid var(--rental-pos-title);
+    outline-offset: 1px;
+}
+
+/* Panel samping */
+html[data-theme] .booking-card {
+    margin-bottom: 1rem;
+    padding: 1.1rem 1.25rem;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--rental-radius-lg);
+}
+
+html[data-theme] .booking-card__title {
+    margin: 0 0 0.75rem;
+    padding: 0;
+    color: var(--rental-pos-title);
+    background: transparent;
+    border: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.booking-card__empty,
+.booking-card__hint {
+    margin: 0;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.8125rem;
+}
+
+.booking-card__hint {
+    margin-top: 0.75rem;
+    font-size: 0.72rem;
+}
+
+.booking-detail__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.booking-detail__rows {
+    margin: 0 0 0.9rem;
+}
+
+.booking-detail__rows > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.3rem 0;
+    font-size: 0.8125rem;
+}
+
+html[data-theme] .booking-detail__rows dt {
+    margin: 0;
+    color: var(--rental-pos-subtitle);
+    font-weight: 500;
+}
+
+html[data-theme] .booking-detail__rows dd {
+    margin: 0;
+    color: var(--body-fg);
+    text-align: right;
+    font-weight: 600;
+}
+
+.booking-detail__actions {
+    display: grid;
+    gap: 0.5rem;
+}
+
+html[data-theme] #content a.booking-action,
+html[data-theme] #content a.booking-action:link,
+html[data-theme] #content a.booking-action:visited {
+    display: block;
+    padding: 0.6rem;
+    color: var(--link-fg) !important;
+    background: var(--white) !important;
+    border: 1px solid var(--border-color);
+    border-radius: var(--rental-radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+}
+
+html[data-theme] #content a.booking-action--primary,
+html[data-theme] #content a.booking-action--primary:link,
+html[data-theme] #content a.booking-action--primary:visited {
+    color: #ffffff !important;
+    background: var(--rental-primary) !important;
+    border-color: var(--rental-primary);
+}
+
+html[data-theme] #content a.booking-action:hover {
+    background: var(--rental-hover-bg) !important;
+}
+
+html[data-theme] #content a.booking-action--primary:hover {
+    background: var(--rental-primary-dark) !important;
+}
+
+.booking-legend {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.booking-legend li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.2rem 0;
+    color: var(--body-fg);
+    font-size: 0.78rem;
+}
+
+.booking-swatch {
+    display: inline-block;
+    width: 1.4rem;
+    height: 0.65rem;
+    border: 1px solid transparent;
+    border-radius: 0.2rem;
+}
+
+.booking-swatch--active { background: var(--rental-primary); }
+.booking-swatch--completed { background: var(--rental-primary-soft); border-color: var(--rental-primary-border); }
+.booking-swatch--draft { background: var(--white); border: 1px dashed var(--gl-neutral-300); }
+.booking-swatch--maintenance { background: var(--rental-calendar-maintenance); }
+.booking-swatch--available { background: var(--rental-calendar-available); }
+
+/* Teks event mengikuti warna event (FullCalendar memutihkan .fc-event-main) */
+html[data-theme] #booking-calendar .fc-event .fc-event-main {
+    color: inherit;
+}
+
+/* "Tersedia" berupa blok lembut agar tidak mendominasi kalender */
+html[data-theme] #booking-calendar .fc-event.bk-event--available {
+    color: var(--rental-calendar-available) !important;
+    background: color-mix(in srgb, var(--rental-calendar-available) 14%, var(--white));
+    border-color: color-mix(in srgb, var(--rental-calendar-available) 40%, var(--white));
+}
+
+/* Angka hari dan judul kolom FullCalendar berupa tautan: warnanya harus menang
+   atas aturan warna tautan umum di dalam #content. */
+html[data-theme] #content #booking-calendar a.fc-daygrid-day-number {
+    color: var(--body-fg) !important;
+}
+
+html[data-theme] #content #booking-calendar .fc-day-other a.fc-daygrid-day-number {
+    color: var(--gl-neutral-300) !important;
+}
+
+html[data-theme] #content #booking-calendar .fc-day-today a.fc-daygrid-day-number {
+    color: #ffffff !important;
+}
+
+html[data-theme] #content #booking-calendar a.fc-col-header-cell-cushion {
+    color: var(--rental-pos-subtitle) !important;
+}
+
+/* ---- Fokus global lebih tipis: border 1px + cincin lembut 2px (sebelumnya 4px + outline 2px) ---- */
+html[data-theme] input:focus,
+html[data-theme] textarea:focus,
+html[data-theme] select:focus,
+html[data-theme] .vTextField:focus,
+html[data-theme] .form-control:focus,
+html[data-theme] .form-select:focus,
+html[data-theme] .btn:focus,
+html[data-theme] .btn:focus-visible,
+html[data-theme] .page-link:focus,
+html[data-theme] .rental-dashboard-summary__filter .form-control:focus {
+    border-color: var(--rental-primary) !important;
+    box-shadow: 0 0 0 2px var(--rental-focus-ring) !important;
+    outline: none !important;
+}
+
+/* Tombol dan tautan yang difokus keyboard: outline tipis, bukan 2px dengan jarak */
+html[data-theme] a:focus-visible,
+html[data-theme] button:focus-visible,
+html[data-theme] .rental-menu-button:focus-visible {
+    outline: 1.5px solid var(--rental-primary);
+    outline-offset: 1px;
+}
+
+/* Kotak centang dan radio mengikuti ukuran yang sama */
+html[data-theme] input[type="checkbox"]:focus-visible,
+html[data-theme] input[type="radio"]:focus-visible {
+    outline: 1.5px solid var(--rental-primary) !important;
+    outline-offset: 1px;
+    box-shadow: none !important;
+}

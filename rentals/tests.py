@@ -1392,3 +1392,57 @@ class TwoColumnFormsTests(TestCase):
         response = self.client.get(reverse('admin:rental_payment_order_summary', args=[1]))
 
         self.assertEqual(response.status_code, 403)
+
+
+class BookingCalendarUxTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.user = get_user_model().objects.create_superuser(
+            username='cal_admin', email='cal@example.com', password='password123',
+        )
+        self.client.force_login(self.user)
+        customer = Customer.objects.create(
+            full_name='Nurhayati', identity_number='ID-CAL',
+            phone_number='08120000004', address='Bandung',
+        )
+        category = VehicleCategory.objects.create(name='MPV')
+        self.vehicle = Vehicle.objects.create(
+            category=category, plate_number='B1CAL', brand='Toyota', model='Avanza',
+            year=2024, transmission=Vehicle.Transmission.MANUAL,
+            fuel_type=Vehicle.FuelType.GASOLINE, daily_rate=Decimal('100000'), odometer=1,
+        )
+        start = timezone.datetime(2026, 8, 2, 9, 0, tzinfo=timezone.get_current_timezone())
+        self.rental = Rental.objects.create(
+            customer=customer, vehicle=self.vehicle, start_at=start,
+            expected_return_at=start + timedelta(days=2), start_odometer=1,
+            daily_rate=Decimal('100000'), status=Rental.Status.ACTIVE,
+        )
+        Payment.objects.create(rental=self.rental, method=Payment.Method.CASH, amount=Decimal('50000'))
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_events_carry_css_classes_and_detail(self):
+        response = self.client.get(
+            reverse('admin:rental_booking_calendar_events'),
+            {'start': '2026-08-01', 'end': '2026-09-01', 'status': 'rented'},
+        )
+        event = next(e for e in response.json() if e['id'] == f'rental-{self.rental.pk}')
+
+        self.assertIn('bk-event--active', event['classNames'])
+        self.assertNotIn('backgroundColor', event)
+        detail = event['extendedProps']['detail']
+        self.assertEqual(detail['title'], self.rental.invoice_number)
+        self.assertEqual(detail['badge']['status'], 'active')
+        rows = dict(detail['rows'])
+        self.assertEqual(rows['Pelanggan'], 'Nurhayati')
+        self.assertEqual(rows['Total'], 'Rp200.000')
+        self.assertEqual(rows['Sisa pembayaran'], 'Rp150.000')
+        self.assertTrue(any(a['label'] == 'Tambah pembayaran' for a in detail['actions']))
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_page_has_status_chips_and_detail_panel(self):
+        response = self.client.get(reverse('admin:rental_booking_calendar'))
+
+        self.assertContains(response, 'id="booking-status-chips"')
+        self.assertContains(response, 'id="booking-detail"')
+        self.assertContains(response, 'Booking baru')
+        self.assertContains(response, 'data-status="maintenance"')

@@ -12,15 +12,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
+from .dashboard import format_rupiah
 from .models import Rental, Vehicle, VehicleMaintenance
-
-
-BOOKING_STATUS_COLORS = {
-    'available': 'var(--rental-calendar-available)',
-    'rented': 'var(--rental-calendar-rented)',
-    'draft': 'var(--rental-calendar-draft)',
-    'maintenance': 'var(--rental-calendar-maintenance)',
-}
 
 
 def _parse_date(value, default):
@@ -102,9 +95,9 @@ def booking_calendar(request):
         'title': 'Kalender Booking',
         'vehicles': Vehicle.objects.order_by('plate_number'),
         'status_options': (
-            ('', 'Semua status'),
+            ('', 'Semua'),
             ('available', 'Tersedia'),
-            ('rented', 'Sedang dirental'),
+            ('rented', 'Disewa'),
             ('draft', 'Draf'),
             ('maintenance', 'Maintenance'),
         ),
@@ -135,7 +128,7 @@ def booking_calendar_events(request):
     busy_dates_by_vehicle = {pk: set() for pk in vehicle_ids}
 
     rentals = list(
-        Rental.objects.select_related('vehicle', 'customer').filter(
+        Rental.objects.select_related('vehicle', 'customer').prefetch_related('payments').filter(
             vehicle_id__in=vehicle_ids,
             start_at__lt=range_end,
             expected_return_at__gte=range_start,
@@ -162,9 +155,23 @@ def booking_calendar_events(request):
 
         for rental in display_rentals:
             is_draft = rental.status == Rental.Status.DRAFT
-            color = BOOKING_STATUS_COLORS['draft' if is_draft else 'rented']
+            if is_draft:
+                kind = 'draft'
+            elif rental.status == Rental.Status.COMPLETED:
+                kind = 'completed'
+            else:
+                kind = 'active'
             rental_start = max(_local_date(rental.start_at), start_date)
             rental_end = min(_exclusive_end_date(rental.expected_return_at), end_date)
+            change_url = reverse('admin:rentals_rental_change', args=[rental.pk])
+            payment_url = f"{reverse('admin:rentals_payment_add')}?rental={rental.pk}"
+            period = (
+                f'{_local_date(rental.start_at):%d %b %Y} - '
+                f'{_local_date(rental.expected_return_at):%d %b %Y} ({rental.rental_days} hari)'
+            )
+            actions = [{'label': 'Buka order', 'url': change_url, 'primary': True}]
+            if not is_draft:
+                actions.append({'label': 'Tambah pembayaran', 'url': payment_url, 'primary': False})
             events.append({
                 'id': f'rental-{rental.pk}',
                 'title': f'{rental.vehicle.plate_number}\n{rental.customer.full_name}',
@@ -172,14 +179,25 @@ def booking_calendar_events(request):
                 'end': rental_end.isoformat(),
                 'allDay': True,
                 'editable': True,
-                'backgroundColor': color,
-                'borderColor': color,
-                'url': reverse('admin:rentals_rental_change', args=[rental.pk]),
+                'classNames': ['bk-event', f'bk-event--{kind}'],
                 'extendedProps': {
                     'type': 'rental',
+                    'kind': kind,
                     'plate_number': rental.vehicle.plate_number,
                     'customer_name': rental.customer.full_name,
                     'status_label': rental.get_status_display(),
+                    'detail': {
+                        'title': rental.invoice_number,
+                        'badge': {'label': rental.get_status_display(), 'status': rental.status},
+                        'rows': [
+                            ['Pelanggan', rental.customer.full_name],
+                            ['Kendaraan', f'{rental.vehicle.plate_number} - {rental.vehicle.brand} {rental.vehicle.model}'],
+                            ['Periode', period],
+                            ['Total', format_rupiah(rental.total_amount)],
+                            ['Sisa pembayaran', format_rupiah(rental.remaining_amount)],
+                        ],
+                        'actions': actions,
+                    },
                 },
             })
 
@@ -207,14 +225,26 @@ def booking_calendar_events(request):
                 'end': maintenance_end.isoformat(),
                 'allDay': True,
                 'editable': False,
-                'backgroundColor': BOOKING_STATUS_COLORS['maintenance'],
-                'borderColor': BOOKING_STATUS_COLORS['maintenance'],
-                'url': reverse('admin:rentals_vehiclemaintenance_change', args=[maintenance.pk]),
+                'classNames': ['bk-event', 'bk-event--maintenance'],
                 'extendedProps': {
                     'type': 'maintenance',
+                    'kind': 'maintenance',
                     'plate_number': maintenance.vehicle.plate_number,
                     'customer_name': 'Maintenance',
                     'status_label': maintenance.get_status_display(),
+                    'detail': {
+                        'title': f'Maintenance {maintenance.vehicle.plate_number}',
+                        'badge': {'label': maintenance.get_status_display(), 'status': 'maintenance'},
+                        'rows': [
+                            ['Kendaraan', f'{maintenance.vehicle.plate_number}'],
+                            ['Tanggal', f'{maintenance_start:%d %b %Y}'],
+                        ],
+                        'actions': [{
+                            'label': 'Buka maintenance',
+                            'url': reverse('admin:rentals_vehiclemaintenance_change', args=[maintenance.pk]),
+                            'primary': True,
+                        }],
+                    },
                 },
             })
 
@@ -223,6 +253,10 @@ def booking_calendar_events(request):
         for vehicle in available_vehicles:
             busy_dates = busy_dates_by_vehicle.get(vehicle.pk, set())
             for free_start, free_end in _free_date_ranges(start_date, end_date, busy_dates):
+                add_url = (
+                    f"{reverse('admin:rentals_rental_add')}"
+                    f"?vehicle={vehicle.pk}&start_at={free_start.isoformat()}+09:00:00"
+                )
                 events.append({
                     'id': f'available-{vehicle.pk}-{free_start.isoformat()}',
                     'title': f'{vehicle.plate_number}\nTersedia',
@@ -230,14 +264,23 @@ def booking_calendar_events(request):
                     'end': free_end.isoformat(),
                     'allDay': True,
                     'editable': False,
-                    'backgroundColor': BOOKING_STATUS_COLORS['available'],
-                    'borderColor': BOOKING_STATUS_COLORS['available'],
+                    'classNames': ['bk-event', 'bk-event--available'],
                     'extendedProps': {
                         'type': 'available',
+                        'kind': 'available',
                         'vehicle_id': vehicle.pk,
                         'plate_number': vehicle.plate_number,
                         'customer_name': 'Tersedia',
                         'status_label': vehicle.get_status_display(),
+                        'detail': {
+                            'title': vehicle.plate_number,
+                            'badge': {'label': 'Tersedia', 'status': 'available'},
+                            'rows': [
+                                ['Kendaraan', vehicle.plate_number],
+                                ['Kosong', f'{free_start:%d %b} - {free_end - timedelta(days=1):%d %b %Y}'],
+                            ],
+                            'actions': [{'label': 'Buat booking', 'url': add_url, 'primary': True}],
+                        },
                     },
                 })
 

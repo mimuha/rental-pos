@@ -2,33 +2,56 @@
 {% load static %}
 
 {% block content %}
-<div class="booking-calendar-page">
-    <div class="booking-calendar-toolbar">
-        <div class="booking-calendar-filters">
-            <label class="form-label" for="booking-vehicle-filter">Kendaraan</label>
-            <select id="booking-vehicle-filter" class="form-select">
-                <option value="">Semua kendaraan</option>
-                {% for vehicle in vehicles %}
-                    <option value="{{ vehicle.pk }}">{{ vehicle.plate_number }} - {{ vehicle.brand }} {{ vehicle.model }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="booking-calendar-filters">
-            <label class="form-label" for="booking-status-filter">Status</label>
-            <select id="booking-status-filter" class="form-select">
+<div class="booking-page">
+    <div class="booking-main">
+        <div class="booking-toolbar">
+            <div class="booking-toolbar__vehicle">
+                <label class="visually-hidden" for="booking-vehicle-filter">Kendaraan</label>
+                <select id="booking-vehicle-filter" class="form-select">
+                    <option value="">Semua kendaraan</option>
+                    {% for vehicle in vehicles %}
+                        <option value="{{ vehicle.pk }}">{{ vehicle.plate_number }} - {{ vehicle.brand }} {{ vehicle.model }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="booking-chips" id="booking-status-chips" role="group" aria-label="Filter status">
                 {% for value, label in status_options %}
-                    <option value="{{ value }}">{{ label }}</option>
+                    <button type="button" class="booking-chip{% if not value %} is-active{% endif %}" data-status="{{ value }}" aria-pressed="{% if not value %}true{% else %}false{% endif %}">
+                        {% if value %}<i class="booking-dot booking-dot--{{ value }}"></i>{% endif %}{{ label }}
+                    </button>
                 {% endfor %}
-            </select>
+            </div>
+            <a class="booking-add" href="{{ rental_add_url }}">+ Booking baru</a>
         </div>
-        <div class="booking-calendar-legend" aria-label="Legenda kalender">
-            <span><i class="booking-calendar-dot booking-calendar-dot--available"></i>Tersedia</span>
-            <span><i class="booking-calendar-dot booking-calendar-dot--rented"></i>Sedang dirental</span>
-            <span><i class="booking-calendar-dot booking-calendar-dot--maintenance"></i>Maintenance</span>
-        </div>
+
+        <div id="booking-calendar"></div>
     </div>
 
-    <div id="booking-calendar"></div>
+    <aside class="booking-side" aria-label="Detail dan keterangan">
+        <section class="booking-card" id="booking-detail" aria-live="polite">
+            <h2 class="booking-card__title">Detail booking</h2>
+            <p class="booking-card__empty" id="booking-detail-empty">Klik sebuah booking di kalender untuk melihat detailnya.</p>
+            <div id="booking-detail-body" hidden>
+                <div class="booking-detail__head">
+                    <strong id="booking-detail-title"></strong>
+                    <span id="booking-detail-badge" class="rental-status-badge"></span>
+                </div>
+                <dl id="booking-detail-rows" class="booking-detail__rows"></dl>
+                <div id="booking-detail-actions" class="booking-detail__actions"></div>
+            </div>
+        </section>
+        <section class="booking-card">
+            <h2 class="booking-card__title">Keterangan</h2>
+            <ul class="booking-legend">
+                <li><i class="booking-swatch booking-swatch--active"></i>Order aktif</li>
+                <li><i class="booking-swatch booking-swatch--completed"></i>Order selesai</li>
+                <li><i class="booking-swatch booking-swatch--draft"></i>Draf (tidak memblokir slot)</li>
+                <li><i class="booking-swatch booking-swatch--maintenance"></i>Maintenance</li>
+                <li><i class="booking-swatch booking-swatch--available"></i>Kendaraan tersedia</li>
+            </ul>
+            <p class="booking-card__hint">Seret bar order untuk memindah jadwal. Klik tanggal kosong untuk membuat booking.</p>
+        </section>
+    </aside>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
@@ -37,7 +60,15 @@
     (function () {
         const calendarElement = document.getElementById('booking-calendar');
         const vehicleFilter = document.getElementById('booking-vehicle-filter');
-        const statusFilter = document.getElementById('booking-status-filter');
+        const chipsContainer = document.getElementById('booking-status-chips');
+        let statusValue = '';
+        const detailEmpty = document.getElementById('booking-detail-empty');
+        const detailBody = document.getElementById('booking-detail-body');
+        const detailTitle = document.getElementById('booking-detail-title');
+        const detailBadge = document.getElementById('booking-detail-badge');
+        const detailRows = document.getElementById('booking-detail-rows');
+        const detailActions = document.getElementById('booking-detail-actions');
+        let selectedElement = null;
         const eventsUrl = '{{ events_url }}';
         const rescheduleUrl = '{{ reschedule_url }}';
         const addUrl = '{{ rental_add_url }}';
@@ -64,6 +95,33 @@
             return addUrl + '?' + params.toString();
         }
 
+        function showDetail(detail) {
+            detailTitle.textContent = detail.title || '';
+            detailBadge.textContent = detail.badge ? detail.badge.label : '';
+            detailBadge.className = 'rental-status-badge' + (detail.badge ? ' rental-status-badge--' + detail.badge.status : '');
+            detailRows.replaceChildren();
+            (detail.rows || []).forEach(function (row) {
+                const wrapper = document.createElement('div');
+                const term = document.createElement('dt');
+                term.textContent = row[0];
+                const description = document.createElement('dd');
+                description.textContent = row[1];
+                wrapper.appendChild(term);
+                wrapper.appendChild(description);
+                detailRows.appendChild(wrapper);
+            });
+            detailActions.replaceChildren();
+            (detail.actions || []).forEach(function (action) {
+                const link = document.createElement('a');
+                link.href = action.url;
+                link.textContent = action.label;
+                link.className = 'booking-action' + (action.primary ? ' booking-action--primary' : '');
+                detailActions.appendChild(link);
+            });
+            detailEmpty.hidden = true;
+            detailBody.hidden = false;
+        }
+
         const calendar = new FullCalendar.Calendar(calendarElement, {
             initialView: 'dayGridMonth',
             locale: 'id',
@@ -74,16 +132,22 @@
             eventDurationEditable: false,
             dayMaxEvents: 4,
             headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth'
+                left: 'prev,next today title',
+                center: '',
+                right: 'dayGridMonth,dayGridWeek'
+            },
+            buttonText: {today: 'Hari ini', month: 'Bulan', week: 'Minggu'},
+            buttonHints: {
+                prev: 'Sebelumnya',
+                next: 'Berikutnya',
+                today: 'Ke hari ini'
             },
             events: function (info, successCallback, failureCallback) {
                 const params = new URLSearchParams({
                     start: info.startStr,
                     end: info.endStr,
                     vehicle: vehicleFilter.value,
-                    status: statusFilter.value
+                    status: statusValue
                 });
 
                 fetch(eventsUrl + '?' + params.toString(), {
@@ -117,10 +181,17 @@
                 return {domNodes: [wrapper]};
             },
             eventClick: function (info) {
-                if (info.event.url) {
-                    info.jsEvent.preventDefault();
-                    window.location.href = info.event.url;
+                info.jsEvent.preventDefault();
+                const detail = info.event.extendedProps.detail;
+                if (!detail) {
+                    return;
                 }
+                if (selectedElement) {
+                    selectedElement.classList.remove('bk-event--selected');
+                }
+                selectedElement = info.el;
+                selectedElement.classList.add('bk-event--selected');
+                showDetail(detail);
             },
             dateClick: function (info) {
                 window.location.href = buildAddUrl(info.dateStr);
@@ -159,7 +230,17 @@
         vehicleFilter.addEventListener('change', function () {
             calendar.refetchEvents();
         });
-        statusFilter.addEventListener('change', function () {
+        chipsContainer.addEventListener('click', function (event) {
+            const chip = event.target.closest('.booking-chip');
+            if (!chip) {
+                return;
+            }
+            statusValue = chip.dataset.status || '';
+            chipsContainer.querySelectorAll('.booking-chip').forEach(function (other) {
+                const active = other === chip;
+                other.classList.toggle('is-active', active);
+                other.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
             calendar.refetchEvents();
         });
 
