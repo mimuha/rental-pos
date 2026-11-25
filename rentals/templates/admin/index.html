@@ -23,11 +23,13 @@
                     <form method="get" class="rental-dashboard-summary__filter">
                         <label class="form-label mb-1" for="dashboard-period">Pilih bulan</label>
                         <input
-                            type="month"
+                            type="text"
                             id="dashboard-period"
                             name="period"
                             class="form-control"
                             value="{{ selected_period }}"
+                            data-rental-month
+                            autocomplete="off"
                             onchange="this.form.submit()"
                         >
                     </form>

@@ -1,19 +1,20 @@
 {% extends "admin/change_form.html" %}
 {% load admin_modify %}
 
-{# Form dua kolom: kartu isian di kiri, ringkasan dan aksi di kanan (menempel saat scroll). #}
+{# Form dua kolom: kartu isian di kiri, kartu bergaya 'rental-side' dan aksi di kanan (menempel saat scroll). #}
 {% block field_sets %}
 <div class="rental-form-layout">
   <div class="rental-form-main">
     {% for fieldset in adminform %}
-      {% if 'rental-summary' not in fieldset.classes %}
+      {% if 'rental-side' not in fieldset.classes %}
         {% include "admin/includes/fieldset.html" with heading_level=2 prefix="fieldset" id_prefix=0 id_suffix=forloop.counter0 %}
       {% endif %}
     {% endfor %}
   </div>
   <aside class="rental-form-side" aria-label="Ringkasan dan aksi">
+    {% block side_extra %}{% endblock %}
     {% for fieldset in adminform %}
-      {% if 'rental-summary' in fieldset.classes %}
+      {% if 'rental-side' in fieldset.classes %}
         {% include "admin/includes/fieldset.html" with heading_level=2 prefix="fieldset" id_prefix=0 id_suffix=forloop.counter0 %}
       {% endif %}
     {% endfor %}

@@ -15,6 +15,15 @@
 {% block extrastyle %}{% endblock %}
 {% if LANGUAGE_BIDI %}<link rel="stylesheet" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}">{% endif %}
 {% block extrahead %}{% endblock %}
+{% if not is_popup %}
+<link rel="stylesheet" href="{% static 'vendor/flatpickr/flatpickr.min.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'vendor/flatpickr/plugins/monthSelect/style.css' %}?v=1">
+<script src="{% static 'vendor/flatpickr/flatpickr.min.js' %}?v=1" defer></script>
+<script src="{% static 'vendor/flatpickr/l10n/id.js' %}?v=1" defer></script>
+<script src="{% static 'vendor/flatpickr/plugins/monthSelect/index.js' %}?v=1" defer></script>
+<script src="{% static 'rentals/js/rental_datetime_picker.js' %}?v=2" defer></script>
+<script src="{% static 'rentals/js/rental_choice_pills.js' %}?v=1" defer></script>
+{% endif %}
 {% block responsive %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static "admin/css/responsive.css" %}">

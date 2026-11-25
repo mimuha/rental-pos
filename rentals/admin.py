@@ -233,14 +233,18 @@ class VehicleMaintenanceAdmin(BaseModelAdmin):
     list_per_page = 25
 
     fieldsets = (
-        ('Informasi maintenance', {
-            'fields': ('vehicle', 'category', 'vendor', 'maintenance_date', 'status'),
+        ('Kendaraan & jenis', {
+            'fields': (('vehicle', 'category'), 'vendor'),
+        }),
+        ('Jadwal & status', {
+            'fields': (('maintenance_date', 'odometer'), 'status'),
         }),
         ('Detail pekerjaan', {
-            'fields': ('odometer', 'issue_description', 'parts_replaced', 'notes'),
+            'fields': ('issue_description', ('parts_replaced', 'notes')),
         }),
         ('Biaya', {
-            'fields': ('total_cost', 'total_cost_rupiah'),
+            'classes': ('rental-side',),
+            'fields': ('total_cost',),
         }),
     )
 
@@ -298,13 +302,18 @@ class OtherExpenseAdmin(BaseModelAdmin):
 
     fieldsets = (
         ('Informasi biaya', {
-            'fields': ('invoice_number', 'expense_type', 'expense_date', 'status', 'payee', 'reference_number'),
+            'fields': (
+                ('invoice_number', 'expense_type'),
+                ('expense_date', 'payee'),
+                'status',
+            ),
         }),
         ('Detail', {
-            'fields': ('description', 'notes'),
+            'fields': ('description', ('reference_number', 'notes')),
         }),
         ('Nominal', {
-            'fields': ('total_cost', 'total_cost_rupiah'),
+            'classes': ('rental-side',),
+            'fields': ('total_cost',),
         }),
     )
 
@@ -420,7 +429,7 @@ class RentalAdmin(BaseModelAdmin):
             ),
         }),
         ('Ringkasan', {
-            'classes': ('rental-summary',),
+            'classes': ('rental-side', 'rental-summary'),
             'fields': (
                 'duration_display',
                 'subtotal_rupiah',
@@ -578,8 +587,21 @@ class PaymentAdmin(BaseModelAdmin):
     search_fields = ['invoice_number', 'rental__invoice_number', 'reference_number']
     date_hierarchy = 'payment_date'
     autocomplete_fields = ['rental']
+    readonly_fields = ['invoice_number']
     # Rental.__str__ menyentuh customer; ikutkan agar tidak 1 query per baris.
     list_select_related = ('rental', 'rental__customer')
+
+    fieldsets = (
+        ('Pembayaran', {
+            'fields': ('rental', 'payment_date', 'method', 'amount'),
+        }),
+        ('Referensi & catatan', {
+            'fields': (('reference_number', 'invoice_number'), 'notes'),
+        }),
+    )
+
+    class Media:
+        js = ('admin/js/rental_payment_form.js',)
 
     @admin.display(description='Jumlah pembayaran')
     def amount_rupiah(self, obj):
@@ -963,6 +985,36 @@ def theme_preference_view(request):
     })
 
 
+def payment_order_summary(request, rental_id):
+    """Ringkasan order untuk form Order payment (sisa, total, dibayar)."""
+    if not (request.user.has_perm('rentals.add_payment') or request.user.has_perm('rentals.change_payment')):
+        return JsonResponse({'ok': False, 'error': 'Tidak diizinkan.'}, status=403)
+
+    rental = get_object_or_404(
+        Rental.objects.select_related('customer', 'vehicle').prefetch_related('payments'),
+        pk=rental_id,
+    )
+    start = timezone.localtime(rental.start_at) if rental.start_at else None
+    end_at = rental.returned_at or rental.expected_return_at
+    end = timezone.localtime(end_at) if end_at else None
+    period = ''
+    if start and end:
+        period = f'{start:%d %b %Y} - {end:%d %b %Y}'
+
+    return JsonResponse({
+        'ok': True,
+        'invoice_number': rental.invoice_number,
+        'customer': str(rental.customer),
+        'vehicle': f'{rental.vehicle.plate_number} - {rental.vehicle.brand} {rental.vehicle.model}',
+        'period': period,
+        'status': rental.status,
+        'status_label': rental.get_status_display(),
+        'total': int(rental.total_amount),
+        'paid': int(rental.paid_amount),
+        'remaining': int(rental.remaining_amount),
+    })
+
+
 def _get_urls():
     urls = admin.AdminSite.get_urls(admin.site)
     my_urls = [
@@ -977,6 +1029,7 @@ def _get_urls():
         path('rentals/favorites/', admin.site.admin_view(menu_favorites_view), name='menu_favorites'),
         path('rentals/favorites/<int:favorite_id>/delete/', admin.site.admin_view(menu_favorite_delete), name='menu_favorite_delete'),
         path('rentals/theme-preference/', admin.site.admin_view(theme_preference_view), name='rental_theme_preference'),
+        path('rentals/rental/<int:rental_id>/payment-summary/', admin.site.admin_view(payment_order_summary), name='rental_payment_order_summary'),
     ]
     return my_urls + urls
 

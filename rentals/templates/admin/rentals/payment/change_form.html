@@ -1,0 +1,24 @@
+{% extends "admin/rentals/rental/change_form.html" %}
+
+{% block side_extra %}
+<section class="rental-order-card" id="payment-order-summary" hidden
+         data-url-template="{% url 'admin:rental_payment_order_summary' 0 %}">
+  <header class="rental-order-card__head">
+    <h2>Order terpilih</h2>
+    <span class="rental-status-badge" data-order="status_label"></span>
+  </header>
+  <dl class="rental-order-card__rows">
+    <div><dt>Order</dt><dd data-order="invoice_number"></dd></div>
+    <div><dt>Pelanggan</dt><dd data-order="customer"></dd></div>
+    <div><dt>Kendaraan</dt><dd data-order="vehicle"></dd></div>
+    <div><dt>Periode</dt><dd data-order="period"></dd></div>
+    <div class="rental-order-card__sep"><dt>Total order</dt><dd data-order="total_text"></dd></div>
+    <div><dt>Sudah dibayar</dt><dd data-order="paid_text"></dd></div>
+    <div><dt>Sisa sebelum pembayaran ini</dt><dd class="is-strong" data-order="remaining_text"></dd></div>
+  </dl>
+  <div class="rental-order-card__after" data-order-after>
+    <span>Sisa setelah pembayaran ini</span>
+    <strong data-order="after_text"></strong>
+  </div>
+</section>
+{% endblock %}

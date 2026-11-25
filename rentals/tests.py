@@ -1322,3 +1322,73 @@ class RentalChangeFormLayoutTests(TestCase):
         self.assertLess(side_start, html.index('class="submit-row"'))
         self.assertEqual(html.count('form-row field-total_amount_rupiah'), 1)
         self.assertEqual(html.count('name="_save"'), 1)
+
+
+class TwoColumnFormsTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.user = get_user_model().objects.create_superuser(
+            username='forms_admin', email='forms@example.com', password='password123',
+        )
+        self.client.force_login(self.user)
+        self.customer = Customer.objects.create(
+            full_name='Nurhayati', identity_number='ID-FRM',
+            phone_number='08120000003', address='Bandung',
+        )
+        category = VehicleCategory.objects.create(name='MPV')
+        self.vehicle = Vehicle.objects.create(
+            category=category, plate_number='B1FRM', brand='Toyota', model='Avanza',
+            year=2024, transmission=Vehicle.Transmission.MANUAL,
+            fuel_type=Vehicle.FuelType.GASOLINE, daily_rate=Decimal('100000'), odometer=1,
+        )
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_payment_maintenance_expense_add_forms_use_two_columns(self):
+        for name in (
+            'admin:rentals_payment_add',
+            'admin:rentals_vehiclemaintenance_add',
+            'admin:rentals_otherexpense_add',
+        ):
+            response = self.client.get(reverse(name))
+            self.assertEqual(response.status_code, 200, name)
+            self.assertContains(response, 'rental-form-layout', msg_prefix=name)
+            self.assertEqual(response.content.decode().count('class="submit-row"'), 1, name)
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_payment_form_has_order_summary_card_and_readonly_invoice(self):
+        response = self.client.get(reverse('admin:rentals_payment_add'))
+
+        self.assertContains(response, 'id="payment-order-summary"')
+        self.assertContains(response, 'rental_payment_order_summary'.replace('rental_payment_order_summary', '/payment-summary/'))
+        self.assertNotContains(response, 'name="invoice_number"')
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_payment_summary_endpoint_returns_totals(self):
+        start = timezone.now() - timedelta(days=3)
+        rental = Rental.objects.create(
+            customer=self.customer, vehicle=self.vehicle, start_at=start,
+            expected_return_at=start + timedelta(days=2), start_odometer=1,
+            daily_rate=Decimal('100000'), status=Rental.Status.ACTIVE,
+        )
+        Payment.objects.create(rental=rental, method=Payment.Method.CASH, amount=Decimal('50000'))
+
+        response = self.client.get(reverse('admin:rental_payment_order_summary', args=[rental.pk]))
+
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertTrue(data['ok'])
+        self.assertEqual(data['total'], 200000)
+        self.assertEqual(data['paid'], 50000)
+        self.assertEqual(data['remaining'], 150000)
+        self.assertEqual(data['status'], 'active')
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_payment_summary_endpoint_requires_permission(self):
+        staff = get_user_model().objects.create_user(
+            username='nopay', password='password123', is_staff=True,
+        )
+        self.client.force_login(staff)
+
+        response = self.client.get(reverse('admin:rental_payment_order_summary', args=[1]))
+
+        self.assertEqual(response.status_code, 403)

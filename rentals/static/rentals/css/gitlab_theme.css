@@ -2340,3 +2340,519 @@ html[data-theme] .rental-form-side .submit-row .closelink,
 html[data-theme] .rental-form-side .submit-row .deletelink {
     order: 4;
 }
+
+/* ---- Date & time picker (flatpickr) mengikuti token tema ---- */
+
+/* Pintasan bawaan Django digantikan popup baru */
+html[data-theme] p.datetime .datetimeshortcuts {
+    display: none !important;
+}
+
+html[data-theme] .flatpickr-calendar.rental-fp {
+    width: 20.5rem;
+    padding: 0.4rem 0.4rem 0.75rem;
+    color: var(--body-fg);
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--rental-radius-lg);
+    box-shadow: var(--rental-shadow-lg);
+    font-family: inherit;
+}
+
+html[data-theme] .flatpickr-calendar.rental-fp::before,
+html[data-theme] .flatpickr-calendar.rental-fp::after {
+    display: none;
+}
+
+html[data-theme] .rental-fp .flatpickr-months {
+    align-items: center;
+    padding: 0.35rem 0.25rem 0.5rem;
+}
+
+html[data-theme] .rental-fp .flatpickr-months .flatpickr-month,
+html[data-theme] .rental-fp .flatpickr-current-month,
+html[data-theme] .rental-fp .flatpickr-current-month .cur-month,
+html[data-theme] .rental-fp .flatpickr-current-month input.cur-year,
+html[data-theme] .rental-fp .flatpickr-monthDropdown-months {
+    color: var(--rental-pos-title);
+    background: transparent;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+html[data-theme] .rental-fp .flatpickr-monthDropdown-months option {
+    color: var(--body-fg);
+    background: var(--white);
+}
+
+html[data-theme] .rental-fp .flatpickr-months .flatpickr-prev-month,
+html[data-theme] .rental-fp .flatpickr-months .flatpickr-next-month {
+    top: 0.45rem;
+    height: 2rem;
+    padding: 0.4rem 0.6rem;
+    color: var(--rental-pos-subtitle);
+    fill: var(--rental-pos-subtitle);
+    border-radius: var(--rental-radius-sm);
+}
+
+html[data-theme] .rental-fp .flatpickr-months .flatpickr-prev-month:hover,
+html[data-theme] .rental-fp .flatpickr-months .flatpickr-next-month:hover {
+    background: var(--rental-hover-bg);
+}
+
+html[data-theme] .rental-fp .flatpickr-months .flatpickr-prev-month svg,
+html[data-theme] .rental-fp .flatpickr-months .flatpickr-next-month svg {
+    fill: currentColor;
+}
+
+html[data-theme] .rental-fp span.flatpickr-weekday {
+    color: var(--rental-pos-subtitle);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+html[data-theme] .rental-fp .flatpickr-days,
+html[data-theme] .rental-fp .dayContainer {
+    width: 19.7rem;
+    min-width: 19.7rem;
+    max-width: 19.7rem;
+}
+
+html[data-theme] .rental-fp .flatpickr-day {
+    max-width: 2.6rem;
+    height: 2.4rem;
+    line-height: 2.4rem;
+    color: var(--body-fg);
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+}
+
+html[data-theme] .rental-fp .flatpickr-day.prevMonthDay,
+html[data-theme] .rental-fp .flatpickr-day.nextMonthDay,
+html[data-theme] .rental-fp .flatpickr-day.flatpickr-disabled {
+    color: var(--gl-neutral-300);
+}
+
+html[data-theme] .rental-fp .flatpickr-day:hover,
+html[data-theme] .rental-fp .flatpickr-day:focus {
+    background: var(--rental-hover-bg);
+    border-color: transparent;
+}
+
+html[data-theme] .rental-fp .flatpickr-day.today {
+    color: var(--rental-primary);
+    border-color: var(--rental-primary);
+    font-weight: 700;
+}
+
+html[data-theme] .rental-fp .flatpickr-day.selected,
+html[data-theme] .rental-fp .flatpickr-day.selected:hover,
+html[data-theme] .rental-fp .flatpickr-day.selected:focus {
+    color: #ffffff;
+    background: var(--rental-primary);
+    border-color: var(--rental-primary);
+    font-weight: 700;
+}
+
+/* Jam */
+html[data-theme] .rental-fp .flatpickr-time {
+    max-height: none;
+    height: 2.75rem;
+    margin-top: 0.4rem;
+    border-top: 1px solid var(--hairline-color);
+}
+
+html[data-theme] .rental-fp .flatpickr-time input,
+html[data-theme] .rental-fp .flatpickr-time .flatpickr-time-separator,
+html[data-theme] .rental-fp .flatpickr-time .flatpickr-am-pm {
+    color: var(--body-fg);
+    background: transparent;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+html[data-theme] .rental-fp .flatpickr-time input:hover,
+html[data-theme] .rental-fp .flatpickr-time input:focus,
+html[data-theme] .rental-fp .numInputWrapper:hover {
+    background: var(--rental-hover-bg);
+}
+
+html[data-theme] .rental-fp .numInputWrapper span.arrowUp::after {
+    border-bottom-color: var(--rental-pos-subtitle);
+}
+
+html[data-theme] .rental-fp .numInputWrapper span.arrowDown::after {
+    border-top-color: var(--rental-pos-subtitle);
+}
+
+/* Footer: tombol cepat dan aksi */
+.rental-fp-footer {
+    display: grid;
+    gap: 0.6rem;
+    padding: 0.6rem 0.5rem 0;
+    border-top: 1px solid var(--hairline-color);
+}
+
+.rental-fp-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+html[data-theme] .rental-fp-chip {
+    padding: 0.25rem 0.75rem;
+    color: var(--body-fg);
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+html[data-theme] .rental-fp-chip:hover {
+    background: var(--rental-hover-bg);
+}
+
+.rental-fp-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+html[data-theme] .rental-fp-cancel,
+html[data-theme] .rental-fp-apply {
+    min-height: 2rem;
+    border-radius: var(--rental-radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+html[data-theme] .rental-fp-cancel {
+    color: var(--body-fg);
+    background: var(--white);
+    border: 1px solid var(--border-color);
+}
+
+html[data-theme] .rental-fp-apply {
+    color: #ffffff;
+    background: var(--rental-primary);
+    border: 1px solid var(--rental-primary);
+}
+
+html[data-theme] .rental-fp-apply:hover {
+    background: var(--rental-primary-dark);
+}
+
+/* ---- Form Order payment, Maintenance, Biaya lain: pilihan, jumlah, kartu order ---- */
+
+/* Tombol pilihan menggantikan dropdown pendek (status, metode) */
+html[data-theme] .rental-pills-source {
+    display: none !important;
+}
+
+.rental-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+html[data-theme] .rental-pill {
+    padding: 0.45rem 1rem;
+    color: var(--body-fg);
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+html[data-theme] .rental-pill:hover {
+    background: var(--rental-hover-bg);
+}
+
+html[data-theme] .rental-pill[aria-checked="true"] {
+    color: #ffffff;
+    background: var(--rental-primary);
+    border-color: var(--rental-primary);
+    font-weight: 700;
+}
+
+/* Jumlah/biaya ditampilkan besar */
+html[data-theme] .rental-form-layout .field-amount input,
+html[data-theme] .rental-form-layout .field-total_cost input {
+    min-height: 3rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.rental-amount-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+}
+
+.rental-amount-chips .rental-fp-chip:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Kartu "Order terpilih" di form Order payment */
+html[data-theme] .rental-order-card {
+    padding: 1.1rem 1.25rem;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--rental-radius-lg);
+}
+
+html[data-theme] .rental-order-card[hidden] {
+    display: none;
+}
+
+.rental-order-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+html[data-theme] .rental-order-card__head h2 {
+    margin: 0;
+    padding: 0;
+    color: var(--rental-pos-title);
+    background: transparent;
+    border: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.rental-order-card__rows {
+    margin: 0;
+}
+
+.rental-order-card__rows > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.3rem 0;
+    font-size: 0.8125rem;
+}
+
+html[data-theme] .rental-order-card__rows dt {
+    margin: 0;
+    color: var(--rental-pos-subtitle);
+    font-weight: 500;
+}
+
+html[data-theme] .rental-order-card__rows dd {
+    margin: 0;
+    color: var(--body-fg);
+    text-align: right;
+    font-weight: 600;
+}
+
+.rental-order-card__sep {
+    margin-top: 0.4rem;
+    padding-top: 0.6rem !important;
+    border-top: 1px solid var(--hairline-color);
+}
+
+.rental-order-card__after {
+    display: grid;
+    gap: 0.15rem;
+    margin-top: 0.75rem;
+    padding: 0.75rem 0.9rem;
+    color: var(--rental-pos-subtitle);
+    background: var(--rental-muted-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--rental-radius-sm);
+    font-size: 0.8125rem;
+}
+
+.rental-order-card__after strong {
+    color: var(--body-fg);
+    font-size: 1.05rem;
+}
+
+html[data-theme] .rental-order-card__after.is-paid {
+    color: #0b645a;
+    background: #e6f5ea;
+    border-color: #bee6d0;
+}
+
+html[data-theme] .rental-order-card__after.is-paid strong {
+    color: #0b645a;
+}
+
+html[data-theme] .rental-order-card__after.is-over strong {
+    color: var(--rental-danger);
+}
+
+html[data-theme="dark"] .rental-order-card__after.is-paid {
+    color: #84d4b6;
+    background: rgba(13, 128, 112, 0.14);
+    border-color: rgba(53, 181, 151, 0.35);
+}
+
+html[data-theme="dark"] .rental-order-card__after.is-paid strong {
+    color: #84d4b6;
+}
+
+html[data-accent="gray"] .rental-order-card__after.is-paid,
+html[data-accent="gray"] .rental-order-card__after.is-paid strong {
+    color: var(--body-fg);
+    background: var(--rental-muted-bg);
+    border-color: var(--border-color);
+}
+
+/* Perbaikan: baris berpasangan harus grid (menimpa .flex-container {display:block}) */
+html[data-theme] .rental-form-layout .form-row .flex-container.form-multiline {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+html[data-theme] .rental-form-layout .related-widget-wrapper {
+    flex-wrap: nowrap;
+}
+
+html[data-theme] .rental-form-layout .related-widget-wrapper .related-widget-wrapper-link {
+    flex: 0 0 auto;
+}
+
+html[data-theme] .rental-form-layout .form-row legend {
+    margin: 0 0 0.3rem;
+    padding: 0;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+html[data-theme] .rental-form-layout .form-row textarea {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+/* Pilihan bulan (plugin monthSelect) */
+html[data-theme] .rental-fp .flatpickr-monthSelect-months {
+    margin: 0.25rem 0 0.1rem;
+}
+
+html[data-theme] .rental-fp .flatpickr-monthSelect-month {
+    margin: 0.15rem;
+    padding: 0.55rem 0;
+    color: var(--body-fg);
+    border: 1px solid transparent;
+    border-radius: var(--rental-radius-sm);
+    font-size: 0.8125rem;
+}
+
+html[data-theme] .rental-fp .flatpickr-monthSelect-month:hover,
+html[data-theme] .rental-fp .flatpickr-monthSelect-month:focus {
+    background: var(--rental-hover-bg);
+}
+
+html[data-theme] .rental-fp .flatpickr-monthSelect-month.today {
+    color: var(--rental-primary);
+    border-color: var(--rental-primary);
+    font-weight: 700;
+}
+
+html[data-theme] .rental-fp .flatpickr-monthSelect-month.selected,
+html[data-theme] .rental-fp .flatpickr-monthSelect-month.selected:hover {
+    color: #ffffff;
+    background: var(--rental-primary);
+    border-color: var(--rental-primary);
+    font-weight: 700;
+}
+
+html[data-theme] .rental-fp .flatpickr-monthSelect-month.flatpickr-disabled {
+    color: var(--gl-neutral-300);
+}
+
+/* Input tampilan (altInput) mengikuti gaya input form */
+html[data-theme] input.flatpickr-input.form-control[readonly] {
+    background: var(--white) !important;
+}
+
+html[data-theme] .rental-fp .flatpickr-monthSelect-month {
+    flex: 0 0 calc(33.333% - 0.3rem);
+    width: calc(33.333% - 0.3rem);
+}
+
+/* ---- Border sidebar lebih lembut ---- */
+html[data-theme] {
+    --rental-nav-border: #f0efee;
+}
+
+html[data-theme="dark"] {
+    --rental-nav-border: rgba(255, 255, 255, 0.07);
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] {
+        --rental-nav-border: rgba(255, 255, 255, 0.07);
+    }
+}
+
+html[data-theme] .rental-nav-shell,
+html[data-theme] .rental-nav-search,
+html[data-theme] .rental-nav-search-btn,
+html[data-theme] .rental-nav-collapse,
+html[data-theme] .rental-nav-favorite,
+html[data-theme] .rental-nav-fav-action {
+    border-color: var(--rental-nav-border) !important;
+    box-shadow: none !important;
+}
+
+/* Pemisah antar grup: satu garis tipis saja (bukan atas + bawah bertumpuk) */
+html[data-theme] .rental-nav-group-details {
+    border-bottom: 0 !important;
+}
+
+html[data-theme] .rental-nav-group-details + .rental-nav-group-details {
+    border-top: 1px solid var(--rental-nav-border) !important;
+}
+
+html[data-theme] .rental-nav-group-items-inner {
+    border-left-color: var(--rental-nav-border) !important;
+}
+
+/* ---- Breadcrumb sama dengan kartu; input pencarian tanpa outline/ring fokus ---- */
+html[data-theme] div.breadcrumbs,
+html[data-theme] .breadcrumbs {
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--rental-radius-lg) !important;
+}
+
+/* Input cari menu di sidebar */
+html[data-theme] #nav-sidebar #nav-filter,
+html[data-theme] #nav-sidebar #nav-filter:focus,
+html[data-theme] #nav-sidebar #nav-filter:focus-visible,
+html[data-theme] #nav-sidebar #nav-filter:active {
+    background: transparent !important;
+    border: 0 !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+html[data-theme] .rental-nav-search:focus-within {
+    border-color: var(--rental-nav-border) !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Input cari di daftar (changelist) */
+html[data-theme] #searchbar,
+html[data-theme] #searchbar:focus,
+html[data-theme] #searchbar:focus-visible,
+html[data-theme] #toolbar input[type="text"]:focus,
+html[data-theme] #toolbar input[type="search"]:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: var(--border-color) !important;
+}
