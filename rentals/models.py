@@ -452,6 +452,25 @@ class Rental(TimeStampedModel):
                 'expected_return_at': 'Rencana kembali harus setelah mulai sewa.',
             })
 
+        if self.status == Rental.Status.ACTIVE and self.vehicle_id:
+            # Satu unit hanya boleh punya satu order aktif; order aktif
+            # sebelumnya harus diselesaikan (atau dibatalkan) lebih dulu.
+            other_active = Rental.objects.filter(
+                vehicle_id=self.vehicle_id,
+                status=Rental.Status.ACTIVE,
+            )
+            if self.pk:
+                other_active = other_active.exclude(pk=self.pk)
+            blocking = other_active.only('invoice_number').first()
+            if blocking is not None:
+                raise ValidationError({
+                    'vehicle': (
+                        f'Kendaraan ini masih memiliki order aktif ({blocking.invoice_number}) '
+                        'yang belum diselesaikan. Selesaikan atau batalkan order tersebut '
+                        'sebelum mengaktifkan order baru.'
+                    ),
+                })
+
         if not (self.vehicle_id and self.start_at and self.expected_return_at):
             return
 

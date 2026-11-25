@@ -1225,3 +1225,66 @@ class DashboardUxTests(TestCase):
 
         self.assertContains(response, 'Perlu perhatian')
         self.assertEqual(len(response.context['recent_actions']), 1)
+
+
+class SingleActiveRentalPerVehicleTests(TestCase):
+    def setUp(self):
+        self.customer = Customer.objects.create(
+            full_name='Nurhayati', identity_number='ID-ACT',
+            phone_number='08120000002', address='Bandung',
+        )
+        category = VehicleCategory.objects.create(name='MPV')
+        self.vehicle = Vehicle.objects.create(
+            category=category, plate_number='B1ACT', brand='Toyota', model='Avanza',
+            year=2024, transmission=Vehicle.Transmission.MANUAL,
+            fuel_type=Vehicle.FuelType.GASOLINE, daily_rate=Decimal('100000'), odometer=1,
+        )
+        self.start = timezone.now().replace(microsecond=0)
+
+    def make_rental(self, offset_days, status):
+        start_at = self.start + timedelta(days=offset_days)
+        return Rental(
+            customer=self.customer, vehicle=self.vehicle, start_at=start_at,
+            expected_return_at=start_at + timedelta(days=1), start_odometer=1,
+            daily_rate=Decimal('100000'), status=status,
+        )
+
+    def test_second_active_rental_on_same_vehicle_is_rejected(self):
+        first = self.make_rental(0, Rental.Status.ACTIVE)
+        first.save()
+
+        second = self.make_rental(10, Rental.Status.ACTIVE)
+        with self.assertRaises(ValidationError) as ctx:
+            second.save()
+
+        self.assertIn(first.invoice_number, str(ctx.exception))
+
+    def test_draft_on_same_vehicle_can_be_created_but_not_activated(self):
+        first = self.make_rental(0, Rental.Status.ACTIVE)
+        first.save()
+        draft = self.make_rental(10, Rental.Status.DRAFT)
+        draft.save()
+
+        draft.status = Rental.Status.ACTIVE
+        with self.assertRaises(ValidationError):
+            draft.save(update_fields=['status', 'updated_at'])
+
+    def test_can_activate_after_previous_is_completed(self):
+        first = self.make_rental(0, Rental.Status.ACTIVE)
+        first.save()
+        first.status = Rental.Status.COMPLETED
+        first.save(update_fields=['status', 'updated_at'])
+
+        second = self.make_rental(10, Rental.Status.ACTIVE)
+        second.save()
+
+        self.assertEqual(second.status, Rental.Status.ACTIVE)
+
+    def test_editing_the_active_rental_itself_is_allowed(self):
+        first = self.make_rental(0, Rental.Status.ACTIVE)
+        first.save()
+        first.notes = 'catatan baru'
+        first.save()
+
+        first.refresh_from_db()
+        self.assertEqual(first.notes, 'catatan baru')

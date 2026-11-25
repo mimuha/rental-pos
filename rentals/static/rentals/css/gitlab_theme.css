@@ -1890,3 +1890,103 @@ html[data-theme] #nav-sidebar:focus-within::-webkit-scrollbar-thumb {
 html[data-theme] #nav-sidebar::-webkit-scrollbar-thumb:hover {
     background-color: var(--rental-scroll-thumb-hover);
 }
+
+/* ---- Inline Pembayaran di Order rental: lebar kolom dan font seragam ---- */
+html[data-theme] #payments-group .tabular {
+    overflow-x: auto;
+}
+
+html[data-theme] #payments-group table {
+    width: 100%;
+}
+
+html[data-theme] #payments-group th,
+html[data-theme] #payments-group td,
+html[data-theme] #payments-group td p,
+html[data-theme] #payments-group td label,
+html[data-theme] #payments-group td input,
+html[data-theme] #payments-group td select,
+html[data-theme] #payments-group td textarea,
+html[data-theme] #payments-group .datetimeshortcuts,
+html[data-theme] #payments-group .datetimeshortcuts a {
+    font-family: inherit;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+}
+
+html[data-theme] #payments-group th {
+    white-space: nowrap;
+}
+
+html[data-theme] #payments-group td {
+    padding: 0.6rem 0.75rem;
+    vertical-align: middle;
+}
+
+/* Judul baris (pay-... - nominal) hanya mengulang kolom Nomor invoice */
+html[data-theme] #payments-group td.original {
+    width: 0;
+    padding: 0;
+}
+
+html[data-theme] #payments-group td.original p {
+    display: none;
+}
+
+/* Tanggal dan waktu: dua baris rapi (label | input | pintasan) */
+html[data-theme] #payments-group p.datetime {
+    display: grid !important;
+    grid-template-columns: auto minmax(7.5rem, 1fr) auto;
+    align-items: center;
+    gap: 0.4rem 0.6rem;
+    margin: 0;
+}
+
+html[data-theme] #payments-group p.datetime label {
+    margin: 0;
+    color: var(--rental-pos-subtitle);
+}
+
+html[data-theme] #payments-group p.datetime input {
+    width: 100%;
+    max-width: none;
+}
+
+html[data-theme] #payments-group .datetimeshortcuts {
+    white-space: nowrap;
+    color: var(--rental-pos-subtitle);
+}
+
+html[data-theme] #payments-group td.field-payment_date {
+    min-width: 17rem;
+}
+
+html[data-theme] #payments-group td.field-method select {
+    min-width: 9rem;
+}
+
+html[data-theme] #payments-group td.field-amount input {
+    min-width: 9.5rem;
+}
+
+html[data-theme] #payments-group td.field-invoice_number,
+html[data-theme] #payments-group td.field-invoice_number p {
+    min-width: 8.5rem;
+    white-space: nowrap;
+    color: var(--rental-pos-subtitle);
+}
+
+html[data-theme] #payments-group td.field-reference_number input {
+    min-width: 9.5rem;
+}
+
+html[data-theme] #payments-group td.field-notes textarea {
+    width: 100%;
+    min-width: 14rem;
+    height: 4rem;
+    resize: vertical;
+}
+
+html[data-theme] #payments-group td.delete {
+    text-align: center;
+}
