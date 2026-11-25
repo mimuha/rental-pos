@@ -157,6 +157,20 @@
 
         var syncing = false;
 
+        function writeTime(selectedDates) {
+            if (syncing || !selectedDates[0]) {
+                return;
+            }
+            var d = selectedDates[0];
+            var value = pad(d.getHours()) + '.' + pad(d.getMinutes());
+            var changed = timeInput.value !== value;
+            timeInput.value = value;
+            if (changed) {
+                fire(dateInput, 'input');
+                fire(timeInput, 'input');
+            }
+        }
+
         var instance = window.flatpickr(dateInput, {
             locale: 'id',
             dateFormat: DATE_FORMAT,
@@ -183,23 +197,22 @@
             },
             onOpen: function (selectedDates, value, fp) {
                 fp._rentalInitial = {date: dateInput.value, time: timeInput.value};
-                var parsed = parseTime(timeInput.value);
-                if (parsed && selectedDates[0]) {
+                // Sinkronkan popup dengan isi kolom saat ini (tanggal/jam bisa
+                // diisi lewat ketikan atau skrip tanpa melewati flatpickr).
+                var synced = makeParser(timeInput)(dateInput.value);
+                if (synced) {
                     syncing = true;
-                    var d = new Date(selectedDates[0].getTime());
-                    d.setHours(parsed[0], parsed[1], 0, 0);
-                    fp.setDate(d, false);
+                    fp.setDate(synced, false);
                     syncing = false;
                 }
             },
+            // Perubahan jam lewat spinner popup memicu onValueUpdate, bukan
+            // selalu onChange, sehingga keduanya menulis ke kolom jam.
             onChange: function (selectedDates) {
-                if (syncing || !selectedDates[0]) {
-                    return;
-                }
-                var d = selectedDates[0];
-                timeInput.value = pad(d.getHours()) + '.' + pad(d.getMinutes());
-                fire(dateInput, 'input');
-                fire(timeInput, 'input');
+                writeTime(selectedDates);
+            },
+            onValueUpdate: function (selectedDates) {
+                writeTime(selectedDates);
             },
             onClose: function () {
                 fire(dateInput, 'change');

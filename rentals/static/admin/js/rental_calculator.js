@@ -115,9 +115,18 @@
             'id_daily_rate', 'id_discount_amount', 'id_additional_fee'
         ];
 
+        // Perhitungan ditunda satu tick agar berjalan setelah pemformat Rupiah
+        // (rupiah_input.js) merapikan nilai; jika tidak, nilai sementara seperti
+        // "37.6500" terbaca sebagai desimal 37,65.
+        function scheduleCalculate() {
+            setTimeout(calculate, 0);
+        }
+
         fieldIds.forEach(function(id) {
             var el = document.getElementById(id);
-            if (el) el.addEventListener('input', calculate);
+            if (!el) return;
+            el.addEventListener('input', scheduleCalculate);
+            el.addEventListener('change', scheduleCalculate);
         });
     }
 

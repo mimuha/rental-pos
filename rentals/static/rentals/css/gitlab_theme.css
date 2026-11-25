@@ -2856,3 +2856,22 @@ html[data-theme] #toolbar input[type="search"]:focus {
     box-shadow: none !important;
     border-color: var(--border-color) !important;
 }
+
+/* Kotak jam/menit di popup picker: tanpa outline, border, dan ring fokus bawaan */
+html[data-theme] .flatpickr-calendar input,
+html[data-theme] .flatpickr-calendar input:focus,
+html[data-theme] .flatpickr-calendar input:focus-visible,
+html[data-theme] .flatpickr-calendar input:active,
+html[data-theme] .flatpickr-calendar .numInputWrapper,
+html[data-theme] .flatpickr-calendar .numInputWrapper:focus-within,
+html[data-theme] .flatpickr-calendar select:focus,
+html[data-theme] .flatpickr-calendar select:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
+}
+
+html[data-theme] .flatpickr-calendar .flatpickr-time input,
+html[data-theme] .flatpickr-calendar .flatpickr-time input:focus {
+    border: 0 !important;
+}

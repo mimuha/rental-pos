@@ -114,7 +114,13 @@
         half.addEventListener('click', function () {
             setAmount(Math.round(remainingBefore() / 2));
         });
-        amountInput.addEventListener('input', refreshAfter);
+        // Ditunda satu tick agar nilai sudah dirapikan oleh pemformat Rupiah.
+        amountInput.addEventListener('input', function () {
+            setTimeout(refreshAfter, 0);
+        });
+        amountInput.addEventListener('change', function () {
+            setTimeout(refreshAfter, 0);
+        });
 
         function load() {
             var id = rentalSelect.value;
