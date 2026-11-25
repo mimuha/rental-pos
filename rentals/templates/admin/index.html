@@ -35,37 +35,43 @@
 
                 <div class="row g-xl-4 g-sm-3 g-2">
                     <div class="col">
+                        <a class="rental-stat-link" href="{% url 'admin:rentals_vehicle_changelist' %}" aria-label="Lihat total kendaraan">
                         <div class="card admin-card border-0 rental-stat-card h-100">
                             <div class="card-body">
                                 <p class="text-secondary mb-2">Total kendaraan</p>
                                 <p class="rental-stat-card__value mb-0">{{ total_vehicles }}</p>
                             </div>
                         </div>
+                        </a>
                     </div>
 
                     <div class="col">
+                        <a class="rental-stat-link" href="{% url 'admin:rentals_vehicle_changelist' %}?status__exact=available" aria-label="Lihat kendaraan tersedia">
                         <div class="card admin-card border-0 rental-stat-card h-100">
                             <div class="card-body">
                                 <p class="text-secondary mb-2">Kendaraan tersedia</p>
                                 <p class="rental-stat-card__value rental-stat-card__value--success mb-0">{{ available_vehicles }}</p>
                             </div>
                         </div>
+                        </a>
                     </div>
 
                     <div class="col">
+                        <a class="rental-stat-link" href="{% url 'admin:rentals_vehicle_changelist' %}?status__exact=rented" aria-label="Lihat kendaraan disewa">
                         <div class="card admin-card border-0 rental-stat-card h-100">
                             <div class="card-body">
                                 <p class="text-secondary mb-2">Kendaraan disewa</p>
                                 <p class="rental-stat-card__value rental-stat-card__value--primary mb-0">{{ rented_vehicles }}</p>
                             </div>
                         </div>
+                        </a>
                     </div>
 
                     <div class="col">
                         <div class="card admin-card border-0 rental-stat-card h-100">
                             <div class="card-body">
                                 <p class="text-secondary mb-2">Pendapatan</p>
-                                <p class="rental-stat-card__value rental-stat-card__value--income mb-0">{{ monthly_income }}</p>
+                                <p class="rental-stat-card__value rental-stat-card__value--income mb-0" title="{{ monthly_income_full }}">{{ monthly_income }}</p>
                             </div>
                         </div>
                     </div>
@@ -74,7 +80,7 @@
                         <div class="card admin-card border-0 rental-stat-card h-100">
                             <div class="card-body">
                                 <p class="text-secondary mb-2">Pengeluaran</p>
-                                <p class="rental-stat-card__value rental-stat-card__value--expense mb-0">{{ monthly_expenses }}</p>
+                                <p class="rental-stat-card__value rental-stat-card__value--expense mb-0" title="{{ monthly_expenses_full }}">{{ monthly_expenses }}</p>
                                 <p class="rental-stat-card__hint text-secondary small mb-0">Maintenance kendaraan &amp; biaya lain</p>
                             </div>
                         </div>
@@ -167,30 +173,61 @@
                 </div>
             {% endif %}
 
+            <div class="card admin-card border-0 mb-4 rental-attention">
+                <div class="card-header border-bottom">
+                    <h2 class="h6 fw-bold mb-0">Perlu perhatian</h2>
+                </div>
+                <div class="card-body">
+                    {% if attention.overdue_count or attention.unpaid_count or attention.maintenance_count %}
+                        {% if attention.overdue_count %}
+                            <h3 class="h6 text-secondary mb-2">Terlambat kembali ({{ attention.overdue_count }})</h3>
+                            <ul class="rental-attention__list">
+                                {% for item in attention.overdue %}
+                                    <li><a href="{{ item.url }}" class="fw-semibold text-decoration-none">{{ item.title }}</a>
+                                        <span class="small text-secondary d-block">{{ item.detail }}</span></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if attention.unpaid_count %}
+                            <h3 class="h6 text-secondary mb-2">Belum lunas ({{ attention.unpaid_count }})</h3>
+                            <ul class="rental-attention__list">
+                                {% for item in attention.unpaid %}
+                                    <li><a href="{{ item.url }}" class="fw-semibold text-decoration-none">{{ item.title }}</a>
+                                        <span class="small text-secondary d-block">{{ item.detail }}</span></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        {% if attention.maintenance_count %}
+                            <p class="mb-0">
+                                <a href="{% url 'admin:rentals_vehicle_changelist' %}?status__exact=maintenance" class="fw-semibold text-decoration-none">{{ attention.maintenance_count }} kendaraan sedang perawatan</a>
+                            </p>
+                        {% endif %}
+                    {% else %}
+                        <p class="text-secondary mb-0">Tidak ada yang perlu ditindaklanjuti.</p>
+                    {% endif %}
+                </div>
+            </div>
+
             <div class="card admin-card border-0">
                 <div class="card-header border-bottom">
                     <h2 class="h6 fw-bold mb-0">{% translate 'Tindakan terbaru' %}</h2>
                 </div>
                 <div class="card-body">
                     <h3 class="h6 text-secondary mb-3">{% translate 'Tindakan saya' %}</h3>
-                    {% get_admin_log 10 as admin_log for_user user %}
-                    {% if not admin_log %}
+                    {% if not recent_actions %}
                         <p class="text-secondary mb-0">{% translate 'Belum ada tindakan.' %}</p>
                     {% else %}
                         <div class="list-group list-group-flush recent-actions">
-                            {% for entry in admin_log %}
+                            {% for action in recent_actions %}
                                 <div class="list-group-item px-0">
-                                    {% if entry.is_deletion or not entry.get_admin_url %}
-                                        <span class="fw-semibold">{{ entry.object_repr }}</span>
+                                    {% if action.url %}
+                                        <a href="{{ action.url }}" class="fw-semibold text-decoration-none">{{ action.title }}</a>
                                     {% else %}
-                                        <a href="{{ entry.get_admin_url }}" class="fw-semibold text-decoration-none">{{ entry.object_repr }}</a>
+                                        <span class="fw-semibold">{{ action.title }}</span>
                                     {% endif %}
                                     <div class="small text-secondary">
-                                        {% if entry.content_type %}
-                                            {% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}
-                                        {% else %}
-                                            {% translate 'Konten tidak diketahui' %}
-                                        {% endif %}
+                                        <span class="rental-action-label rental-action-label--{{ action.flag }}">{{ action.label }}</span>
+                                        {{ action.model }} &middot; {{ action.time|timesince }} lalu
                                     </div>
                                 </div>
                             {% endfor %}

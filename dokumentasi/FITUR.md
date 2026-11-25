@@ -118,3 +118,13 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - Secure cookies (session + CSRF)
 - ALLOWED_HOSTS dibatasi otomatis via Render
 - Credential via environment variables (tidak hardcoded)
+
+## Perbaikan UI/UX
+
+- Total order dibulatkan ke rupiah penuh; sisa pembayaran tidak pernah negatif, kelebihan bayar tampil di field terpisah.
+- Format uang tanpa `,00` bila bulat; kartu pendapatan/pengeluaran menampilkan nominal penuh saat kursor diarahkan.
+- Dashboard: panel "Perlu perhatian" (terlambat kembali, belum lunas, kendaraan perawatan), kartu kendaraan bisa diklik ke daftar terfilter, dan "Tindakan terbaru" menampilkan jenis aksi tanpa entri duplikat.
+- Form: tanggal dan waktu sebaris, tanda `*` pada field wajib, ikon hapus di samping dropdown disembunyikan.
+- Daftar order: badge status berlatar, tabel lebar bisa digulir horizontal.
+- Radius kartu hanya dua ukuran (`--rental-radius-sm` 0,5rem dan `--rental-radius-lg` 0,75rem); shadow kartu dihilangkan, hanya popup yang memakai shadow tipis.
+- Aksesibilitas: outline fokus keyboard dan dukungan `prefers-reduced-motion`.

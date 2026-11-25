@@ -1461,3 +1461,256 @@ html[data-theme="dark"][data-accent="gray"] .messagelist li.error {
         border-color: rgba(165, 163, 163, 0.35) !important;
     }
 }
+
+/* ---- Perbaikan UI/UX ---- */
+
+/* Ikon modul dashboard: bagian duotone tidak terlalu pucat */
+html[data-theme] .rental-menu-icon svg [opacity],
+html[data-theme] .rental-menu-icon svg [stroke-opacity],
+html[data-theme] .rental-menu-icon svg [fill-opacity] {
+    opacity: 0.9;
+    stroke-opacity: 0.9;
+    fill-opacity: 0.9;
+}
+
+/* Fokus keyboard yang terlihat */
+html[data-theme] a:focus-visible,
+html[data-theme] button:focus-visible,
+html[data-theme] input:focus-visible,
+html[data-theme] select:focus-visible,
+html[data-theme] textarea:focus-visible,
+html[data-theme] .rental-menu-button:focus-visible {
+    outline: 2px solid var(--rental-primary);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html[data-theme] *,
+    html[data-theme] *::before,
+    html[data-theme] *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Dashboard: kartu kendaraan bisa diklik */
+.rental-stat-link {
+    display: block;
+    height: 100%;
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+.rental-stat-link .rental-stat-card {
+    transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.rental-stat-link:hover .rental-stat-card,
+.rental-stat-link:focus-visible .rental-stat-card {
+    box-shadow: var(--rental-shadow-lg) !important;
+}
+
+.rental-attention__list {
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+}
+
+.rental-attention__list li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--hairline-color);
+}
+
+.rental-attention__list li:last-child {
+    border-bottom: 0;
+}
+
+.rental-action-label {
+    display: inline-block;
+    padding: 0.05rem 0.4rem;
+    margin-right: 0.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.rental-action-label--1 {
+    color: var(--rental-success);
+    border-color: var(--rental-success);
+}
+
+.rental-action-label--3 {
+    color: var(--rental-danger);
+    border-color: var(--rental-danger);
+}
+
+/* Form: field wajib, tanggal + waktu sebaris, ikon hapus tidak rawan salah klik */
+.form-row.required > div > label::after,
+.form-row .required label::after,
+.form-row > label.required::after {
+    content: " *";
+    color: var(--rental-danger);
+}
+
+p.datetime {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1.25rem;
+}
+
+p.datetime br {
+    display: none;
+}
+
+p.datetime label {
+    min-width: 0 !important;
+    margin-right: 0.35rem;
+}
+
+.related-widget-wrapper .related-widget-wrapper-link.delete-related {
+    display: none !important;
+}
+
+.form-row .errorlist {
+    margin-top: 0.35rem;
+}
+
+.form-row.errors input,
+.form-row.errors select,
+.form-row.errors textarea {
+    border-color: var(--rental-danger) !important;
+}
+
+@media (min-width: 1200px) {
+    .aligned .form-row.field-daily_rate,
+    .aligned .form-row.field-discount_amount {
+        max-width: 48rem;
+    }
+}
+
+/* Daftar order: badge status berlatar, tabel lebar bisa digulir */
+.rental-status-badge {
+    display: inline-block;
+    padding: 0.1rem 0.55rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.rental-status-badge--active,
+.rental-status-badge--in-progress {
+    background: var(--rental-primary-soft);
+}
+
+.rental-status-badge--cancelled {
+    background: transparent;
+}
+
+#changelist .results {
+    overflow-x: auto;
+}
+
+#changelist .results td:last-child,
+#changelist .results th:last-child {
+    white-space: nowrap;
+}
+
+#result_list:empty,
+#changelist .paginator:only-child {
+    text-align: center;
+}
+
+@media (max-width: 767.98px) {
+    .rental-stat-card__value {
+        font-size: 1.5rem;
+    }
+}
+
+/* ---- Radius dan shadow kartu yang konsisten ----
+   Dua ukuran saja: kecil untuk kartu/tombol kartu, besar untuk panel dan
+   kontainer. Shadow kartu dihilangkan; pemisah memakai border. Hanya popup
+   melayang yang masih diberi shadow tipis. */
+:root {
+    --rental-radius-sm: 0.5rem;
+    --rental-radius-lg: 0.75rem;
+}
+
+html[data-theme] {
+    --rental-box-shadow: none;
+    --rental-shadow-sm: none;
+    --rental-shadow-md: none;
+    --rental-shadow-lg: 0 2px 6px rgba(5, 5, 6, 0.08);
+}
+
+/* Besar: panel dan kontainer */
+html[data-theme] .card.admin-card,
+html[data-theme] .module,
+html[data-theme] fieldset.module,
+html[data-theme] .inline-group,
+html[data-theme] #changelist,
+html[data-theme] #changelist-filter,
+html[data-theme] .login-card,
+html[data-theme] .rental-nav-shell,
+html[data-theme] .rental-user-menu-popup,
+html[data-theme] .rental-nav-popup {
+    border-radius: var(--rental-radius-lg) !important;
+}
+
+html[data-theme] .card.admin-card .card-header,
+html[data-theme] .module h2,
+html[data-theme] .module caption,
+html[data-theme] .inline-group h2,
+html[data-theme] #changelist-filter-header {
+    border-radius: var(--rental-radius-lg) var(--rental-radius-lg) 0 0 !important;
+}
+
+/* Kecil: kartu statistik, tombol menu, dan kontrol di dalam panel.
+   Ditaruh setelah aturan besar agar .rental-stat-card (juga .admin-card) kecil. */
+html[data-theme] .card.admin-card.rental-stat-card,
+html[data-theme] .rental-menu-button,
+html[data-theme] .rental-nav-favorite,
+html[data-theme] .rental-nav-search,
+html[data-theme] .rental-nav-search-btn,
+html[data-theme] .rental-nav-collapse,
+html[data-theme] .rental-nav-group-details,
+html[data-theme] .rental-nav-link,
+html[data-theme] .rental-nav-group-summary,
+html[data-theme] .photo-upload-area,
+html[data-theme] .messagelist li,
+html[data-theme] .errornote,
+html[data-theme] .rental-filter-empty {
+    border-radius: var(--rental-radius-sm) !important;
+}
+
+/* Tanpa shadow pada kartu; hover memakai border/background */
+html[data-theme] .card,
+html[data-theme] .admin-card,
+html[data-theme] .rental-stat-card,
+html[data-theme] .rental-dashboard-card,
+html[data-theme] .rental-menu-button,
+html[data-theme] .rental-menu-button:hover,
+html[data-theme] .rental-nav-shell,
+html[data-theme] .module,
+html[data-theme] .inline-group,
+html[data-theme] #changelist,
+html[data-theme] #changelist-filter,
+html[data-theme] #changelist .actions,
+html[data-theme] .login-card,
+html[data-theme] .photo-upload-area,
+html[data-theme] .rental-stat-link:hover .rental-stat-card,
+html[data-theme] .rental-stat-link:focus-visible .rental-stat-card {
+    box-shadow: none !important;
+}
+
+html[data-theme] .rental-menu-button:hover,
+html[data-theme] .rental-stat-link:hover .rental-stat-card,
+html[data-theme] .rental-stat-link:focus-visible .rental-stat-card {
+    border-color: var(--rental-primary-border) !important;
+}

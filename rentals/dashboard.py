@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from .cache_utils import safe_cache_get, safe_cache_set
-from .models import OtherExpense, Payment, Vehicle, VehicleMaintenance
+from .models import OtherExpense, Payment, Rental, Vehicle, VehicleMaintenance
 
 
 def month_bounds(year, month):
@@ -95,6 +95,8 @@ def format_rupiah(value):
         value = 0
 
     amount = f'{value:,.2f}'.replace(',', '_').replace('.', ',').replace('_', '.')
+    if amount.endswith(',00'):
+        amount = amount[:-3]
     return f'Rp{amount}'
 
 
@@ -208,6 +210,54 @@ def apply_rental_menu_groups(app_list):
     return app_list
 
 
+ATTENTION_LIMIT = 5
+
+
+def get_attention_items(maintenance_count=0, now=None):
+    """Hal yang butuh tindakan kasir: telat kembali, belum lunas, perawatan.
+
+    Mengembalikan struktur dict/list biasa agar aman disimpan di cache.
+    """
+    now = now or timezone.now()
+    active_rentals = list(
+        Rental.objects.filter(status=Rental.Status.ACTIVE)
+        .select_related('customer', 'vehicle')
+        .prefetch_related('payments')
+        .order_by('expected_return_at')
+    )
+
+    def rental_item(rental, detail):
+        return {
+            'title': f'{rental.invoice_number} - {rental.customer.full_name}',
+            'detail': detail,
+            'url': reverse('admin:rentals_rental_change', args=[rental.pk]),
+        }
+
+    overdue = [
+        rental for rental in active_rentals
+        if rental.expected_return_at and rental.expected_return_at < now
+    ]
+    unpaid = [rental for rental in active_rentals if rental.remaining_amount > 0]
+
+    return {
+        'overdue_count': len(overdue),
+        'overdue': [
+            rental_item(
+                rental,
+                f'{rental.vehicle.plate_number}, seharusnya kembali '
+                f'{timezone.localtime(rental.expected_return_at):%d/%m/%Y %H:%M}',
+            )
+            for rental in overdue[:ATTENTION_LIMIT]
+        ],
+        'unpaid_count': len(unpaid),
+        'unpaid': [
+            rental_item(rental, f'Sisa {format_rupiah(rental.remaining_amount)}')
+            for rental in unpaid[:ATTENTION_LIMIT]
+        ],
+        'maintenance_count': maintenance_count,
+    }
+
+
 def get_dashboard_context(request):
     year, month = parse_dashboard_period(request)
     cache_seconds = getattr(settings, 'DASHBOARD_CACHE_SECONDS', 60)
@@ -232,6 +282,7 @@ def get_dashboard_context(request):
         total=Count('pk'),
         available=Count('pk', filter=Q(status=Vehicle.Status.AVAILABLE)),
         rented=Count('pk', filter=Q(status=Vehicle.Status.RENTED)),
+        maintenance=Count('pk', filter=Q(status=Vehicle.Status.MAINTENANCE)),
     )
 
     context = {
@@ -239,7 +290,10 @@ def get_dashboard_context(request):
         'available_vehicles': vehicle_stats['available'] or 0,
         'rented_vehicles': vehicle_stats['rented'] or 0,
         'monthly_income': format_rupiah_short(monthly_income),
+        'monthly_income_full': format_rupiah(monthly_income),
         'monthly_expenses': format_rupiah_short(monthly_expenses),
+        'monthly_expenses_full': format_rupiah(monthly_expenses),
+        'attention': get_attention_items(vehicle_stats['maintenance'] or 0),
         'selected_period': f'{year:04d}-{month:02d}',
         'selected_period_label': format_period_label(year, month),
     }

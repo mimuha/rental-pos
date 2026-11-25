@@ -5,7 +5,7 @@ from django.db import models, transaction, IntegrityError
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.utils import timezone
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 
 
 class TimeStampedModel(models.Model):
@@ -564,9 +564,15 @@ class Rental(TimeStampedModel):
     def subtotal(self):
         return (self.daily_rate or Decimal('0')) * self.rental_days
 
+    @staticmethod
+    def _round_rupiah(value):
+        # Rupiah tidak punya sen; bulatkan ke rupiah penuh (setengah ke atas).
+        return Decimal(value).quantize(Decimal('1'), rounding=ROUND_HALF_UP)
+
     @property
     def total_amount(self):
-        return self.subtotal + (self.additional_fee or Decimal('0')) - (self.discount_amount or Decimal('0'))
+        total = self.subtotal + (self.additional_fee or Decimal('0')) - (self.discount_amount or Decimal('0'))
+        return self._round_rupiah(total)
 
     @property
     def paid_amount(self):
@@ -577,7 +583,17 @@ class Rental(TimeStampedModel):
 
     @property
     def remaining_amount(self):
-        return self.total_amount - self.paid_amount
+        # Dibulatkan lalu tidak pernah negatif, agar selisih pecahan seperti
+        # -0,18 tidak tampil sebagai "Rp-0,18" pada order yang sudah lunas.
+        remaining = self._round_rupiah(self.total_amount - self.paid_amount)
+        return max(remaining, Decimal('0'))
+
+    @property
+    def overpaid_amount(self):
+        # Kelebihan bayar ditampilkan terpisah karena sisa pembayaran tidak
+        # pernah negatif.
+        overpaid = self._round_rupiah(self.paid_amount - self.total_amount)
+        return max(overpaid, Decimal('0'))
 
 
 class Payment(TimeStampedModel):

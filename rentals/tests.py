@@ -1078,3 +1078,150 @@ class CacheResilienceTests(TestCase):
                 response = middleware(request)
 
         self.assertEqual(response.status_code, 200)
+
+
+class RentalRupiahRoundingTests(TestCase):
+    def setUp(self):
+        self.customer = Customer.objects.create(
+            full_name='Nurhayati',
+            identity_number='ID-ROUND',
+            phone_number='08123456780',
+            address='Bandung',
+        )
+        category = VehicleCategory.objects.create(name='MPV')
+        self.vehicle = Vehicle.objects.create(
+            category=category,
+            plate_number='B9999RND',
+            brand='Toyota',
+            model='Avanza',
+            year=2024,
+            transmission=Vehicle.Transmission.MANUAL,
+            fuel_type=Vehicle.FuelType.GASOLINE,
+            daily_rate=Decimal('116666.66'),
+            odometer=1000,
+        )
+
+    def make_rental(self, **extra):
+        start_at = timezone.datetime(2026, 10, 1, 9, 0, tzinfo=timezone.get_current_timezone())
+        return Rental(
+            customer=self.customer,
+            vehicle=self.vehicle,
+            daily_rate=Decimal('116666.66'),
+            start_odometer=1000,
+            start_at=start_at,
+            expected_return_at=start_at + timedelta(days=30),
+            **extra,
+        )
+
+    def test_total_amount_rounded_to_whole_rupiah(self):
+        rental = self.make_rental()
+
+        self.assertEqual(rental.subtotal, Decimal('3499999.80'))
+        self.assertEqual(rental.total_amount, Decimal('3500000'))
+
+    def test_total_amount_rounds_half_up(self):
+        rental = self.make_rental(additional_fee=Decimal('0.70'))
+
+        self.assertEqual(rental.total_amount, Decimal('3500001'))
+
+    def test_remaining_amount_not_negative_after_rounding(self):
+        rental = self.make_rental()
+        rental.save()
+        Payment.objects.create(
+            rental=rental,
+            method=Payment.Method.CASH,
+            amount=Decimal('3499999.82'),
+        )
+
+        self.assertEqual(rental.remaining_amount, Decimal('0'))
+
+    def test_remaining_amount_clamped_when_overpaid(self):
+        rental = self.make_rental()
+        rental.save()
+        Payment.objects.create(
+            rental=rental,
+            method=Payment.Method.CASH,
+            amount=Decimal('4000000'),
+        )
+
+        self.assertEqual(rental.remaining_amount, Decimal('0'))
+
+    def test_remaining_amount_for_partial_payment(self):
+        rental = self.make_rental()
+        rental.save()
+        Payment.objects.create(
+            rental=rental,
+            method=Payment.Method.CASH,
+            amount=Decimal('2000000'),
+        )
+
+        self.assertEqual(rental.remaining_amount, Decimal('1500000'))
+
+
+class DashboardUxTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.user = get_user_model().objects.create_superuser(
+            username='ux_admin', email='ux@example.com', password='password123',
+        )
+        self.customer = Customer.objects.create(
+            full_name='Nurhayati', identity_number='ID-UX',
+            phone_number='08120000001', address='Bandung',
+        )
+        category = VehicleCategory.objects.create(name='MPV')
+        self.vehicle = Vehicle.objects.create(
+            category=category, plate_number='B1UX', brand='Toyota', model='Avanza',
+            year=2024, transmission=Vehicle.Transmission.MANUAL,
+            fuel_type=Vehicle.FuelType.GASOLINE, daily_rate=Decimal('100000'), odometer=1,
+        )
+
+    def test_format_rupiah_drops_zero_decimals(self):
+        from .admin import format_rupiah
+
+        self.assertEqual(format_rupiah(Decimal('3500000.00')), 'Rp3.500.000')
+        self.assertEqual(format_rupiah(Decimal('1500.50')), 'Rp1.500,50')
+
+    def test_overpaid_amount_reported_separately(self):
+        start = timezone.now() - timedelta(days=3)
+        rental = Rental.objects.create(
+            customer=self.customer, vehicle=self.vehicle, start_at=start,
+            expected_return_at=start + timedelta(days=1), start_odometer=1,
+            daily_rate=Decimal('100000'),
+        )
+        Payment.objects.create(rental=rental, method=Payment.Method.CASH, amount=Decimal('150000'))
+
+        self.assertEqual(rental.remaining_amount, Decimal('0'))
+        self.assertEqual(rental.overpaid_amount, Decimal('50000'))
+
+    def test_dashboard_lists_overdue_and_unpaid_active_rentals(self):
+        start = timezone.now() - timedelta(days=3)
+        rental = Rental.objects.create(
+            customer=self.customer, vehicle=self.vehicle, start_at=start,
+            expected_return_at=start + timedelta(days=1), start_odometer=1,
+            daily_rate=Decimal('100000'), status=Rental.Status.ACTIVE,
+        )
+        context = get_dashboard_context(RequestFactory().get('/admin/'))
+
+        attention = context['attention']
+        self.assertEqual(attention['overdue_count'], 1)
+        self.assertEqual(attention['unpaid_count'], 1)
+        self.assertIn(rental.invoice_number, attention['overdue'][0]['title'])
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_dashboard_renders_attention_and_deduped_actions(self):
+        from django.contrib.admin.models import CHANGE, LogEntry
+        from django.contrib.contenttypes.models import ContentType
+
+        content_type = ContentType.objects.get_for_model(Customer)
+        for _ in range(3):
+            LogEntry.objects.create(
+                user=self.user, content_type=content_type,
+                object_id=str(self.customer.pk), object_repr='Nurhayati',
+                action_flag=CHANGE,
+            )
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse('admin:index'))
+
+        self.assertContains(response, 'Perlu perhatian')
+        self.assertEqual(len(response.context['recent_actions']), 1)

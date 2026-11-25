@@ -2,6 +2,7 @@ import csv
 import json
 
 from django.contrib import admin
+from django.contrib.admin.models import ADDITION, CHANGE, DELETION, LogEntry
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, get_object_or_404
@@ -53,6 +54,9 @@ def format_rupiah(value):
         return '-'
 
     amount = f'{value:,.2f}'.replace(',', '_').replace('.', ',').replace('_', '.')
+    # Tanpa ",00" bila bilangan bulat, sama dengan format input Rupiah.
+    if amount.endswith(',00'):
+        amount = amount[:-3]
     return f'Rp{amount}'
 
 
@@ -376,6 +380,7 @@ class RentalAdmin(BaseModelAdmin):
         'total_amount_rupiah',
         'paid_amount_rupiah',
         'remaining_amount_rupiah',
+        'overpaid_amount_rupiah',
     ]
     form = RentalForm
     inlines = [PaymentInline, OtherExpenseInline]
@@ -409,6 +414,7 @@ class RentalAdmin(BaseModelAdmin):
                 'total_amount_rupiah',
                 'paid_amount_rupiah',
                 'remaining_amount_rupiah',
+                'overpaid_amount_rupiah',
             ),
         }),
     )
@@ -539,6 +545,12 @@ class RentalAdmin(BaseModelAdmin):
             return '-'
         return format_rupiah(obj.remaining_amount)
 
+    @admin.display(description='Kelebihan bayar')
+    def overpaid_amount_rupiah(self, obj):
+        if obj is None or not obj.overpaid_amount:
+            return '-'
+        return format_rupiah(obj.overpaid_amount)
+
 
 @admin.register(Payment)
 class PaymentAdmin(BaseModelAdmin):
@@ -567,9 +579,44 @@ def rental_each_context(request):
     return context
 
 
+RECENT_ACTION_LABELS = {
+    ADDITION: 'Dibuat',
+    CHANGE: 'Diubah',
+    DELETION: 'Dihapus',
+}
+
+
+def get_recent_actions(user, limit=8):
+    """Tindakan terakhir user; entri beruntun yang sama digabung."""
+    entries = (
+        LogEntry.objects.filter(user=user)
+        .select_related('content_type')
+        .order_by('-action_time')[:limit * 4]
+    )
+    actions = []
+    seen = set()
+    for entry in entries:
+        key = (entry.content_type_id, entry.object_id, entry.action_flag)
+        if key in seen:
+            continue
+        seen.add(key)
+        actions.append({
+            'title': entry.object_repr,
+            'model': entry.content_type.name.capitalize() if entry.content_type else 'Konten tidak diketahui',
+            'label': RECENT_ACTION_LABELS.get(entry.action_flag, 'Diubah'),
+            'flag': entry.action_flag,
+            'url': None if entry.is_deletion() else entry.get_admin_url(),
+            'time': entry.action_time,
+        })
+        if len(actions) >= limit:
+            break
+    return actions
+
+
 def rental_admin_index(request, extra_context=None):
     context = dict(extra_context or {})
     context.update(get_dashboard_context(request))
+    context['recent_actions'] = get_recent_actions(request.user)
     response = _original_admin_index(request, context)
     if hasattr(response, 'context_data') and response.context_data is not None:
         apply_rental_menu_groups(response.context_data.get('app_list', []))
