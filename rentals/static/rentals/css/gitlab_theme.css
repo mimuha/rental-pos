@@ -1990,3 +1990,62 @@ html[data-theme] #payments-group td.field-notes textarea {
 html[data-theme] #payments-group td.delete {
     text-align: center;
 }
+
+/* ---- Perbaikan lanjutan: sidebar sticky dan inline tabular ---- */
+
+/* Kolom sidebar harus setinggi baris agar sticky punya ruang bergerak
+   (baris memakai align-items-start sehingga kolom hanya setinggi isinya). */
+@media (min-width: 1200px) {
+    html[data-theme] .admin-sidebar-col {
+        align-self: stretch !important;
+    }
+}
+
+/* Tabel inline selalu selebar kontainer */
+html[data-theme] .inline-group .tabular {
+    width: 100%;
+}
+
+html[data-theme] .inline-group .tabular table {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+/* Font seragam untuk semua inline tabular (Pembayaran, Biaya tambahan, dst.) */
+html[data-theme] .inline-group .tabular th,
+html[data-theme] .inline-group .tabular td,
+html[data-theme] .inline-group .tabular td p,
+html[data-theme] .inline-group .tabular td a,
+html[data-theme] .inline-group .tabular td label,
+html[data-theme] .inline-group .tabular td input,
+html[data-theme] .inline-group .tabular td select,
+html[data-theme] .inline-group .tabular td textarea {
+    font-family: inherit;
+    font-size: 0.8125rem !important;
+    line-height: 1.4;
+}
+
+html[data-theme] .inline-group .tabular td.original p {
+    font-weight: 600;
+}
+
+/* Tanggal + waktu: kolom mengikuti isi, tanpa potongan dan tanpa wrap */
+html[data-theme] #payments-group p.datetime {
+    grid-template-columns: max-content minmax(7.5rem, 1fr) max-content !important;
+}
+
+html[data-theme] #payments-group p.datetime label {
+    width: auto !important;
+    min-width: 0 !important;
+    white-space: nowrap;
+}
+
+html[data-theme] #payments-group p.datetime .datetimeshortcuts,
+html[data-theme] #payments-group p.datetime span {
+    width: auto !important;
+    white-space: nowrap;
+}
+
+html[data-theme] #payments-group td.field-payment_date {
+    min-width: 21rem;
+}
