@@ -3680,3 +3680,470 @@ html[data-theme] input[type="radio"]:focus-visible {
     outline-offset: 1px;
     box-shadow: none !important;
 }
+
+/* ---- Dashboard baru ---- */
+.dash {
+    display: grid;
+    gap: 1rem;
+    max-width: 82rem;
+    margin: 0 auto;
+    padding: 0 0.25rem 1.5rem;
+}
+
+.dash-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+html[data-theme] .dash-head__title {
+    margin: 0;
+    padding: 0;
+    color: var(--rental-pos-title);
+    background: transparent;
+    border: 0;
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+
+.dash-head__sub {
+    margin: 0.15rem 0 0;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.8125rem;
+}
+
+.dash-head__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dash-period input {
+    width: 11rem;
+}
+
+html[data-theme] #content a.dash-btn {
+    padding: 0.5rem 0.9rem;
+    color: var(--link-fg) !important;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--rental-radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+html[data-theme] #content a.dash-btn:hover {
+    background: var(--rental-hover-bg);
+}
+
+html[data-theme] #content a.dash-btn--primary {
+    color: #ffffff !important;
+    background: var(--rental-primary);
+    border-color: var(--rental-primary);
+}
+
+html[data-theme] #content a.dash-btn--primary:hover {
+    background: var(--rental-primary-dark);
+}
+
+html[data-theme] .dash-card {
+    min-width: 0;
+    padding: 1rem 1.15rem;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--rental-radius-lg);
+}
+
+html[data-theme] .dash-card__title {
+    margin: 0 0 0.75rem;
+    padding: 0;
+    color: var(--rental-pos-title);
+    background: transparent;
+    border: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.dash-card__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.dash-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.dash-kpi p {
+    margin: 0;
+}
+
+.dash-kpi__label {
+    color: var(--rental-pos-subtitle);
+    font-size: 0.78rem;
+}
+
+.dash-kpi__value {
+    margin: 0.35rem 0 !important;
+    color: var(--rental-pos-title);
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.dash-kpi__note {
+    font-size: 0.75rem;
+}
+
+.dash-tone--good { color: var(--rental-success); }
+.dash-tone--bad { color: var(--rental-danger) !important; }
+.dash-tone--neutral { color: var(--rental-pos-subtitle); }
+
+.dash-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.dash-row--chart {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+
+/* Grafik: dua seri, aksen = pendapatan, abu = konteks (pengeluaran) */
+html[data-theme] {
+    --dash-expense: #8a8889;
+}
+
+.dash-legend {
+    display: flex;
+    gap: 0.9rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.75rem;
+}
+
+.dash-legend li {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.dash-key {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 2px;
+}
+
+.dash-key--income, .dash-bar--income { background: var(--rental-primary); }
+.dash-key--expense, .dash-bar--expense { background: var(--dash-expense); }
+
+.dash-chart__peak {
+    margin: 0 0 0.25rem;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.7rem;
+}
+
+.dash-bars {
+    display: flex;
+    align-items: stretch;
+    height: 13rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.6rem;
+}
+
+.dash-bars__group {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.dash-bars__pair {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 2px;
+    height: 100%;
+    padding-top: 1.25rem;
+}
+
+.dash-bar {
+    position: relative;
+    display: block;
+    width: 1.4rem;
+    max-width: 38%;
+    border-radius: 4px 4px 0 0;
+}
+
+.dash-bar:hover {
+    filter: brightness(0.92);
+}
+
+.dash-bar em {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding-bottom: 2px;
+    color: var(--body-fg);
+    font-size: 0.65rem;
+    font-style: normal;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.dash-bar--expense em {
+    transform: translateX(-20%);
+}
+
+.dash-bars__label {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    right: 0;
+    left: 0;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.72rem;
+    text-align: center;
+}
+
+.dash-bars__group.is-current .dash-bars__label {
+    color: var(--rental-pos-title);
+    font-weight: 700;
+}
+
+.dash-table summary,
+.dash-activity summary,
+.dash-menu__more summary {
+    cursor: pointer;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.78rem;
+}
+
+.dash-table table {
+    width: 100%;
+    margin-top: 0.5rem;
+    font-size: 0.78rem;
+}
+
+.dash-table th,
+.dash-table td {
+    padding: 0.3rem 0.5rem;
+    text-align: right;
+}
+
+.dash-table th:first-child {
+    text-align: left;
+}
+
+/* Armada */
+.dash-meter__head {
+    display: flex;
+    justify-content: space-between;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.8125rem;
+}
+
+.dash-meter__head strong {
+    color: var(--rental-pos-title);
+}
+
+.dash-meter {
+    height: 0.6rem;
+    margin: 0.35rem 0 0.6rem;
+    background: var(--rental-hover-bg);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.dash-meter span {
+    display: block;
+    height: 100%;
+    background: var(--rental-primary);
+    border-radius: 999px;
+}
+
+.dash-fleet__counts {
+    margin: 0 0 0.5rem;
+    font-size: 0.78rem;
+}
+
+.dash-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dash-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--hairline-color);
+    font-size: 0.8125rem;
+}
+
+.dash-list li:last-child {
+    border-bottom: 0;
+}
+
+.dash-badge {
+    flex: 0 0 auto;
+    padding: 0.1rem 0.6rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.dash-badge--rented {
+    color: var(--rental-primary);
+    background: var(--rental-primary-soft);
+    border-color: var(--rental-primary-border);
+}
+
+.dash-badge--available {
+    color: var(--rental-success);
+    border-color: var(--rental-success);
+}
+
+.dash-badge--maintenance {
+    color: var(--rental-danger);
+    border-color: var(--rental-danger);
+}
+
+.dash-more {
+    display: inline-block;
+    margin-top: 0.6rem;
+    font-size: 0.8125rem;
+}
+
+.dash-empty {
+    margin: 0;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.8125rem;
+}
+
+/* Agenda dan perhatian */
+.dash-agenda li {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+}
+
+.dash-agenda__day {
+    color: var(--rental-pos-subtitle);
+    font-size: 0.75rem;
+}
+
+.dash-agenda__day.is-today {
+    color: var(--rental-pos-title);
+    font-weight: 700;
+}
+
+.dash-agenda__text small {
+    color: var(--rental-pos-subtitle);
+}
+
+.dash-alerts {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.dash-alert {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+    padding: 0.1rem 0 0.1rem 0.75rem;
+    border-left: 4px solid var(--gl-neutral-300);
+    font-size: 0.8125rem;
+}
+
+.dash-alert--critical { border-left-color: var(--rental-danger); }
+.dash-alert--warning { border-left-color: var(--rental-warning); }
+
+.dash-alert small {
+    display: block;
+    color: var(--rental-pos-subtitle);
+}
+
+.dash-alert__action {
+    flex: 0 0 auto;
+    font-weight: 700;
+}
+
+/* Menu ringkas */
+.dash-menu {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 1.25rem;
+    font-size: 0.8125rem;
+}
+
+.dash-menu__label {
+    color: var(--rental-pos-title);
+    font-weight: 700;
+}
+
+.dash-menu__more {
+    position: relative;
+}
+
+.dash-menu__more > div {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 0.4rem);
+    z-index: 20;
+    display: grid;
+    gap: 0.5rem;
+    min-width: 13rem;
+    padding: 0.75rem;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--rental-radius-sm);
+    box-shadow: var(--rental-shadow-lg);
+}
+
+.dash-activity__meta {
+    color: var(--rental-pos-subtitle);
+    font-size: 0.72rem;
+    text-align: right;
+}
+
+@media (max-width: 1099.98px) {
+    .dash-kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dash-row,
+    .dash-row--chart {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .dash-kpis {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tautan aksi dashboard memakai warna aksen (menang atas warna tautan umum) */
+html[data-theme] #content .dash a.dash-more,
+html[data-theme] #content .dash a.dash-alert__action,
+html[data-theme] #content .dash .dash-agenda a,
+html[data-theme] #content .dash .dash-kpi__note a {
+    color: var(--link-fg) !important;
+}

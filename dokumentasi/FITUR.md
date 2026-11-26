@@ -128,3 +128,12 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - Daftar order: badge status berlatar, tabel lebar bisa digulir horizontal.
 - Radius kartu hanya dua ukuran (`--rental-radius-sm` 0,5rem dan `--rental-radius-lg` 0,75rem); shadow kartu dihilangkan, hanya popup yang memakai shadow tipis.
 - Aksesibilitas: outline fokus keyboard dan dukungan `prefers-reduced-motion`.
+
+## Dashboard
+
+- Tombol aksi cepat: Order rental, Pembayaran, Maintenance.
+- Kartu uang: Pendapatan dan Pengeluaran (dibanding bulan sebelumnya), Laba bersih, dan Belum dibayar (order aktif).
+- Grafik 6 bulan pendapatan vs pengeluaran, dengan tampilan tabel.
+- Armada: utilisasi = hari tersewa / (jumlah kendaraan x hari dalam bulan); draf dan order dibatalkan tidak dihitung.
+- Agenda 7 hari ke depan: pengambilan, pengembalian, draf, dan perawatan.
+- Perlu perhatian dengan aksi langsung, menu ringkas, dan aktivitas terbaru yang bisa dilipat.

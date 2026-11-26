@@ -1446,3 +1446,86 @@ class BookingCalendarUxTests(TestCase):
         self.assertContains(response, 'id="booking-detail"')
         self.assertContains(response, 'Booking baru')
         self.assertContains(response, 'data-status="maintenance"')
+
+
+class DashboardRedesignTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.user = get_user_model().objects.create_superuser(
+            username='dash_admin', email='dash@example.com', password='password123',
+        )
+        self.customer = Customer.objects.create(
+            full_name='Nurhayati', identity_number='ID-DSH',
+            phone_number='08120000005', address='Bandung',
+        )
+        category = VehicleCategory.objects.create(name='MPV')
+        self.vehicle = Vehicle.objects.create(
+            category=category, plate_number='B1DSH', brand='Toyota', model='Avanza',
+            year=2024, transmission=Vehicle.Transmission.MANUAL,
+            fuel_type=Vehicle.FuelType.GASOLINE, daily_rate=Decimal('100000'), odometer=1,
+        )
+
+    def at(self, month, day):
+        return timezone.datetime(2026, month, day, 9, 0, tzinfo=timezone.get_current_timezone())
+
+    def rental(self, start, end, status):
+        return Rental.objects.create(
+            customer=self.customer, vehicle=self.vehicle, start_at=start,
+            expected_return_at=end, start_odometer=1, daily_rate=Decimal('100000'), status=status,
+        )
+
+    def test_series_compare_and_net_profit(self):
+        rental = self.rental(self.at(3, 1), self.at(3, 3), Rental.Status.COMPLETED)
+        for month, amount in ((3, '200000'), (4, '300000')):
+            Payment.objects.create(
+                rental=rental, method=Payment.Method.CASH, amount=Decimal(amount),
+                payment_date=self.at(month, 10),
+            )
+        OtherExpense.objects.create(
+            expense_type=ExpenseType.objects.get(name='Pajak kendaraan'),
+            expense_date=self.at(4, 5), description='Pajak', total_cost=Decimal('50000'),
+        )
+
+        context = get_dashboard_context(RequestFactory().get('/admin/', {'period': '2026-04'}))
+
+        rows = context['chart']['rows']
+        self.assertEqual(len(rows), 6)
+        self.assertEqual(rows[-1]['income_text'], 'Rp300.000')
+        self.assertEqual(rows[-2]['income_text'], 'Rp200.000')
+        self.assertEqual(rows[-1]['income_height'], 100)
+        self.assertEqual(context['net_profit_full'], 'Rp250.000')
+        self.assertEqual(context['income_change']['tone'], 'good')
+        self.assertIn('Naik 50%', context['income_change']['text'])
+
+    def test_utilization_counts_confirmed_days_once(self):
+        # April 2026: 30 hari, 1 kendaraan; order 1-3 April = 3 hari tersewa.
+        self.rental(self.at(4, 1), self.at(4, 3), Rental.Status.COMPLETED)
+        self.rental(self.at(4, 10), self.at(4, 20), Rental.Status.DRAFT)
+
+        context = get_dashboard_context(RequestFactory().get('/admin/', {'period': '2026-04'}))
+
+        self.assertEqual(context['fleet']['utilization'], 10)
+
+    def test_agenda_and_attention_actions(self):
+        now = timezone.now()
+        active = self.rental(now - timedelta(days=5), now + timedelta(days=2), Rental.Status.ACTIVE)
+
+        context = get_dashboard_context(RequestFactory().get('/admin/'))
+
+        self.assertTrue(any(
+            item['kind'] == 'Kembali' and 'Nurhayati' in item['text'] for item in context['agenda']
+        ))
+        unpaid = context['attention']['unpaid'][0]
+        self.assertEqual(unpaid['action_label'], 'Catat bayar')
+        self.assertTrue(unpaid['action_url'].endswith(f'?rental={active.pk}'))
+        self.assertEqual(context['outstanding_count'], 1)
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_dashboard_page_has_new_sections(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse('admin:index'))
+
+        for text in ('Laba bersih', 'Armada', 'Agenda 7 hari ke depan', 'Perlu perhatian',
+                     'Aktivitas terbaru', 'Master data', '+ Order rental'):
+            self.assertContains(response, text)

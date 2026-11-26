@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n log %}
+{% load i18n %}
 
 {% block coltype %}colMS{% endblock %}
 {% block bodyclass %}{{ block.super }} dashboard bootstrap-admin-dashboard{% endblock %}
@@ -9,236 +9,250 @@
 {% block content_subtitle %}{% endblock %}
 
 {% block content %}
-<div class="admin-dashboard">
-    <div class="row justify-content-center">
-        <div class="col-12 col-xl-11 px-3">
-            <section class="rental-dashboard-summary">
-                <div class="rental-dashboard-summary__header">
-                    <div>
-                        <h2 class="h4 fw-bold mb-1">Dashboard</h2>
-                        <p class="text-secondary mb-0">
-                            Ringkasan operasional rental mobil bulan {{ selected_period_label }}.
-                        </p>
-                    </div>
-                    <form method="get" class="rental-dashboard-summary__filter">
-                        <label class="form-label mb-1" for="dashboard-period">Pilih bulan</label>
-                        <input
-                            type="text"
-                            id="dashboard-period"
-                            name="period"
-                            class="form-control"
-                            value="{{ selected_period }}"
-                            data-rental-month
-                            autocomplete="off"
-                            onchange="this.form.submit()"
-                        >
-                    </form>
-                </div>
+<div class="admin-dashboard dash">
 
-                <div class="row g-xl-4 g-sm-3 g-2">
-                    <div class="col">
-                        <a class="rental-stat-link" href="{% url 'admin:rentals_vehicle_changelist' %}" aria-label="Lihat total kendaraan">
-                        <div class="card admin-card border-0 rental-stat-card h-100">
-                            <div class="card-body">
-                                <p class="text-secondary mb-2">Total kendaraan</p>
-                                <p class="rental-stat-card__value mb-0">{{ total_vehicles }}</p>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a class="rental-stat-link" href="{% url 'admin:rentals_vehicle_changelist' %}?status__exact=available" aria-label="Lihat kendaraan tersedia">
-                        <div class="card admin-card border-0 rental-stat-card h-100">
-                            <div class="card-body">
-                                <p class="text-secondary mb-2">Kendaraan tersedia</p>
-                                <p class="rental-stat-card__value rental-stat-card__value--success mb-0">{{ available_vehicles }}</p>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <a class="rental-stat-link" href="{% url 'admin:rentals_vehicle_changelist' %}?status__exact=rented" aria-label="Lihat kendaraan disewa">
-                        <div class="card admin-card border-0 rental-stat-card h-100">
-                            <div class="card-body">
-                                <p class="text-secondary mb-2">Kendaraan disewa</p>
-                                <p class="rental-stat-card__value rental-stat-card__value--primary mb-0">{{ rented_vehicles }}</p>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-
-                    <div class="col">
-                        <div class="card admin-card border-0 rental-stat-card h-100">
-                            <div class="card-body">
-                                <p class="text-secondary mb-2">Pendapatan</p>
-                                <p class="rental-stat-card__value rental-stat-card__value--income mb-0" title="{{ monthly_income_full }}">{{ monthly_income }}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col">
-                        <div class="card admin-card border-0 rental-stat-card h-100">
-                            <div class="card-body">
-                                <p class="text-secondary mb-2">Pengeluaran</p>
-                                <p class="rental-stat-card__value rental-stat-card__value--expense mb-0" title="{{ monthly_expenses_full }}">{{ monthly_expenses }}</p>
-                                <p class="rental-stat-card__hint text-secondary small mb-0">Maintenance kendaraan &amp; biaya lain</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+    <header class="dash-head">
+        <div>
+            <h2 class="dash-head__title">Dashboard</h2>
+            <p class="dash-head__sub">Ringkasan operasional, {{ selected_period_label }}</p>
         </div>
+        <div class="dash-head__actions">
+            <form method="get" class="dash-period">
+                <label class="visually-hidden" for="dashboard-period">Pilih bulan</label>
+                <input
+                    type="text"
+                    id="dashboard-period"
+                    name="period"
+                    class="form-control"
+                    value="{{ selected_period }}"
+                    data-rental-month
+                    autocomplete="off"
+                    onchange="this.form.submit()"
+                >
+            </form>
+            <a class="dash-btn dash-btn--primary" href="{% url 'admin:rentals_rental_add' %}">+ Order rental</a>
+            <a class="dash-btn" href="{% url 'admin:rentals_payment_add' %}">+ Pembayaran</a>
+            <a class="dash-btn" href="{% url 'admin:rentals_vehiclemaintenance_add' %}">+ Maintenance</a>
+        </div>
+    </header>
+
+    <section class="dash-kpis" aria-label="Ringkasan keuangan">
+        <article class="dash-card dash-kpi">
+            <p class="dash-kpi__label">Pendapatan</p>
+            <p class="dash-kpi__value">{{ monthly_income_full }}</p>
+            <p class="dash-kpi__note dash-tone--{{ income_change.tone }}">{{ income_change.text }}</p>
+        </article>
+        <article class="dash-card dash-kpi">
+            <p class="dash-kpi__label">Pengeluaran</p>
+            <p class="dash-kpi__value">{{ monthly_expenses_full }}</p>
+            <p class="dash-kpi__note dash-tone--{{ expense_change.tone }}">{{ expense_change.text }}</p>
+        </article>
+        <article class="dash-card dash-kpi">
+            <p class="dash-kpi__label">Laba bersih</p>
+            <p class="dash-kpi__value{% if net_profit_negative %} dash-tone--bad{% endif %}">{{ net_profit_full }}</p>
+            <p class="dash-kpi__note dash-tone--neutral">Pendapatan dikurangi pengeluaran</p>
+        </article>
+        <article class="dash-card dash-kpi">
+            <p class="dash-kpi__label">Belum dibayar (order aktif)</p>
+            <p class="dash-kpi__value{% if outstanding_count %} dash-tone--bad{% endif %}">{{ outstanding_full }}</p>
+            <p class="dash-kpi__note">
+                {% if outstanding_count %}
+                    <a href="{% url 'admin:rentals_rental_changelist' %}?status__exact=active">{{ outstanding_count }} order &middot; Lihat daftar</a>
+                {% else %}
+                    <span class="dash-tone--neutral">Semua order aktif lunas</span>
+                {% endif %}
+            </p>
+        </article>
+    </section>
+
+    <div class="dash-row dash-row--chart">
+        <section class="dash-card" aria-labelledby="dash-chart-title">
+            <header class="dash-card__head">
+                <h3 class="dash-card__title" id="dash-chart-title">Pendapatan vs pengeluaran, 6 bulan</h3>
+                <ul class="dash-legend">
+                    <li><i class="dash-key dash-key--income"></i>Pendapatan</li>
+                    <li><i class="dash-key dash-key--expense"></i>Pengeluaran</li>
+                </ul>
+            </header>
+            {% if chart.has_data %}
+                <p class="dash-chart__peak">Tertinggi {{ chart.peak_text }}</p>
+                <div class="dash-bars" aria-hidden="true">
+                    {% for row in chart.rows %}
+                        <div class="dash-bars__group{% if row.is_current %} is-current{% endif %}">
+                            <div class="dash-bars__pair">
+                                <span class="dash-bar dash-bar--income" style="height: {{ row.income_height }}%"
+                                      title="{{ row.full_label }} - Pendapatan {{ row.income_text }}">
+                                    {% if row.is_current %}<em>{{ row.income_short }}</em>{% endif %}
+                                </span>
+                                <span class="dash-bar dash-bar--expense" style="height: {{ row.expense_height }}%"
+                                      title="{{ row.full_label }} - Pengeluaran {{ row.expense_text }}">
+                                    {% if row.is_current %}<em>{{ row.expense_short }}</em>{% endif %}
+                                </span>
+                            </div>
+                            <span class="dash-bars__label">{{ row.label }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="dash-empty">Belum ada transaksi dalam 6 bulan ini.</p>
+            {% endif %}
+            <details class="dash-table">
+                <summary>Lihat sebagai tabel</summary>
+                <table>
+                    <thead><tr><th scope="col">Bulan</th><th scope="col">Pendapatan</th><th scope="col">Pengeluaran</th></tr></thead>
+                    <tbody>
+                        {% for row in chart.rows %}
+                            <tr><th scope="row">{{ row.full_label }}</th><td>{{ row.income_text }}</td><td>{{ row.expense_text }}</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </details>
+        </section>
+
+        <section class="dash-card" aria-labelledby="dash-fleet-title">
+            <h3 class="dash-card__title" id="dash-fleet-title">Armada</h3>
+            <div class="dash-meter__head">
+                <span>Utilisasi {{ selected_period_label }}</span>
+                <strong>{{ fleet.utilization }}%</strong>
+            </div>
+            <div class="dash-meter" role="meter" aria-label="Utilisasi armada" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ fleet.utilization }}">
+                <span style="width: {{ fleet.utilization }}%"></span>
+            </div>
+            <p class="dash-fleet__counts">
+                <a href="{% url 'admin:rentals_vehicle_changelist' %}?status__exact=rented">{{ rented_vehicles }} disewa</a> &middot;
+                <a href="{% url 'admin:rentals_vehicle_changelist' %}?status__exact=available">{{ available_vehicles }} tersedia</a> &middot;
+                <a href="{% url 'admin:rentals_vehicle_changelist' %}?status__exact=maintenance">{{ maintenance_vehicles }} perawatan</a>
+            </p>
+            <ul class="dash-list">
+                {% for vehicle in fleet.vehicles %}
+                    <li>
+                        <a href="{{ vehicle.url }}">{{ vehicle.name }}</a>
+                        <span class="dash-badge dash-badge--{{ vehicle.status }}">{{ vehicle.status_label }}</span>
+                    </li>
+                {% empty %}
+                    <li class="dash-empty">Belum ada kendaraan.</li>
+                {% endfor %}
+            </ul>
+            <a class="dash-more" href="{% url 'admin:rentals_vehicle_changelist' %}">Lihat semua {{ total_vehicles }} kendaraan</a>
+        </section>
     </div>
 
-    <div class="row g-4 justify-content-center">
-        <div class="col-12 col-xl-7">
-            <div class="row g-4">
-                {% if app_list %}
+    <div class="dash-row">
+        <section class="dash-card" aria-labelledby="dash-agenda-title">
+            <h3 class="dash-card__title" id="dash-agenda-title">Agenda 7 hari ke depan</h3>
+            <ul class="dash-list dash-agenda">
+                {% for item in agenda %}
+                    <li>
+                        <span class="dash-agenda__day{% if item.is_today %} is-today{% endif %}">{{ item.day }}</span>
+                        <span class="dash-agenda__text">
+                            <strong>{{ item.kind }}:</strong> {{ item.text }}
+                            <small>({{ item.time }})</small>
+                        </span>
+                        <a href="{{ item.url }}">Buka</a>
+                    </li>
+                {% empty %}
+                    <li class="dash-empty">Tidak ada jadwal dalam 7 hari ke depan.</li>
+                {% endfor %}
+            </ul>
+            <a class="dash-more" href="{% url 'admin:rental_booking_calendar' %}">Buka Kalender Booking</a>
+        </section>
+
+        <section class="dash-card" aria-labelledby="dash-attention-title">
+            <h3 class="dash-card__title" id="dash-attention-title">Perlu perhatian</h3>
+            {% if attention.overdue_count or attention.unpaid_count or attention.draft_count or attention.maintenance_count %}
+                <ul class="dash-alerts">
+                    {% for item in attention.overdue %}
+                        <li class="dash-alert dash-alert--critical">
+                            <div><strong>Terlambat kembali: <a href="{{ item.url }}">{{ item.title }}</a></strong><small>{{ item.detail }}</small></div>
+                            <a class="dash-alert__action" href="{{ item.action_url }}">{{ item.action_label }}</a>
+                        </li>
+                    {% endfor %}
+                    {% for item in attention.unpaid %}
+                        <li class="dash-alert dash-alert--warning">
+                            <div><strong>Belum lunas: <a href="{{ item.url }}">{{ item.title }}</a></strong><small>{{ item.detail }}</small></div>
+                            <a class="dash-alert__action" href="{{ item.action_url }}">{{ item.action_label }}</a>
+                        </li>
+                    {% endfor %}
+                    {% for item in attention.drafts %}
+                        <li class="dash-alert">
+                            <div><strong>Draf belum diaktifkan: <a href="{{ item.url }}">{{ item.title }}</a></strong><small>{{ item.detail }}</small></div>
+                            <a class="dash-alert__action" href="{{ item.action_url }}">{{ item.action_label }}</a>
+                        </li>
+                    {% endfor %}
+                    {% if attention.maintenance_count %}
+                        <li class="dash-alert">
+                            <div><strong>{{ attention.maintenance_count }} kendaraan sedang perawatan</strong></div>
+                            <a class="dash-alert__action" href="{% url 'admin:rentals_vehicle_changelist' %}?status__exact=maintenance">Lihat</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            {% else %}
+                <p class="dash-empty">Tidak ada yang perlu ditindaklanjuti.</p>
+            {% endif %}
+        </section>
+    </div>
+
+    {% if app_list %}
+        <nav class="dash-card dash-menu" aria-label="Menu aplikasi">
+            <span class="dash-menu__label">Menu</span>
+            {% for app in app_list %}
+                {% if app.app_label == 'rentals' %}
+                    {% for group in app.menu_groups %}
+                        {% if group.title != 'Master Data' %}
+                            {% for model in group.models %}
+                                {% if model.admin_url and model.object_name|lower != 'expensetype' %}
+                                    <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+            <details class="dash-menu__more">
+                <summary>Master data</summary>
+                <div>
                     {% for app in app_list %}
                         {% if app.app_label == 'rentals' %}
-                            <div class="col-12 px-3">
-                                <div class="card admin-card border-0">
-                                    <div class="card-header border-bottom">
-                                        <h2 class="h6 fw-bold text-uppercase mb-0">{{ app.name }}</h2>
-                                    </div>
-                                    <div class="card-body px-md-4 rental-menu-groups">
-                                        {% for group in app.menu_groups %}
-                                            <section class="rental-menu-group{% if not forloop.last %} rental-menu-group--spaced{% endif %}">
-                                                <h3 class="rental-menu-group__title">{{ group.title }}</h3>
-                                                <div class="row g-xl-2 g-sm-3 g-2">
-                                                    {% for model in group.models %}
-                                                        <div class="col">
-                                                            {% include "admin/includes/rental_menu_button.html" with model=model %}
-                                                        </div>
-                                                    {% endfor %}
-                                                </div>
-                                            </section>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                    <div class="col-12 px-3">
-                        <div class="card admin-card border-0">
-                            <div class="card-body">
-                                <p class="mb-0">{% translate 'Anda tidak memiliki izin untuk melihat atau mengubah data.' %}</p>
-                            </div>
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <div class="col-12 col-xl-4">
-            {% if app_list %}
-                <div class="row g-4 mb-4">
-                    {% for app in app_list %}
-                        {% if app.app_label != 'rentals' %}
-                            <div class="col-12">
-                                <div class="card admin-card border-0">
-                                    <div class="card-header border-bottom">
-                                        <h2 class="h6 fw-bold text-uppercase mb-0">{{ app.name }}</h2>
-                                    </div>
-                                    <div class="card-body p-0">
-                                        <div class="list-group list-group-flush">
-                                            {% for model in app.models %}
-                                                <div class="list-group-item d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
-                                                    <div>
-                                                        {% if model.admin_url %}
-                                                            <a href="{{ model.admin_url }}" class="fw-semibold text-decoration-none">{{ model.name }}</a>
-                                                        {% else %}
-                                                            <span class="fw-semibold">{{ model.name }}</span>
-                                                        {% endif %}
-                                                    </div>
-                                                    <div class="d-flex gap-2">
-                                                        {% if model.add_url %}
-                                                            <a href="{{ model.add_url }}" class="btn btn-sm btn-primary">{% translate 'Tambah' %}</a>
-                                                        {% endif %}
-                                                        {% if model.admin_url %}
-                                                            <a href="{{ model.admin_url }}" class="btn btn-sm btn-outline-primary">
-                                                                {% if model.view_only %}{% translate 'Lihat' %}{% else %}{% translate 'Ubah' %}{% endif %}
-                                                            </a>
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            {% endif %}
-
-            <div class="card admin-card border-0 mb-4 rental-attention">
-                <div class="card-header border-bottom">
-                    <h2 class="h6 fw-bold mb-0">Perlu perhatian</h2>
-                </div>
-                <div class="card-body">
-                    {% if attention.overdue_count or attention.unpaid_count or attention.maintenance_count %}
-                        {% if attention.overdue_count %}
-                            <h3 class="h6 text-secondary mb-2">Terlambat kembali ({{ attention.overdue_count }})</h3>
-                            <ul class="rental-attention__list">
-                                {% for item in attention.overdue %}
-                                    <li><a href="{{ item.url }}" class="fw-semibold text-decoration-none">{{ item.title }}</a>
-                                        <span class="small text-secondary d-block">{{ item.detail }}</span></li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                        {% if attention.unpaid_count %}
-                            <h3 class="h6 text-secondary mb-2">Belum lunas ({{ attention.unpaid_count }})</h3>
-                            <ul class="rental-attention__list">
-                                {% for item in attention.unpaid %}
-                                    <li><a href="{{ item.url }}" class="fw-semibold text-decoration-none">{{ item.title }}</a>
-                                        <span class="small text-secondary d-block">{{ item.detail }}</span></li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                        {% if attention.maintenance_count %}
-                            <p class="mb-0">
-                                <a href="{% url 'admin:rentals_vehicle_changelist' %}?status__exact=maintenance" class="fw-semibold text-decoration-none">{{ attention.maintenance_count }} kendaraan sedang perawatan</a>
-                            </p>
-                        {% endif %}
-                    {% else %}
-                        <p class="text-secondary mb-0">Tidak ada yang perlu ditindaklanjuti.</p>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="card admin-card border-0">
-                <div class="card-header border-bottom">
-                    <h2 class="h6 fw-bold mb-0">{% translate 'Tindakan terbaru' %}</h2>
-                </div>
-                <div class="card-body">
-                    <h3 class="h6 text-secondary mb-3">{% translate 'Tindakan saya' %}</h3>
-                    {% if not recent_actions %}
-                        <p class="text-secondary mb-0">{% translate 'Belum ada tindakan.' %}</p>
-                    {% else %}
-                        <div class="list-group list-group-flush recent-actions">
-                            {% for action in recent_actions %}
-                                <div class="list-group-item px-0">
-                                    {% if action.url %}
-                                        <a href="{{ action.url }}" class="fw-semibold text-decoration-none">{{ action.title }}</a>
-                                    {% else %}
-                                        <span class="fw-semibold">{{ action.title }}</span>
+                            {% for group in app.menu_groups %}
+                                {% for model in group.models %}
+                                    {% if model.admin_url %}
+                                        {% if group.title == 'Master Data' or model.object_name|lower == 'expensetype' %}
+                                            <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                                        {% endif %}
                                     {% endif %}
-                                    <div class="small text-secondary">
-                                        <span class="rental-action-label rental-action-label--{{ action.flag }}">{{ action.label }}</span>
-                                        {{ action.model }} &middot; {{ action.time|timesince }} lalu
-                                    </div>
-                                </div>
+                                {% endfor %}
                             {% endfor %}
-                        </div>
-                    {% endif %}
+                        {% else %}
+                            {% for model in app.models %}
+                                {% if model.admin_url %}<a href="{{ model.admin_url }}">{{ model.name }}</a>{% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
                 </div>
-            </div>
-        </div>
-    </div>
+            </details>
+        </nav>
+    {% else %}
+        <div class="dash-card"><p class="dash-empty">{% translate 'Anda tidak memiliki izin untuk melihat atau mengubah data.' %}</p></div>
+    {% endif %}
+
+    <details class="dash-card dash-activity">
+        <summary>Aktivitas terbaru ({{ recent_actions|length }})</summary>
+        {% if not recent_actions %}
+            <p class="dash-empty">{% translate 'Belum ada tindakan.' %}</p>
+        {% else %}
+            <ul class="dash-list">
+                {% for action in recent_actions %}
+                    <li>
+                        {% if action.url %}<a href="{{ action.url }}">{{ action.title }}</a>{% else %}<span>{{ action.title }}</span>{% endif %}
+                        <span class="dash-activity__meta">
+                            <span class="rental-action-label rental-action-label--{{ action.flag }}">{{ action.label }}</span>
+                            {{ action.model }} &middot; {{ action.time|timesince }} lalu
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </details>
 </div>
 {% endblock %}
 
