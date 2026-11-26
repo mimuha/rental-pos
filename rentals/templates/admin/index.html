@@ -1,10 +1,9 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
 
-{% block coltype %}colMS{% endblock %}
+{% block coltype %}colM{% endblock %}
 {% block bodyclass %}{{ block.super }} dashboard bootstrap-admin-dashboard{% endblock %}
 {% block nav-breadcrumbs %}{% endblock %}
-{% block nav-sidebar %}{% endblock %}
 {% block content_title %}{% endblock %}
 {% block content_subtitle %}{% endblock %}
 
@@ -192,46 +191,7 @@
         </section>
     </div>
 
-    {% if app_list %}
-        <nav class="dash-card dash-menu" aria-label="Menu aplikasi">
-            <span class="dash-menu__label">Menu</span>
-            {% for app in app_list %}
-                {% if app.app_label == 'rentals' %}
-                    {% for group in app.menu_groups %}
-                        {% if group.title != 'Master Data' %}
-                            {% for model in group.models %}
-                                {% if model.admin_url and model.object_name|lower != 'expensetype' %}
-                                    <a href="{{ model.admin_url }}">{{ model.name }}</a>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-            <details class="dash-menu__more">
-                <summary>Master data</summary>
-                <div>
-                    {% for app in app_list %}
-                        {% if app.app_label == 'rentals' %}
-                            {% for group in app.menu_groups %}
-                                {% for model in group.models %}
-                                    {% if model.admin_url %}
-                                        {% if group.title == 'Master Data' or model.object_name|lower == 'expensetype' %}
-                                            <a href="{{ model.admin_url }}">{{ model.name }}</a>
-                                        {% endif %}
-                                    {% endif %}
-                                {% endfor %}
-                            {% endfor %}
-                        {% else %}
-                            {% for model in app.models %}
-                                {% if model.admin_url %}<a href="{{ model.admin_url }}">{{ model.name }}</a>{% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </details>
-        </nav>
-    {% else %}
+    {% if not app_list %}
         <div class="dash-card"><p class="dash-empty">{% translate 'Anda tidak memiliki izin untuk melihat atau mengubah data.' %}</p></div>
     {% endif %}
 

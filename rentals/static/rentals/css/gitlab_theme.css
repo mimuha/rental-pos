@@ -3685,9 +3685,9 @@ html[data-theme] input[type="radio"]:focus-visible {
 .dash {
     display: grid;
     gap: 1rem;
-    max-width: 82rem;
-    margin: 0 auto;
-    padding: 0 0.25rem 1.5rem;
+    width: 100%;
+    margin: 0;
+    padding: 0 0 1.5rem;
 }
 
 .dash-head {
@@ -3921,8 +3921,7 @@ html[data-theme] {
 }
 
 .dash-table summary,
-.dash-activity summary,
-.dash-menu__more summary {
+.dash-activity summary {
     cursor: pointer;
     color: var(--rental-pos-subtitle);
     font-size: 0.78rem;
@@ -4084,39 +4083,6 @@ html[data-theme] {
     font-weight: 700;
 }
 
-/* Menu ringkas */
-.dash-menu {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.4rem 1.25rem;
-    font-size: 0.8125rem;
-}
-
-.dash-menu__label {
-    color: var(--rental-pos-title);
-    font-weight: 700;
-}
-
-.dash-menu__more {
-    position: relative;
-}
-
-.dash-menu__more > div {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + 0.4rem);
-    z-index: 20;
-    display: grid;
-    gap: 0.5rem;
-    min-width: 13rem;
-    padding: 0.75rem;
-    background: var(--white);
-    border: 1px solid var(--border-color);
-    border-radius: var(--rental-radius-sm);
-    box-shadow: var(--rental-shadow-lg);
-}
-
 .dash-activity__meta {
     color: var(--rental-pos-subtitle);
     font-size: 0.72rem;
@@ -4146,4 +4112,9 @@ html[data-theme] #content .dash a.dash-alert__action,
 html[data-theme] #content .dash .dash-agenda a,
 html[data-theme] #content .dash .dash-kpi__note a {
     color: var(--link-fg) !important;
+}
+
+/* Pesan kosong di agenda tidak ikut grid tiga kolom */
+.dash-agenda li.dash-empty {
+    display: block;
 }

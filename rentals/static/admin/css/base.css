@@ -146,18 +146,8 @@ tbody, td, tfoot, th, thead, tr {
     min-width: 0;
 }
 
-.dashboard .admin-sidebar-col {
-    display: none;
-}
-
 .login .admin-sidebar-col {
     display: none;
-}
-
-.dashboard .admin-main-col {
-    flex: 0 0 100%;
-    max-width: 100%;
-    width: 100%;
 }
 
 .login .admin-main-col {

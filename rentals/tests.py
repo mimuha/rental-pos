@@ -1527,5 +1527,8 @@ class DashboardRedesignTests(TestCase):
         response = self.client.get(reverse('admin:index'))
 
         for text in ('Laba bersih', 'Armada', 'Agenda 7 hari ke depan', 'Perlu perhatian',
-                     'Aktivitas terbaru', 'Master data', '+ Order rental'):
+                     'Aktivitas terbaru', '+ Order rental'):
             self.assertContains(response, text)
+        # Navigasi memakai sidebar yang sama dengan halaman lain.
+        self.assertContains(response, 'id="nav-sidebar"')
+        self.assertNotContains(response, 'dash-menu')

@@ -291,16 +291,6 @@ div.breadcrumbs a {
     min-width: 0;
 }
 
-.dashboard .admin-sidebar-col {
-    display: none;
-}
-
-.dashboard .admin-main-col {
-    flex: 0 0 100%;
-    max-width: 100%;
-    width: 100%;
-}
-
 #content h1 {
     color: var(--rental-pos-title);
     font-size: 1.5rem;

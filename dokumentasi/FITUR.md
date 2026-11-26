@@ -136,4 +136,4 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - Grafik 6 bulan pendapatan vs pengeluaran, dengan tampilan tabel.
 - Armada: utilisasi = hari tersewa / (jumlah kendaraan x hari dalam bulan); draf dan order dibatalkan tidak dihitung.
 - Agenda 7 hari ke depan: pengambilan, pengembalian, draf, dan perawatan.
-- Perlu perhatian dengan aksi langsung, menu ringkas, dan aktivitas terbaru yang bisa dilipat.
+- Perlu perhatian dengan aksi langsung, dan aktivitas terbaru yang bisa dilipat. Navigasi memakai sidebar yang sama dengan halaman lain.
