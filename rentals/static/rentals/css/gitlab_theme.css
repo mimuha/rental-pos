@@ -4163,3 +4163,18 @@ html[data-theme] .rental-nav-home {
         border-radius: 999px;
     }
 }
+
+/* Ikon dan label Dashboard sejajar dengan judul grup menu */
+html[data-theme] .admin-sidebar-col:not(.rental-nav-collapsed) .rental-nav-home > .rental-nav-link {
+    grid-template-columns: 32px minmax(0, 1fr);
+    column-gap: 5px;
+    padding-inline: 4px;
+}
+
+/* Judul grup sidebar: tipis, huruf awal kapital, kecil */
+html[data-theme] #nav-sidebar .rental-nav-section > h2 {
+    font-size: 0.7rem !important;
+    font-weight: 400 !important;
+    text-transform: capitalize !important;
+    letter-spacing: normal !important;
+}
