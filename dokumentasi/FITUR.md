@@ -102,13 +102,7 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - Preferensi collapsed/expanded tersimpan di `localStorage` dan diingat antar sesi
 - Tombol ikon pencarian (search) tampil saat sidebar collapsed; klik untuk expand dan langsung fokus ke input pencarian
 - Saat sidebar expanded, ikon pencarian di tombol tersembunyi
-- **Menu Favorit** — tombol di bawah search untuk akses cepat ke menu yang sering digunakan
-  - Klik untuk melihat daftar menu favorit dalam popup
-  - Mode **Edit** untuk menambah/mengurangi menu favorit via checkbox
-  - Data favorit tersimpan per-user di database (Supabase PostgreSQL)
-  - Tampil di semua mode: expanded, collapsed desktop, dan collapsed mobile
-  - Model: `MenuFavorite` (tabel `menu_favorites`)
-  - API: `GET/POST /admin/rentals/favorites/`, `POST /admin/rentals/favorites/<id>/delete/`
+- **Menu Dashboard** — item paling atas di sidebar, mengarah ke `/admin/`
 
 ## Keamanan
 

@@ -52,8 +52,7 @@
     color: #111827;
 }
 
-.rental-nav-brand-mark,
-.rental-nav-favorite-icon {
+.rental-nav-brand-mark {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -64,12 +63,6 @@
     color: #353438;
     background: #f6f6f6;
     border-radius: .75rem;
-}
-
-.rental-nav-favorite-icon {
-    width: 2.25rem;
-    height: 2.25rem;
-    margin: .25rem 0;
 }
 
 .rental-nav-icon {
@@ -92,8 +85,7 @@
 }
 
 .rental-nav-brand-mark svg,
-.rental-nav-icon svg,
-.rental-nav-favorite-icon svg {
+.rental-nav-icon svg {
     width: 1.4rem;
     height: 1.4rem;
     color: currentColor;
@@ -441,48 +433,6 @@
     display: block;
 }
 
-.rental-nav-favorite {
-    display: grid;
-    grid-template-columns: 2rem minmax(0, 1fr) auto;
-    align-items: center;
-    gap: .75rem;
-    width: 100%;
-    margin-bottom: 1.15rem;
-    padding: .55rem;
-    color: #353438;
-    background: var(--white2);
-    border: 1px solid #ececec;
-    border-radius: .325rem;
-    box-shadow: var(--rental-box-shadow);
-    cursor: pointer;
-    font-family: inherit;
-    text-align: left;
-    line-height: inherit;
-}
-
-.rental-nav-favorite strong {
-    display: block;
-    color: #353438;
-    font-size: .82rem;
-    font-weight: 900;
-    line-height: 1.2;
-}
-
-.rental-nav-favorite small {
-    display: block;
-    margin-top: .15rem;
-    color: #667085;
-    font-size: .68rem;
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-.rental-nav-favorite-arrow {
-    color: #353438;
-    font-size: 1.35rem;
-    font-weight: 800;
-}
-
 .rental-nav-empty {
     color: #667085;
     font-size: .75rem;
@@ -510,9 +460,7 @@
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-label,
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-group-chevron,
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-add-btn,
-.admin-sidebar-col.rental-nav-collapsed .rental-nav-group-summary,
-.admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite span:not(.rental-nav-favorite-icon),
-.admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite-arrow  {
+.admin-sidebar-col.rental-nav-collapsed .rental-nav-group-summary {
     display: none;
 }
 
@@ -542,8 +490,7 @@
 
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-items,
 .admin-sidebar-col.rental-nav-collapsed .rental-nav-group-details,
-.admin-sidebar-col.rental-nav-collapsed .rental-nav-link-wrapper,
-.admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite {
+.admin-sidebar-col.rental-nav-collapsed .rental-nav-link-wrapper {
     width: 100%;
     max-width: 100%;
 }
@@ -575,16 +522,6 @@
     justify-content: center;
     min-height: auto;
     padding: 0;
-}
-
-.admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    box-shadow: none;
 }
 
 @media (max-width: 1199.98px) {
@@ -632,8 +569,7 @@
         gap: 0;
     }
 
-    .admin-sidebar-col.rental-nav-collapsed .rental-nav-brand-mark,
-    .admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite-icon {
+    .admin-sidebar-col.rental-nav-collapsed .rental-nav-brand-mark {
         width: 2.75rem;
         height: 2.75rem;
         color: #353438;
@@ -642,8 +578,7 @@
     }
 
     .admin-sidebar-col.rental-nav-collapsed .rental-nav-brand-mark svg,
-    .admin-sidebar-col.rental-nav-collapsed .rental-nav-icon svg,
-    .admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite-icon svg {
+    .admin-sidebar-col.rental-nav-collapsed .rental-nav-icon svg {
         width: 1.55rem;
         height: 1.55rem;
     }
@@ -700,13 +635,7 @@
         border-radius: .85rem;
     }
 
-    .admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite {
-        display: flex;
-        width: 2.75rem;
-        height: 2.75rem;
-        margin-bottom: 0;
-        border-radius: .85rem;
-    }
+    
 
     .admin-sidebar-col.rental-nav-collapsed .rental-nav-icon {
         width: 2.75rem;
@@ -775,114 +704,3 @@
     color: #353438 !important;
 }
 
-.rental-nav-fav-popup {
-    min-width: 16rem;
-}
-
-.rental-nav-fav-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: .45rem .5rem;
-    border-bottom: 1px solid #f1f3f6;
-    margin-bottom: .35rem;
-}
-
-.rental-nav-fav-title {
-    font-weight: 700;
-    font-size: .9rem;
-    color: #111827;
-}
-
-.rental-nav-fav-action {
-    padding: .2rem .55rem;
-    color: #353438;
-    background: #f7f7f7;
-    border: 0;
-    border-radius: .35rem;
-    font-size: .72rem;
-    font-weight: 800;
-    cursor: pointer;
-    font-family: inherit;
-}
-
-.rental-nav-fav-action:hover {
-    background: rgba(226, 203, 68, 0.25);
-}
-
-.rental-nav-fav-list {
-    padding: .25rem .25rem;
-    max-height: 20rem;
-    overflow-y: auto;
-}
-
-.rental-nav-fav-item {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    padding: .45rem .5rem;
-    color: #1f2937 !important;
-    text-decoration: none !important;
-    border-radius: .35rem;
-}
-
-.rental-nav-fav-item:hover {
-    background: #f6f6f6;
-    color: #353438 !important;
-}
-
-.rental-nav-fav-edit-item {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    padding: .45rem .5rem;
-    border-radius: .35rem;
-    cursor: pointer;
-}
-
-.rental-nav-fav-edit-item:hover {
-    background: #f5f6f8;
-}
-
-.rental-nav-fav-edit-item.is-active {
-    background: #efefef;
-}
-
-.rental-nav-fav-item-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 auto;
-    width: 1.5rem;
-    height: 1.5rem;
-}
-
-.rental-nav-fav-item-icon svg {
-    width: 1.15rem;
-    height: 1.15rem;
-    color: #667085;
-}
-
-.rental-nav-fav-item-name {
-    flex: 1 1 0;
-    min-width: 0;
-    font-size: .82rem;
-    font-weight: 600;
-    color: #1f2937;
-}
-
-.rental-nav-fav-toggle {
-    flex: 0 0 auto;
-    width: 1rem;
-    height: 1rem;
-    accent-color: #e2cb44;
-    cursor: pointer;
-}
-
-.rental-nav-fav-empty {
-    padding: .75rem .5rem;
-    color: #9aa4b2;
-    font-size: .8rem;
-    font-weight: 600;
-    text-align: center;
-}

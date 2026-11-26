@@ -6,11 +6,11 @@
 <link rel="icon" type="image/svg+xml" href="{% static 'rentals/img/pos_rental.svg' %}">
 <link rel="stylesheet" href="{% block stylesheet %}{% static "admin/css/base.css" %}?v=3{% endblock %}">
 {% block dark-mode-vars %}
-  <link rel="stylesheet" href="{% static "admin/css/dark_mode.css" %}?v=2">
+  <link rel="stylesheet" href="{% static "admin/css/dark_mode.css" %}?v=3">
 {% endblock %}
 {% if not is_popup and is_nav_sidebar_enabled %}
-  <link rel="stylesheet" href="{% static "admin/css/nav_sidebar.css" %}?v=11">
-  <script src="{% static 'admin/js/nav_sidebar.js' %}?v=3" defer></script>
+  <link rel="stylesheet" href="{% static "admin/css/nav_sidebar.css" %}?v=12">
+  <script src="{% static 'admin/js/nav_sidebar.js' %}?v=4" defer></script>
 {% endif %}
 {% block extrastyle %}{% endblock %}
 {% if LANGUAGE_BIDI %}<link rel="stylesheet" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}">{% endif %}

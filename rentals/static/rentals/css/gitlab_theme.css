@@ -563,16 +563,13 @@ html[data-theme] .btn-outline-info {
 .rental-nav-search,
 .rental-nav-search-btn,
 .rental-nav-collapse,
-.rental-nav-popup,
-.rental-nav-favorite,
-.rental-nav-fav-action {
+.rental-nav-popup {
     background: var(--white) !important;
 }
 
 .rental-nav-link:hover,
 .rental-nav-group-summary:hover,
 .rental-nav-popup .rental-nav-popup-link:hover,
-.rental-nav-fav-item:hover,
 .rental-nav-add-btn:hover,
 .rental-user-menu-btn:hover {
     background: var(--rental-hover-bg) !important;
@@ -849,9 +846,7 @@ html[data-theme] .rental-user-menu-popup,
 html[data-theme] .rental-nav-popup,
 html[data-theme] .rental-nav-search,
 html[data-theme] .rental-nav-search-btn,
-html[data-theme] .rental-nav-collapse,
-html[data-theme] .rental-nav-favorite,
-html[data-theme] .rental-nav-fav-action {
+html[data-theme] .rental-nav-collapse {
     background: var(--white) !important;
     border-color: var(--border-color) !important;
 }
@@ -977,8 +972,7 @@ html[data-theme] .rental-nav-icon svg [fill="#292D32"] {
     fill: var(--rental-accent) !important;
 }
 
-html[data-theme] .rental-nav-popup .rental-nav-popup-link:hover,
-html[data-theme] .rental-nav-fav-item:hover {
+html[data-theme] .rental-nav-popup .rental-nav-popup-link:hover {
     background: var(--rental-hover-bg) !important;
     color: var(--rental-pos-title) !important;
 }
@@ -1076,11 +1070,6 @@ html[data-theme="dark"] .messagelist li.error {
         background: rgba(241, 81, 104, 0.12) !important;
         border-color: rgba(241, 81, 104, 0.35) !important;
     }
-}
-
-html[data-theme] .rental-nav-favorite-icon {
-    color: var(--rental-accent) !important;
-    background: var(--rental-accent-soft) !important;
 }
 
 html[data-theme] .photo-upload-area {
@@ -1675,7 +1664,6 @@ html[data-theme] #changelist-filter-header {
    Ditaruh setelah aturan besar agar .rental-stat-card (juga .admin-card) kecil. */
 html[data-theme] .card.admin-card.rental-stat-card,
 html[data-theme] .rental-menu-button,
-html[data-theme] .rental-nav-favorite,
 html[data-theme] .rental-nav-search,
 html[data-theme] .rental-nav-search-btn,
 html[data-theme] .rental-nav-collapse,
@@ -1727,8 +1715,7 @@ html[data-theme="auto"] {
     --rental-nav-icon-color: var(--rental-pos-subtitle);
 }
 
-html[data-theme] .rental-nav-icon,
-html[data-theme] .rental-nav-favorite-icon {
+html[data-theme] .rental-nav-icon {
     width: 1.5rem;
     height: 1.5rem;
     margin: 0;
@@ -1737,21 +1724,17 @@ html[data-theme] .rental-nav-favorite-icon {
     border-radius: var(--rental-radius-sm);
 }
 
-html[data-theme] .rental-nav-icon svg,
-html[data-theme] .rental-nav-favorite-icon svg {
+html[data-theme] .rental-nav-icon svg {
     width: 1.125rem;
     height: 1.125rem;
 }
 
-html[data-theme] .rental-nav-icon svg *,
-html[data-theme] .rental-nav-favorite-icon svg * {
+html[data-theme] .rental-nav-icon svg * {
     stroke: var(--rental-nav-icon-color) !important;
 }
 
 html[data-theme] .rental-nav-icon svg [fill="#353438"],
-html[data-theme] .rental-nav-icon svg [fill="#292D32"],
-html[data-theme] .rental-nav-favorite-icon svg [fill="#353438"],
-html[data-theme] .rental-nav-favorite-icon svg [fill="#292D32"] {
+html[data-theme] .rental-nav-icon svg [fill="#292D32"] {
     fill: var(--rental-nav-icon-color) !important;
 }
 
@@ -1814,14 +1797,12 @@ html[data-theme] .rental-nav-group-details + .rental-nav-group-details {
 }
 
 /* Mode ringkas: ikon 20px di target 36px, jarak 44px antar item */
-html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-icon,
-html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite-icon {
+html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-icon {
     width: 2.25rem;
     height: 2.25rem;
 }
 
-html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-icon svg,
-html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-favorite-icon svg {
+html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-icon svg {
     width: 1.25rem;
     height: 1.25rem;
 }
@@ -2680,9 +2661,7 @@ html[data-theme="dark"] {
 html[data-theme] .rental-nav-shell,
 html[data-theme] .rental-nav-search,
 html[data-theme] .rental-nav-search-btn,
-html[data-theme] .rental-nav-collapse,
-html[data-theme] .rental-nav-favorite,
-html[data-theme] .rental-nav-fav-action {
+html[data-theme] .rental-nav-collapse {
     border-color: var(--rental-nav-border) !important;
     box-shadow: none !important;
 }
@@ -2754,7 +2733,6 @@ html[data-theme] .flatpickr-calendar .flatpickr-time input,
 html[data-theme] .flatpickr-calendar .flatpickr-time input:focus {
     border: 0 !important;
 }
-
 
 /* ---- Inline Pembayaran: satu baris per pembayaran (grid), hapus lewat ikon ---- */
 .rental-payments__summary {
@@ -4117,4 +4095,71 @@ html[data-theme] #content .dash .dash-kpi__note a {
 /* Pesan kosong di agenda tidak ikut grid tiga kolom */
 .dash-agenda li.dash-empty {
     display: block;
+}
+
+/* Item Dashboard berada di atas semua grup menu sidebar */
+html[data-theme] .rental-nav-home {
+    margin-bottom: 0.25rem;
+}
+
+/* Mobile ringkas: semua ikon dalam satu grid seragam, tanpa kolom per grup */
+@media (max-width: 576px) {
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-shell {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(2.75rem, 1fr));
+        gap: 0.25rem;
+        align-content: start;
+        padding: 0.5rem;
+    }
+
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-header,
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-section h2,
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-group-summary {
+        display: none !important;
+    }
+
+    /* Pembungkus diratakan agar setiap ikon menjadi satu sel grid */
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-actions,
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-sections,
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-section,
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-section .rental-nav-items,
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-group-details,
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-group-details::details-content,
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-group-items,
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-group-items-inner {
+        display: contents !important;
+    }
+
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-link-wrapper,
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-search-btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 2.75rem;
+        margin: 0 !important;
+        padding: 0;
+    }
+
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-link {
+        width: 2.75rem;
+        height: 2.75rem;
+        min-height: 2.75rem;
+        margin: 0;
+        padding: 0;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Penanda halaman aktif berupa garis bawah */
+    html[data-theme] .admin-sidebar-col.rental-nav-collapsed .rental-nav-link-wrapper.current::before {
+        top: auto;
+        bottom: -0.1rem;
+        left: 30%;
+        right: 30%;
+        width: auto;
+        height: 3px;
+        border-radius: 999px;
+    }
 }

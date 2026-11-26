@@ -368,8 +368,7 @@
         color: #f2f2f5;
     }
 
-    html[data-theme="auto"] .rental-nav-brand-mark,
-    html[data-theme="auto"] .rental-nav-favorite-icon {
+    html[data-theme="auto"] .rental-nav-brand-mark {
         color: #e2cb44;
         background: #24242b;
     }
@@ -460,23 +459,15 @@
         border-color: #33333c;
     }
 
-    html[data-theme="auto"] .rental-nav-favorite {
-        color: #ececef;
-        border-color: #33333c;
-    }
+    
 
-    html[data-theme="auto"] .rental-nav-favorite strong {
-        color: #f2f2f5;
-    }
+    
 
-    html[data-theme="auto"] .rental-nav-favorite small,
     html[data-theme="auto"] .rental-nav-empty {
         color: #b3b3bd;
     }
 
-    html[data-theme="auto"] .rental-nav-favorite-arrow {
-        color: #f2f2f5;
-    }
+    
 
     html[data-theme="auto"] .rental-nav-popup {
         background: #1c1c22;
@@ -488,37 +479,24 @@
         border-color: #2a2a31;
     }
 
-    html[data-theme="auto"] .rental-nav-popup .rental-nav-popup-link,
-    html[data-theme="auto"] .rental-nav-fav-item {
+    html[data-theme="auto"] .rental-nav-popup .rental-nav-popup-link {
         color: #ececef !important;
     }
 
-    html[data-theme="auto"] .rental-nav-popup .rental-nav-popup-link:hover,
-    html[data-theme="auto"] .rental-nav-fav-item:hover {
+    html[data-theme="auto"] .rental-nav-popup .rental-nav-popup-link:hover {
         background: rgba(226, 203, 68, 0.14);
         color: #e2cb44 !important;
     }
 
-    html[data-theme="auto"] .rental-nav-fav-header {
-        border-color: #2a2a31;
-    }
+    
 
-    html[data-theme="auto"] .rental-nav-fav-title {
-        color: #f2f2f5;
-    }
+    
 
-    html[data-theme="auto"] .rental-nav-fav-action {
-        color: #ececef;
-        background: #24242b;
-    }
+    
 
-    html[data-theme="auto"] .rental-nav-fav-item-name {
-        color: #ececef;
-    }
+    
 
-    html[data-theme="auto"] .rental-nav-fav-item-icon svg {
-        color: #b3b3bd;
-    }
+    
 
     /* Sidebar SVG icons use hardcoded dark strokes — make them visible */
     html[data-theme="auto"] .rental-nav-icon svg [stroke="#353438"],
@@ -992,8 +970,7 @@ html[data-theme="dark"] .rental-nav-brand:hover {
     color: #f2f2f5;
 }
 
-html[data-theme="dark"] .rental-nav-brand-mark,
-html[data-theme="dark"] .rental-nav-favorite-icon {
+html[data-theme="dark"] .rental-nav-brand-mark {
     color: #e2cb44;
     background: #24242b;
 }
@@ -1083,22 +1060,8 @@ html[data-theme="dark"] .rental-nav-add-btn:hover {
     border-color: #33333c;
 }
 
-html[data-theme="dark"] .rental-nav-favorite {
-    color: #ececef;
-    border-color: #33333c;
-}
-
-html[data-theme="dark"] .rental-nav-favorite strong {
-    color: #f2f2f5;
-}
-
-html[data-theme="dark"] .rental-nav-favorite small,
 html[data-theme="dark"] .rental-nav-empty {
     color: #b3b3bd;
-}
-
-html[data-theme="dark"] .rental-nav-favorite-arrow {
-    color: #f2f2f5;
 }
 
 html[data-theme="dark"] .rental-nav-popup {
@@ -1111,36 +1074,13 @@ html[data-theme="dark"] .rental-nav-popup-title {
     border-color: #2a2a31;
 }
 
-html[data-theme="dark"] .rental-nav-popup .rental-nav-popup-link,
-html[data-theme="dark"] .rental-nav-fav-item {
+html[data-theme="dark"] .rental-nav-popup .rental-nav-popup-link {
     color: #ececef !important;
 }
 
-html[data-theme="dark"] .rental-nav-popup .rental-nav-popup-link:hover,
-html[data-theme="dark"] .rental-nav-fav-item:hover {
+html[data-theme="dark"] .rental-nav-popup .rental-nav-popup-link:hover {
     background: rgba(226, 203, 68, 0.14);
     color: #e2cb44 !important;
-}
-
-html[data-theme="dark"] .rental-nav-fav-header {
-    border-color: #2a2a31;
-}
-
-html[data-theme="dark"] .rental-nav-fav-title {
-    color: #f2f2f5;
-}
-
-html[data-theme="dark"] .rental-nav-fav-action {
-    color: #ececef;
-    background: #24242b;
-}
-
-html[data-theme="dark"] .rental-nav-fav-item-name {
-    color: #ececef;
-}
-
-html[data-theme="dark"] .rental-nav-fav-item-icon svg {
-    color: #b3b3bd;
 }
 
 /* Sidebar SVG icons use hardcoded dark strokes — make them visible */

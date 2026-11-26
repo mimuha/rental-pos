@@ -1532,3 +1532,29 @@ class DashboardRedesignTests(TestCase):
         # Navigasi memakai sidebar yang sama dengan halaman lain.
         self.assertContains(response, 'id="nav-sidebar"')
         self.assertNotContains(response, 'dash-menu')
+
+
+class SidebarDashboardMenuTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.user = get_user_model().objects.create_superuser(
+            username='nav_admin', email='nav@example.com', password='password123',
+        )
+        self.client.force_login(self.user)
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_sidebar_has_dashboard_link_and_no_favorites(self):
+        response = self.client.get(reverse('admin:index'))
+        html = response.content.decode()
+
+        self.assertIn('rental-nav-home current', html)
+        self.assertIn('data-menu-title="Dashboard"', html)
+        self.assertNotIn('rental-nav-favorite', html)
+        self.assertNotIn('Menu favorit', html)
+
+    @override_settings(SECURE_SSL_REDIRECT=False)
+    def test_dashboard_link_not_current_on_other_pages(self):
+        response = self.client.get(reverse('admin:rentals_rental_changelist'))
+
+        self.assertContains(response, 'data-menu-title="Dashboard"')
+        self.assertNotContains(response, 'rental-nav-home current')
