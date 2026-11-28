@@ -1,7 +1,7 @@
 {% load i18n admin_urls %}
 <div class="submit-row">
 {% block submit-row %}
-{% if show_save %}<input type="submit" value="{% translate 'Save' %}" class="default" name="_save">{% endif %}
+{% if show_save %}<input type="submit" value="{% if page_noun and add and not is_popup %}Simpan {{ page_noun }}{% else %}{% translate 'Save' %}{% endif %}" class="{% if photo_first %}rental-submit-secondary{% else %}default{% endif %}" name="_save">{% endif %}
 {% if opts.app_label == 'rentals' and opts.model_name == 'rental' and original and can_change %}
     {% if original.status == 'draft' %}
         <input type="submit" value="Aktifkan" class="rental-status-submit rental-status-submit-activate" name="_activate_rental">
@@ -12,7 +12,11 @@
 {% endif %}
 {% if show_save_as_new %}<input type="submit" value="{% translate 'Save as new' %}" name="_saveasnew">{% endif %}
 {% if show_save_and_add_another %}<input type="submit" value="{% translate 'Save and add another' %}" name="_addanother">{% endif %}
-{% if show_save_and_continue %}<input type="submit" value="{% if can_change %}{% translate 'Save and continue editing' %}{% else %}{% translate 'Save and view' %}{% endif %}" name="_continue">{% endif %}
+{% if show_save_and_continue %}<input type="submit" value="{% if photo_first %}Simpan &amp; unggah foto{% elif can_change %}Simpan dan lanjut edit{% else %}{% translate 'Save and view' %}{% endif %}"{% if photo_first %} class="rental-submit-primary"{% endif %} name="_continue">{% endif %}
+{% if page_noun and show_save and not is_popup %}
+    {% url opts|admin_urlname:'changelist' as cancel_url %}
+    <a href="{% add_preserved_filters cancel_url %}" class="rental-cancel-link">Batal</a>
+{% endif %}
 {% if show_close %}
     {% url opts|admin_urlname:'changelist' as changelist_url %}
     <a role="button" href="{% add_preserved_filters changelist_url %}" class="closelink">{% translate 'Close' %}</a>

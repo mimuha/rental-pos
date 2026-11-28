@@ -1558,3 +1558,44 @@ class SidebarDashboardMenuTests(TestCase):
 
         self.assertContains(response, 'data-menu-title="Dashboard"')
         self.assertNotContains(response, 'rental-nav-home current')
+
+
+@override_settings(SECURE_SSL_REDIRECT=False)
+class AddFormPageTests(TestCase):
+    PAGES = {
+        'customer': 'pelanggan',
+        'vehiclecategory': 'kategori kendaraan',
+        'vehicle': 'kendaraan',
+        'maintenancecategory': 'kategori maintenance',
+        'maintenancevendor': 'bengkel',
+        'expensetype': 'jenis biaya',
+        'rental': 'order rental',
+        'payment': 'pembayaran',
+        'vehiclemaintenance': 'maintenance kendaraan',
+        'otherexpense': 'biaya lain',
+    }
+
+    def setUp(self):
+        self.client.force_login(get_user_model().objects.create_superuser('formadmin', 'f@example.com', 'x'))
+
+    def test_add_pages_use_two_column_layout_with_cancel_link(self):
+        for model, noun in self.PAGES.items():
+            with self.subTest(model=model):
+                response = self.client.get(reverse(f'admin:rentals_{model}_add'))
+                self.assertContains(response, f'Tambah {noun}')
+                self.assertContains(response, 'rental-form-layout--add')
+                self.assertContains(response, 'rental-cancel-link')
+
+    def test_new_vehicle_offers_save_and_upload_photo(self):
+        response = self.client.get(reverse('admin:rentals_vehicle_add'))
+        self.assertContains(response, 'Simpan &amp; unggah foto')
+        # Formset foto tetap dikirim walau disembunyikan.
+        self.assertContains(response, 'photos-TOTAL_FORMS')
+
+    def test_vendor_can_be_saved_from_new_layout(self):
+        response = self.client.post(reverse('admin:rentals_maintenancevendor_add'), {'name': 'Bengkel Uji', '_save': '1'})
+        self.assertRedirects(response, reverse('admin:rentals_maintenancevendor_changelist'))
+
+    def test_popup_has_no_cancel_link(self):
+        response = self.client.get(reverse('admin:rentals_vehiclecategory_add') + '?_popup=1')
+        self.assertNotContains(response, 'rental-cancel-link')

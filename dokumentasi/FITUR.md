@@ -131,3 +131,10 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - Armada: utilisasi = hari tersewa / (jumlah kendaraan x hari dalam bulan); draf dan order dibatalkan tidak dihitung.
 - Agenda 7 hari ke depan: pengambilan, pengembalian, draf, dan perawatan.
 - Perlu perhatian dengan aksi langsung, dan aktivitas terbaru yang bisa dilipat. Navigasi memakai sidebar yang sama dengan halaman lain.
+
+## Halaman Tambah dan Edit
+
+- Semua form modul rental memakai tata letak dua kolom: kartu isian di kiri, aksi (dan ringkasan/harga) di kanan.
+- Judul "Tambah ...", subjudul, contoh isian, tanda `*` untuk field wajib, dan tautan Batal.
+- Di HP (lebar di bawah 576px) halaman tambah menampilkan tombol simpan utama dan Batal yang menempel di bawah layar.
+- Kendaraan baru: foto diunggah setelah disimpan lewat tombol "Simpan & unggah foto".

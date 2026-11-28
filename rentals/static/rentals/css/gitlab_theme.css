@@ -1540,7 +1540,7 @@ html[data-theme] .rental-menu-button:focus-visible {
 /* Form: field wajib, tanggal + waktu sebaris, ikon hapus tidak rawan salah klik */
 .form-row.required > div > label::after,
 .form-row .required label::after,
-.form-row > label.required::after {
+.form-row label.required::after {
     content: " *";
     color: var(--rental-danger);
 }
@@ -4177,4 +4177,178 @@ html[data-theme] #nav-sidebar .rental-nav-section > h2 {
     font-weight: 400 !important;
     text-transform: capitalize !important;
     letter-spacing: normal !important;
+}
+
+/* ---- Halaman form: subjudul, kartu bantuan, aksi ---- */
+.rental-page-intro {
+    margin: -0.5rem 0 1.25rem;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.875rem;
+}
+
+.rental-side-note {
+    padding: 1.1rem 1.25rem;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--rental-radius-lg);
+}
+
+html[data-theme] .rental-side-note h2 {
+    margin: 0 0 0.4rem;
+    padding: 0;
+    color: var(--rental-pos-title) !important;
+    background: transparent !important;
+    font-size: 0.875rem;
+    font-weight: 700;
+}
+
+.rental-side-note p {
+    margin: 0;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.8125rem;
+}
+
+.rental-side-note .rental-side-note__drop {
+    padding: 0.9rem;
+    text-align: center;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--rental-radius-sm);
+}
+
+html[data-theme] .rental-form-layout .form-row input::placeholder,
+html[data-theme] .rental-form-layout .form-row textarea::placeholder {
+    color: var(--rental-pos-subtitle);
+    opacity: 0.65;
+}
+
+html[data-theme] .rental-form-layout .form-row.field-brand .form-multiline {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+}
+
+html[data-theme] .rental-form-layout .form-row.field-seat_count .form-multiline {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 767.98px) {
+    html[data-theme] .rental-form-layout .form-row .form-multiline {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+}
+
+html[data-theme] #content .rental-form-side .submit-row a.rental-cancel-link {
+    order: 5;
+    padding: 0.4rem;
+    color: var(--rental-pos-subtitle) !important;
+    background: transparent;
+    border: 0;
+    text-decoration: none;
+}
+
+html[data-theme] #content .rental-form-side .submit-row a.rental-cancel-link:hover {
+    color: var(--body-fg) !important;
+    text-decoration: underline;
+}
+
+/* Kendaraan baru: "Simpan & unggah foto" menjadi tombol utama */
+html[data-theme] .rental-form-side .submit-row input[name="_continue"].rental-submit-primary {
+    order: 0;
+    color: #ffffff !important;
+    background: var(--rental-primary) !important;
+    border-color: var(--rental-primary) !important;
+}
+
+html[data-theme] .rental-form-side .submit-row input[name="_save"].rental-submit-secondary {
+    color: var(--rental-primary) !important;
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+/* HP: tombol simpan utama dan Batal menempel di bawah layar */
+@media (max-width: 575.98px) {
+    html[data-theme] .rental-form-layout--add .rental-form-side {
+        display: contents;
+    }
+
+    html[data-theme] .rental-form-layout--add .submit-row {
+        display: grid;
+        position: sticky;
+        bottom: 0;
+        z-index: 20;
+        order: 10;
+        gap: 0.25rem;
+        margin: 0;
+        padding: 0.75rem;
+        background: var(--white) !important;
+        border: 1px solid var(--border-color);
+        border-radius: var(--rental-radius-lg);
+    }
+
+    html[data-theme] .rental-form-layout--add .submit-row input,
+    html[data-theme] #content .rental-form-layout--add .submit-row a {
+        width: 100%;
+        margin: 0;
+        text-align: center;
+    }
+
+    html[data-theme] .rental-form-layout--add .submit-row input[name="_addanother"],
+    html[data-theme] .rental-form-layout--add .submit-row input[name="_continue"]:not(.rental-submit-primary),
+    html[data-theme] .rental-form-layout--add .submit-row input.rental-submit-secondary {
+        display: none;
+    }
+}
+
+/* Tanda wajib isi (menang atas aturan ::after bawaan label) */
+html[data-theme] .form-row label.required::after {
+    content: " *" !important;
+    display: inline !important;
+    color: var(--rental-danger);
+}
+
+html[data-theme] .rental-form-side .submit-row input {
+    text-transform: none !important;
+}
+
+/* HP: input selebar kartu (mengalahkan max-width bawaan responsive.css) */
+@media (max-width: 767.98px) {
+    html[data-theme] .rental-form-layout .form-row input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not(.vDateField):not(.vTimeField),
+    html[data-theme] .rental-form-layout .form-row select,
+    html[data-theme] .rental-form-layout .form-row textarea {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    html[data-theme] .rental-form-layout .form-row .form-multiline,
+    html[data-theme] .rental-form-layout .form-row .form-multiline > div {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        margin: 0;
+    }
+
+    html[data-theme] .rental-form-layout .related-widget-wrapper > select {
+        width: auto !important;
+    }
+
+    /* responsive.css memberi lebar selebar layar pada pembungkus baris */
+    html[data-theme] .rental-form-layout .form-row > div,
+    html[data-theme] .rental-form-layout .form-row > div > .flex-container {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+/* HP: tanggal dan waktu tetap di dalam kartu */
+@media (max-width: 767.98px) {
+    html[data-theme] .rental-form-layout p.datetime {
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    html[data-theme] .rental-form-layout p.datetime > input {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0;
+        margin: 0 !important;
+    }
 }

@@ -101,10 +101,28 @@ class BaseModelAdmin(admin.ModelAdmin):
     label when blank. This applies across the admin when other ModelAdmin
     classes inherit from this base.
     """
+    # Teks halaman form: nama singkat objek, subjudul, kartu bantuan, contoh isian.
+    page_noun = ''
+    page_intro = ''
+    side_tip = ''
+    placeholders = {}
+
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name in MONEY_FIELD_NAMES:
             kwargs['form_class'] = RupiahField
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
+        form_field = super().formfield_for_dbfield(db_field, request, **kwargs)
+        if form_field is not None and db_field.name in self.placeholders:
+            form_field.widget.attrs['placeholder'] = self.placeholders[db_field.name]
+        return form_field
+
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        if self.page_noun:
+            context.update(photo_first=add and self.model is Vehicle and '_popup' not in request.GET,
+                           page_noun=self.page_noun, page_intro=self.page_intro if add else '',
+                           side_tip=self.side_tip if add else '')
+            if add:
+                context['title'] = f'Tambah {self.page_noun}'
+        return super().render_change_form(request, context, add=add, change=change, form_url=form_url, obj=obj)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if 'empty_label' not in kwargs:
@@ -134,6 +152,20 @@ class BaseModelAdmin(admin.ModelAdmin):
 
 @admin.register(Customer)
 class CustomerAdmin(BaseModelAdmin):
+    page_noun = 'pelanggan'
+    page_intro = 'Data penyewa untuk dipakai di order rental'
+    placeholders = {
+        'full_name': 'Sesuai KTP/SIM',
+        'identity_number': 'Nomor KTP atau SIM',
+        'phone_number': '0812 3456 7890',
+        'email': 'nama@contoh.com (opsional)',
+        'address': 'Jalan, RT/RW, kota',
+    }
+    change_form_template = 'admin/rentals/rental/change_form.html'
+    fieldsets = (
+        ('Identitas', {'fields': ('full_name', 'identity_number')}),
+        ('Kontak & alamat', {'fields': (('phone_number', 'email'), 'address')}),
+    )
     list_display = ['full_name', 'identity_number', 'phone_number', 'email']
     search_fields = ['full_name', 'identity_number', 'phone_number', 'email']
     list_per_page = 25
@@ -141,6 +173,17 @@ class CustomerAdmin(BaseModelAdmin):
 
 @admin.register(VehicleCategory)
 class VehicleCategoryAdmin(BaseModelAdmin):
+    page_noun = 'kategori kendaraan'
+    page_intro = 'Pengelompokan unit, misalnya MPV atau city car'
+    side_tip = 'Hanya nama kategori. Deskripsi bisa dilengkapi belakangan.'
+    placeholders = {
+        'name': 'Contoh: MPV',
+        'description': 'Keterangan singkat (opsional)',
+    }
+    change_form_template = 'admin/rentals/rental/change_form.html'
+    fieldsets = (
+        ('Kategori', {'fields': ('name', 'description')}),
+    )
     list_display = ['name', 'description']
     search_fields = ['name']
 
@@ -172,6 +215,25 @@ class VehiclePhotoInline(admin.TabularInline):
 
 @admin.register(Vehicle)
 class VehicleAdmin(BaseModelAdmin):
+    page_noun = 'kendaraan'
+    page_intro = 'Unit baru yang siap disewakan'
+    placeholders = {
+        'plate_number': 'B 1234 ABC',
+        'brand': 'Toyota',
+        'model': 'Avanza',
+        'year': '2024',
+        'color': 'Hitam',
+        'odometer': '45200',
+        'daily_rate': '0',
+        'deposit_amount': '0',
+        'notes': 'Kelengkapan, kondisi bodi, dll.',
+    }
+    fieldsets = (
+        ('Identitas unit', {'fields': (('plate_number', 'category'), ('brand', 'model', 'year', 'color'))}),
+        ('Spesifikasi & kondisi', {'fields': (('transmission', 'fuel_type'), ('seat_count', 'odometer', 'status'))}),
+        ('Catatan', {'fields': ('notes',)}),
+        ('Harga sewa', {'classes': ('rental-side',), 'fields': ('daily_rate', 'deposit_amount')}),
+    )
     list_display = [
         'plate_number',
         'brand',
@@ -193,6 +255,17 @@ class VehicleAdmin(BaseModelAdmin):
 
 @admin.register(MaintenanceCategory)
 class MaintenanceCategoryAdmin(BaseModelAdmin):
+    page_noun = 'kategori maintenance'
+    page_intro = 'Jenis pekerjaan yang dicatat saat maintenance'
+    side_tip = 'Nama dan jenis maintenance. Deskripsi opsional.'
+    placeholders = {
+        'name': 'Contoh: Ganti oli mesin',
+        'description': 'Keterangan singkat (opsional)',
+    }
+    change_form_template = 'admin/rentals/rental/change_form.html'
+    fieldsets = (
+        ('Kategori maintenance', {'fields': (('name', 'category_type'), 'description')}),
+    )
     list_display = ['name', 'category_type', 'description']
     list_filter = ['category_type']
     search_fields = ['name', 'description']
@@ -201,6 +274,21 @@ class MaintenanceCategoryAdmin(BaseModelAdmin):
 
 @admin.register(MaintenanceVendor)
 class MaintenanceVendorAdmin(BaseModelAdmin):
+    page_noun = 'bengkel'
+    page_intro = 'Data bengkel dipakai saat mencatat maintenance kendaraan'
+    side_tip = 'Hanya nama bengkel. Data lain bisa dilengkapi belakangan.'
+    placeholders = {
+        'name': 'Contoh: Bengkel Maju Jaya',
+        'contact_person': 'Nama yang bisa dihubungi',
+        'phone_number': '0812 3456 7890',
+        'address': 'Jalan, kota',
+        'notes': 'Jam buka, spesialisasi, dll.',
+    }
+    change_form_template = 'admin/rentals/rental/change_form.html'
+    fieldsets = (
+        ('Identitas bengkel', {'fields': ('name', ('contact_person', 'phone_number'))}),
+        ('Alamat & catatan', {'fields': (('address', 'notes'),)}),
+    )
     list_display = ['name', 'contact_person', 'phone_number']
     search_fields = ['name', 'contact_person', 'phone_number', 'address']
     list_per_page = 25
@@ -208,6 +296,8 @@ class MaintenanceVendorAdmin(BaseModelAdmin):
 
 @admin.register(VehicleMaintenance)
 class VehicleMaintenanceAdmin(BaseModelAdmin):
+    page_noun = 'maintenance kendaraan'
+    page_intro = 'Catat perawatan dan biaya bengkel untuk satu kendaraan'
     list_display = [
         'maintenance_date',
         'vehicle',
@@ -270,6 +360,17 @@ class VehicleMaintenanceAdmin(BaseModelAdmin):
 
 @admin.register(ExpenseType)
 class ExpenseTypeAdmin(BaseModelAdmin):
+    page_noun = 'jenis biaya'
+    page_intro = 'Pengelompokan biaya operasional lain'
+    side_tip = 'Hanya nama jenis biaya. Deskripsi opsional.'
+    placeholders = {
+        'name': 'Contoh: Pajak kendaraan',
+        'description': 'Keterangan singkat (opsional)',
+    }
+    change_form_template = 'admin/rentals/rental/change_form.html'
+    fieldsets = (
+        ('Jenis biaya', {'fields': ('name', 'description')}),
+    )
     list_display = ['name', 'description']
     search_fields = ['name', 'description']
     list_per_page = 25
@@ -277,6 +378,8 @@ class ExpenseTypeAdmin(BaseModelAdmin):
 
 @admin.register(OtherExpense)
 class OtherExpenseAdmin(BaseModelAdmin):
+    page_noun = 'biaya lain'
+    page_intro = 'Catat pengeluaran operasional di luar maintenance'
     list_display = [
         'invoice_number',
         'expense_date',
@@ -370,6 +473,8 @@ class OtherExpenseInline(admin.TabularInline):
 
 @admin.register(Rental)
 class RentalAdmin(BaseModelAdmin):
+    page_noun = 'order rental'
+    page_intro = 'Order baru disimpan sebagai draf sebelum diaktifkan'
     list_display = [
         'invoice_number',
         'customer',
@@ -582,6 +687,8 @@ class RentalAdmin(BaseModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(BaseModelAdmin):
+    page_noun = 'pembayaran'
+    page_intro = 'Catat pembayaran untuk satu order rental'
     list_display = ['invoice_number', 'rental', 'payment_date', 'method', 'amount_rupiah', 'reference_number']
     list_filter = ['method', 'payment_date']
     search_fields = ['invoice_number', 'rental__invoice_number', 'reference_number']

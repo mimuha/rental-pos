@@ -1,0 +1,15 @@
+{% extends "admin/rentals/rental/change_form.html" %}
+
+{% block side_after %}
+{% if add %}
+<section class="rental-side-note">
+  <h2>Foto kendaraan</h2>
+  <p class="rental-side-note__drop">Bisa diunggah setelah kendaraan disimpan</p>
+</section>
+{% endif %}
+{% endblock %}
+
+{# Unggah foto butuh ID kendaraan; di halaman tambah formset tetap dikirim tetapi disembunyikan. #}
+{% block inline_field_sets %}
+<div{% if add %} hidden{% endif %}>{{ block.super }}</div>
+{% endblock %}

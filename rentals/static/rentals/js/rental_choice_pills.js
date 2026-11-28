@@ -7,8 +7,10 @@
     'use strict';
 
     var SELECTORS = [
-        '.rental-form-layout select#id_status',
-        '.rental-form-layout select#id_method'
+        'body:not(.model-vehicle) .rental-form-layout select#id_status',
+        '.rental-form-layout select#id_method',
+        '.rental-form-layout select#id_transmission',
+        '.rental-form-layout select#id_fuel_type'
     ];
 
     function build(select) {
