@@ -3028,7 +3028,7 @@ html[data-theme] #payments-group tr.add-row a::before {
     }
 }
 
-/* ---- Palet baru: Indigo (aksen "purple") dan Terakota (aksen "orange") ---- */
+/* ---- Palet baru: Indigo (aksen "purple") dan Pink (aksen "orange") ---- */
 html[data-theme="light"][data-accent="purple"],
 html[data-theme="auto"][data-accent="purple"] {
     --rental-accent: #4f46e5;
@@ -3059,30 +3059,30 @@ html[data-theme="auto"][data-accent="purple"] {
 
 html[data-theme="light"][data-accent="orange"],
 html[data-theme="auto"][data-accent="orange"] {
-    --rental-accent: #b4532a;
-    --rental-accent-hover: #98441f;
-    --rental-accent-soft: #faece4;
-    --rental-accent-border: rgba(180, 83, 42, 0.35);
-    --primary: #b4532a;
-    --link-fg: #b4532a;
-    --link-hover-color: #98441f;
-    --link-selected-fg: #7a3718;
-    --breadcrumbs-color: #b4532a;
-    --rental-primary: #b4532a;
-    --rental-primary-dark: #98441f;
-    --rental-primary-soft: #faece4;
-    --rental-primary-border: rgba(180, 83, 42, 0.35);
-    --rental-primary-shadow: rgba(180, 83, 42, 0.24);
-    --rental-selected-bg: #faece4;
-    --rental-focus-ring: rgba(180, 83, 42, 0.25);
-    --rental-calendar-rented: #b4532a;
-    --unguhover: rgba(180, 83, 42, 0.08);
-    --bs-primary: #b4532a;
-    --bs-primary-rgb: 180, 83, 42;
-    --bs-link-color: #b4532a;
-    --bs-link-hover-color: #98441f;
-    --bs-info: #b4532a;
-    --bs-info-rgb: 180, 83, 42;
+    --rental-accent: #db2777;
+    --rental-accent-hover: #be185d;
+    --rental-accent-soft: #fdeaf3;
+    --rental-accent-border: rgba(219, 39, 119, 0.35);
+    --primary: #db2777;
+    --link-fg: #db2777;
+    --link-hover-color: #be185d;
+    --link-selected-fg: #9d174d;
+    --breadcrumbs-color: #db2777;
+    --rental-primary: #db2777;
+    --rental-primary-dark: #be185d;
+    --rental-primary-soft: #fdeaf3;
+    --rental-primary-border: rgba(219, 39, 119, 0.35);
+    --rental-primary-shadow: rgba(219, 39, 119, 0.24);
+    --rental-selected-bg: #fdeaf3;
+    --rental-focus-ring: rgba(219, 39, 119, 0.25);
+    --rental-calendar-rented: #db2777;
+    --unguhover: rgba(219, 39, 119, 0.08);
+    --bs-primary: #db2777;
+    --bs-primary-rgb: 219, 39, 119;
+    --bs-link-color: #db2777;
+    --bs-link-hover-color: #be185d;
+    --bs-info: #db2777;
+    --bs-info-rgb: 219, 39, 119;
 }
 
 html[data-theme="dark"][data-accent="purple"] {
@@ -3115,32 +3115,32 @@ html[data-theme="dark"][data-accent="purple"] {
 }
 
 html[data-theme="dark"][data-accent="orange"] {
-    --rental-accent: #e29a78;
-    --rental-accent-hover: #f0b79d;
-    --rental-accent-soft: rgba(226, 154, 120, 0.16);
-    --rental-accent-border: rgba(226, 154, 120, 0.35);
-    --primary: #b4532a;
-    --link-fg: #e29a78;
-    --link-hover-color: #f0b79d;
-    --link-selected-fg: #f0b79d;
-    --breadcrumbs-color: #e29a78;
-    --rental-primary: #b4532a;
-    --rental-primary-dark: #98441f;
-    --rental-primary-soft: rgba(226, 154, 120, 0.16);
-    --rental-primary-border: rgba(226, 154, 120, 0.35);
+    --rental-accent: #f9a8d4;
+    --rental-accent-hover: #fbcfe8;
+    --rental-accent-soft: rgba(244, 114, 182, 0.16);
+    --rental-accent-border: rgba(244, 114, 182, 0.35);
+    --primary: #db2777;
+    --link-fg: #f9a8d4;
+    --link-hover-color: #fbcfe8;
+    --link-selected-fg: #fbcfe8;
+    --breadcrumbs-color: #f9a8d4;
+    --rental-primary: #db2777;
+    --rental-primary-dark: #be185d;
+    --rental-primary-soft: rgba(244, 114, 182, 0.16);
+    --rental-primary-border: rgba(244, 114, 182, 0.35);
     --rental-primary-shadow: rgba(0, 0, 0, 0.5);
-    --rental-selected-bg: rgba(226, 154, 120, 0.16);
-    --selected-bg: rgba(226, 154, 120, 0.16);
-    --rental-focus-ring: rgba(226, 154, 120, 0.35);
-    --rental-row-hover-bg: rgba(226, 154, 120, 0.10);
-    --rental-calendar-rented: #e29a78;
-    --unguhover: rgba(226, 154, 120, 0.14);
-    --bs-primary: #b4532a;
-    --bs-primary-rgb: 180, 83, 42;
-    --bs-link-color: #e29a78;
-    --bs-link-hover-color: #f0b79d;
-    --bs-info: #e29a78;
-    --bs-info-rgb: 226, 154, 120;
+    --rental-selected-bg: rgba(244, 114, 182, 0.16);
+    --selected-bg: rgba(244, 114, 182, 0.16);
+    --rental-focus-ring: rgba(244, 114, 182, 0.35);
+    --rental-row-hover-bg: rgba(244, 114, 182, 0.10);
+    --rental-calendar-rented: #f9a8d4;
+    --unguhover: rgba(244, 114, 182, 0.14);
+    --bs-primary: #db2777;
+    --bs-primary-rgb: 219, 39, 119;
+    --bs-link-color: #f9a8d4;
+    --bs-link-hover-color: #fbcfe8;
+    --bs-info: #f9a8d4;
+    --bs-info-rgb: 244, 114, 182;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -3174,32 +3174,32 @@ html[data-theme="dark"][data-accent="orange"] {
     }
 
     html[data-theme="auto"][data-accent="orange"] {
-        --rental-accent: #e29a78;
-        --rental-accent-hover: #f0b79d;
-        --rental-accent-soft: rgba(226, 154, 120, 0.16);
-        --rental-accent-border: rgba(226, 154, 120, 0.35);
-        --primary: #b4532a;
-        --link-fg: #e29a78;
-        --link-hover-color: #f0b79d;
-        --link-selected-fg: #f0b79d;
-        --breadcrumbs-color: #e29a78;
-        --rental-primary: #b4532a;
-        --rental-primary-dark: #98441f;
-        --rental-primary-soft: rgba(226, 154, 120, 0.16);
-        --rental-primary-border: rgba(226, 154, 120, 0.35);
+        --rental-accent: #f9a8d4;
+        --rental-accent-hover: #fbcfe8;
+        --rental-accent-soft: rgba(244, 114, 182, 0.16);
+        --rental-accent-border: rgba(244, 114, 182, 0.35);
+        --primary: #db2777;
+        --link-fg: #f9a8d4;
+        --link-hover-color: #fbcfe8;
+        --link-selected-fg: #fbcfe8;
+        --breadcrumbs-color: #f9a8d4;
+        --rental-primary: #db2777;
+        --rental-primary-dark: #be185d;
+        --rental-primary-soft: rgba(244, 114, 182, 0.16);
+        --rental-primary-border: rgba(244, 114, 182, 0.35);
         --rental-primary-shadow: rgba(0, 0, 0, 0.5);
-        --rental-selected-bg: rgba(226, 154, 120, 0.16);
-        --selected-bg: rgba(226, 154, 120, 0.16);
-        --rental-focus-ring: rgba(226, 154, 120, 0.35);
-        --rental-row-hover-bg: rgba(226, 154, 120, 0.10);
-        --rental-calendar-rented: #e29a78;
-        --unguhover: rgba(226, 154, 120, 0.14);
-        --bs-primary: #b4532a;
-        --bs-primary-rgb: 180, 83, 42;
-        --bs-link-color: #e29a78;
-        --bs-link-hover-color: #f0b79d;
-        --bs-info: #e29a78;
-        --bs-info-rgb: 226, 154, 120;
+        --rental-selected-bg: rgba(244, 114, 182, 0.16);
+        --selected-bg: rgba(244, 114, 182, 0.16);
+        --rental-focus-ring: rgba(244, 114, 182, 0.35);
+        --rental-row-hover-bg: rgba(244, 114, 182, 0.10);
+        --rental-calendar-rented: #f9a8d4;
+        --unguhover: rgba(244, 114, 182, 0.14);
+        --bs-primary: #db2777;
+        --bs-primary-rgb: 219, 39, 119;
+        --bs-link-color: #f9a8d4;
+        --bs-link-hover-color: #fbcfe8;
+        --bs-info: #f9a8d4;
+        --bs-info-rgb: 244, 114, 182;
     }
 
 }
@@ -3210,7 +3210,7 @@ html[data-theme] .rental-theme-swatch-purple {
 }
 
 html[data-theme] .rental-theme-swatch-orange {
-    background: #b4532a;
+    background: #db2777;
 }
 
 html[data-theme] a.historylink,

@@ -16,10 +16,10 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 
 - Pilihan tema tersedia di menu gear pengguna.
 - Mode: Terang, Gelap, Ikuti Sistem.
-- Aksen: Indigo (default, nilai `purple`), Terakota (nilai `orange`), atau Grayscale (seluruh warna aksen, tautan, tombol, dan status menjadi abu-abu netral).
+- Aksen: Indigo (default, nilai `purple`), Pink (nilai `orange`), atau Grayscale (seluruh warna aksen, tautan, tombol, dan status menjadi abu-abu netral).
 - Preferensi disimpan per user di database dan diterapkan lintas perangkat.
 - Hover, selected, focus ring, dan shadow memakai token tema yang sama.
-- Logo Zandev tetap; seluruh ikon modul di sidebar dan dashboard mengikuti aksen aktif (purple/orange).
+- Logo Zandev tetap; seluruh ikon modul di sidebar dan dashboard mengikuti aksen aktif (Indigo/Pink).
 - Tombol solid memakai teks putih; aksi tambah/sukses memakai hijau yang lebih cerah.
 - Card statistik dan card admin memakai background putih pada light mode.
 
