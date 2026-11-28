@@ -83,7 +83,7 @@
             const closeButton = createElement('button', 'rental-filter-close');
             closeButton.type = 'button';
             closeButton.setAttribute('aria-label', 'Tutup filter');
-            closeButton.textContent = 'x';
+            closeButton.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
             header.appendChild(closeButton);
 
             closeButton.addEventListener('click', function () {
@@ -100,6 +100,12 @@
                 return !item.matches('.rental-filter-group li:first-child');
             });
 
+        // Pilihan langsung diterapkan saat diklik, jadi ringkasan dan reset
+        // hanya perlu muncul ketika ada filter yang aktif.
+        if (selectedOptions.length === 0) {
+            return;
+        }
+
         const activeWrap = createElement('div', 'rental-active-filters');
         activeWrap.appendChild(createElement('h3', null, 'Filter aktif'));
 
@@ -112,28 +118,16 @@
             const chip = createElement('a', 'rental-filter-chip');
             chip.href = firstLink ? firstLink.href : getCurrentPath();
             chip.textContent = title + ': ' + (currentLink ? currentLink.textContent.trim() : item.textContent.trim());
-            chip.insertAdjacentHTML('beforeend', '<span aria-hidden="true">x</span>');
+            chip.insertAdjacentHTML('beforeend', '<span aria-hidden="true">&times;</span>');
             chips.appendChild(chip);
         });
-
-        if (selectedOptions.length === 0) {
-            activeWrap.classList.add('is-empty');
-            chips.appendChild(createElement('span', 'rental-filter-empty', 'Belum ada filter aktif'));
-        }
-
         activeWrap.appendChild(chips);
         panel.appendChild(activeWrap);
 
         const actions = createElement('div', 'rental-filter-actions');
-
-        const resetButton = createElement('a', 'rental-filter-reset', 'Reset Semua');
+        const resetButton = createElement('a', 'rental-filter-reset', 'Reset semua');
         resetButton.href = getResetHref(panel);
         actions.appendChild(resetButton);
-
-        const applyButton = createElement('a', 'rental-filter-apply', 'Terapkan Filter');
-        applyButton.href = window.location.href;
-        actions.appendChild(applyButton);
-
         panel.appendChild(actions);
     }
 
