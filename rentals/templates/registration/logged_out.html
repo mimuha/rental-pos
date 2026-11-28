@@ -1,0 +1,36 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Anda sudah keluar | {{ site_title }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'rentals/css/auth.css' %}?v=1">
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} auth-page{% endblock %}
+{% block header %}{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% block content_subtitle %}{% endblock %}
+
+{% block content %}
+<div class="auth-card auth-card--center">
+    <div class="auth-brand">
+        <span class="auth-logo auth-logo--small" aria-hidden="true">
+            {% include "admin/includes/sidebar_icons/pos_rental.svg" %}
+        </span>
+        <span>Zandev POS</span>
+    </div>
+    <div class="auth-check" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    </div>
+    <h1 class="auth-title">Anda sudah keluar</h1>
+    <p class="auth-subtitle">Sesi di perangkat ini telah diakhiri dengan aman.</p>
+    <a class="auth-button" href="{% url 'admin:index' %}">Masuk kembali</a>
+    <p class="auth-note">Memakai komputer bersama?<br>Tutup juga jendela browser ini.</p>
+</div>
+{% endblock %}
+
+{% block sidebar %}{% endblock %}

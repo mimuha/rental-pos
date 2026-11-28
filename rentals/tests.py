@@ -1599,3 +1599,29 @@ class AddFormPageTests(TestCase):
     def test_popup_has_no_cancel_link(self):
         response = self.client.get(reverse('admin:rentals_vehiclecategory_add') + '?_popup=1')
         self.assertNotContains(response, 'rental-cancel-link')
+
+
+@override_settings(SECURE_SSL_REDIRECT=False)
+class AuthPageTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.user = get_user_model().objects.create_superuser('authadmin', 'a@example.com', 'sandi-uji-123')
+
+    def test_login_page_shows_new_card_and_short_error(self):
+        response = self.client.get(reverse('admin:login'))
+        self.assertContains(response, 'Masuk ke Zandev POS')
+        response = self.client.post(reverse('admin:login'), {'username': 'authadmin', 'password': 'salah'})
+        self.assertContains(response, 'Nama pengguna atau sandi salah.')
+        self.assertContains(response, 'auth-card has-error')
+
+    def test_logout_page_and_post_only_logout(self):
+        self.client.force_login(self.user)
+        page = self.client.get(reverse('admin:index'))
+        # Auto-logout mengirim form ini; GET ke URL logout ditolak Django.
+        self.assertContains(page, 'data-logout-form')
+        self.assertNotContains(page, "window.location.href = '/admin/logout/'")
+        self.assertEqual(self.client.get(reverse('admin:logout')).status_code, 405)
+        response = self.client.post(reverse('admin:logout'))
+        self.assertContains(response, 'Anda sudah keluar')
+        self.assertContains(response, 'Masuk kembali')
+        self.assertNotContains(response, 'var timeoutSec')

@@ -5,6 +5,7 @@ from decimal import Decimal, InvalidOperation
 
 import requests
 from django import forms
+from django.contrib.admin.forms import AdminAuthenticationForm
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
@@ -39,6 +40,13 @@ def normalize_rupiah_value(value):
         text = text.replace('.', '')
 
     return text
+
+
+class RentalAdminLoginForm(AdminAuthenticationForm):
+    error_messages = {
+        **AdminAuthenticationForm.error_messages,
+        'invalid_login': 'Nama pengguna atau sandi salah.',
+    }
 
 
 class RupiahWidget(forms.TextInput):

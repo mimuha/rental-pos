@@ -1,0 +1,296 @@
+/* Halaman masuk dan keluar */
+html[data-theme] body.auth-page {
+    min-height: 100vh;
+    background-color: var(--body-bg);
+    background-image: radial-gradient(circle at top left, var(--rental-primary-soft), transparent 30rem);
+    background-repeat: no-repeat;
+    overflow-x: hidden;
+}
+
+body.auth-page #container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+body.auth-page .main,
+body.auth-page .content {
+    flex: 0 0 auto;
+    min-height: 0;
+    padding: 0 !important;
+}
+
+body.auth-page .admin-sidebar-col,
+body.auth-page br.clear {
+    display: none;
+}
+
+body.auth-page .admin-content-container,
+body.auth-page .admin-content-container > .row {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+body.auth-page .admin-content-container {
+    padding: 1.5rem 1rem;
+}
+
+html[data-theme] body.auth-page .admin-main-col {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+html[data-theme] body.auth-page #content {
+    width: 100%;
+    max-width: 25rem !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.auth-card {
+    padding: 2rem;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 1.25rem;
+}
+
+.auth-card--center {
+    text-align: center;
+}
+
+.auth-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    margin: 0 auto 0.75rem;
+    border-radius: var(--rental-radius-lg);
+}
+
+.auth-logo svg {
+    width: 5.5rem;
+    height: 5.5rem;
+    flex: none;
+}
+
+.auth-logo--small {
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: 0;
+    border-radius: var(--rental-radius-sm);
+}
+
+.auth-logo--small svg {
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+/* Logo tetap berwarna asli; di mode gelap diberi alas terang */
+html[data-theme="dark"] .auth-logo {
+    background: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="auto"] .auth-logo {
+        background: #ffffff;
+    }
+}
+
+.auth-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+    color: var(--rental-pos-title);
+    font-weight: 700;
+}
+
+html[data-theme] body.auth-page h1.auth-title {
+    margin: 0 0 0.35rem;
+    color: var(--rental-pos-title) !important;
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.auth-subtitle {
+    margin: 0 0 1.5rem;
+    color: var(--rental-pos-subtitle);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.auth-error {
+    margin: 0 0 1rem;
+    padding: 0.65rem 0.8rem;
+    color: var(--rental-danger);
+    border: 1px solid var(--rental-danger);
+    border-radius: var(--rental-radius-sm);
+    font-size: 0.8125rem;
+    text-align: center;
+}
+
+html[data-theme] body.auth-page label.auth-label {
+    display: block;
+    float: none;
+    width: auto;
+    margin: 0 0 0.35rem;
+    color: var(--body-fg);
+    font-size: 0.8125rem;
+    font-weight: 700;
+}
+
+.auth-field {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.auth-field__icon,
+.auth-toggle svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.auth-field__icon {
+    position: absolute;
+    top: 50%;
+    left: 0.85rem;
+    color: var(--rental-pos-subtitle);
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+html[data-theme] body.auth-page .auth-field input {
+    width: 100%;
+    max-width: none;
+    min-height: 2.85rem;
+    padding: 0.6rem 2.75rem !important;
+    color: var(--body-fg);
+    background: var(--white) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 0.65rem !important;
+}
+
+html[data-theme] body.auth-page .auth-field input:focus {
+    border-color: var(--rental-primary) !important;
+    outline: none;
+    box-shadow: none !important;
+}
+
+html[data-theme] body.auth-page .auth-card.has-error .auth-field input {
+    border-color: var(--rental-danger) !important;
+}
+
+/* Isian otomatis browser: tutup latar biru bawaan dengan warna kartu */
+html[data-theme] body.auth-page .auth-field input:-webkit-autofill,
+html[data-theme] body.auth-page .auth-field input:-webkit-autofill:hover,
+html[data-theme] body.auth-page .auth-field input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 100px var(--white) inset !important;
+    -webkit-text-fill-color: var(--body-fg);
+    caret-color: var(--body-fg);
+}
+
+html[data-theme] body.auth-page button.auth-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0.4rem;
+    display: flex;
+    padding: 0.45rem;
+    color: var(--rental-pos-subtitle);
+    background: transparent;
+    border: 0;
+    border-radius: var(--rental-radius-sm);
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+html[data-theme] body.auth-page button.auth-toggle[hidden] {
+    display: none;
+}
+
+.auth-toggle__slash {
+    display: none;
+}
+
+.auth-toggle[aria-pressed="true"] .auth-toggle__slash {
+    display: inline;
+}
+
+.auth-reset {
+    margin: -0.25rem 0 0.75rem;
+    font-size: 0.75rem;
+    text-align: right;
+}
+
+html[data-theme] body.auth-page #content .auth-button {
+    display: block;
+    width: 100%;
+    min-height: 2.85rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem 1rem;
+    color: #ffffff !important;
+    background: var(--rental-primary) !important;
+    border: 1px solid var(--rental-primary) !important;
+    border-radius: 0.65rem !important;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    text-transform: none;
+    cursor: pointer;
+}
+
+html[data-theme] body.auth-page #content .auth-button:hover {
+    background: var(--rental-primary-dark) !important;
+    border-color: var(--rental-primary-dark) !important;
+}
+
+.auth-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.25rem;
+    height: 4.25rem;
+    margin: 0 auto 1.25rem;
+    color: var(--link-fg);
+    background: var(--rental-primary-soft);
+    border-radius: 999px;
+}
+
+.auth-check svg {
+    width: 2.25rem;
+    height: 2.25rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.auth-note {
+    margin: 1.5rem 0 0;
+    padding-top: 1.25rem;
+    color: var(--rental-pos-subtitle);
+    border-top: 1px solid var(--border-color);
+    font-size: 0.75rem;
+}
+
+@media (max-width: 575.98px) {
+    .auth-card {
+        padding: 1.5rem 1.25rem;
+    }
+}

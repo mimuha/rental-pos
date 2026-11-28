@@ -29,6 +29,7 @@
     function apply(mode, accent) {
         root.dataset.theme = mode;
         root.dataset.accent = accent;
+        try { localStorage.setItem('rental.theme', JSON.stringify({mode: mode, accent: accent})); } catch (e) {}
         setPressed(modeButtons, 'themeMode', mode);
         setPressed(accentButtons, 'themeAccent', accent);
     }

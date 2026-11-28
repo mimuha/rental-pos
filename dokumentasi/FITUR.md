@@ -138,3 +138,10 @@ Halaman utama menampilkan ringkasan bulan berjalan:
 - Judul "Tambah ...", subjudul, contoh isian, tanda `*` untuk field wajib, dan tautan Batal.
 - Di HP (lebar di bawah 576px) halaman tambah menampilkan tombol simpan utama dan Batal yang menempel di bawah layar.
 - Kendaraan baru: foto diunggah setelah disimpan lewat tombol "Simpan & unggah foto".
+
+## Halaman Masuk dan Keluar
+
+- Kartu di tengah layar dengan ikon pada field dan tombol tampilkan sandi.
+- Halaman keluar berisi konfirmasi dan tombol "Masuk kembali".
+- Tema terakhir di perangkat tetap dipakai pada kedua halaman.
+- Auto logout idle mengirim form logout (POST); aktivitas di tab lain menunda logout.

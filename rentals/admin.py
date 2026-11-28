@@ -33,6 +33,7 @@ from .models import (
     UserThemePreference,
 )
 from .forms import (
+    RentalAdminLoginForm,
     MAX_FILE_SIZE,
     MONEY_FIELD_NAMES,
     RentalForm,
@@ -46,6 +47,7 @@ from .views import booking_calendar, booking_calendar_events, booking_calendar_r
 admin.site.site_header = 'Zandev POS'
 admin.site.site_title = 'Zandev POS'
 admin.site.index_title = 'Zandev POS Admin'
+admin.site.login_form = RentalAdminLoginForm
 
 
 def format_rupiah(value):
